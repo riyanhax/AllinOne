@@ -130,7 +130,7 @@ public class FragmentSelectCategories extends Fragment {
         });
     }
 
-    private void addToFav(String ids, String userId) {
+    private void addToFav(final String ids, String userId) {
         String url = "http://dev.swopinfo.com/AddremoveFav.aspx?user_id="+userId+"&category_ids="+ids+"&action=add";
         WebServiceHandler webServiceHandle = new WebServiceHandler(mActivity);
         webServiceHandle.serviceListener = new WebServiceListener() {
@@ -143,13 +143,18 @@ public class FragmentSelectCategories extends Fragment {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.optString("Response").equalsIgnoreCase("sucess")){
+                                adapter.removeCategories(ids);
+/*
                                 for (int i = 0; i < categoryArrayList.size(); i++) {
                                     if(categoryArrayList.get(i).isCategoryChecked()) {
+                                        Log.e("check",categoryArrayList.get(i).getCategoryName());
                                         FragmentFavourites.favCatIds.add(categoryArrayList.get(i).getCategoryId() + "");
                                         categoryArrayList.remove(i);
+                                        adapter.notifyDataSetChanged();
+
                                     }
                                 }
-                                adapter.notifyDataSetChanged();
+*/
                             }
                         }catch (JSONException e){e.printStackTrace();}
                     }

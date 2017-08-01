@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import okhttp3.FormBody;
 
@@ -62,6 +66,26 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
         return categoryArrayList.size();
     }
 
+    public void removeCategories(String ids) {
+        for (int i = getCount()-1; i >=0 ; i--) {
+            if(categoryArrayList.get(i).isCategoryChecked()){
+                Log.e("MMM",categoryArrayList.get(i).getCategoryName());
+                remove(getItem(i));
+            }
+        }
+        notifyDataSetChanged();
+/*
+        List<String> selectedSkillIds = new LinkedList<String>(Arrays.asList(ids.split(",")));
+        for (int i = 0; i < categoryArrayList.size(); i++) {
+            if(selectedSkillIds.contains(categoryArrayList.get(i).getCategoryId()+"")){
+                Log.e("cat",categoryArrayList.get(i).getCategoryName());
+                remove(getItem(i));
+            }
+        }
+        notifyDataSetChanged();
+*/
+    }
+
 
     class ViewHolder
     {
@@ -90,6 +114,7 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
         viewHolder.checkBoxCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("BOX",categoryArrayList.get(position).getCategoryName()+"__"+!categoryArrayList.get(position).isCategoryChecked());
                 categoryArrayList.get(position).setCategoryChecked(!categoryArrayList.get(position).isCategoryChecked());
                 notifyDataSetChanged();
             }
@@ -109,4 +134,14 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
         return ids;
     }
 
+    @Nullable
+    @Override
+    public Category getItem(int position) {
+        return categoryArrayList.get(position);
+    }
+
+    @Override
+    public void remove(@Nullable Category object) {
+        categoryArrayList.remove(object);
+    }
 }

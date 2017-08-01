@@ -460,8 +460,6 @@ public class LocationActivity extends AppCompatActivity implements
             }
 
         }
-        else
-            Log.e("heolo","Dsaf");
 
     }
 
