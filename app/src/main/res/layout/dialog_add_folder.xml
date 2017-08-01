@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Please select an optional image for folder thumbnail and fill in the folder name"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_folder"
+                />
+
+            <EditText
+                android:id="@+id/editFolderName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:hint="Folder Name"
+                android:singleLine="true"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:paddingLeft="@dimen/_5sdp"
+                android:background="@drawable/border_edit"
+                android:textColor="@color/textGrey"
+                android:textSize="@dimen/_14sdp"
+                android:textColorHint="@color/textGrey"
+                />
+
+            <Button
+                android:id="@+id/btnCreateFolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Folder"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:textColor="#fff"
+                android:background="@color/colorPrimary"
+                />
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:textColor="#fff"
+                android:background="@color/colorPrimary"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

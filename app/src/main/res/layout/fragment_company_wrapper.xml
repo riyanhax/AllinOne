@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:weightSum="1"
+    android:layout_marginTop="@dimen/_1sdp"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/layoutCompany"
+        android:layout_width="match_parent"
+        android:layout_weight="0.33"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_marginRight="@dimen/_12sdp"
+        android:layout_marginLeft="@dimen/_12sdp"
+        android:layout_height="0dp">
+
+
+        <ImageView
+            android:id="@+id/imageCompany"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.60"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitCenter"
+            android:src="@drawable/avtar"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.04"
+            />
+
+        <TextView
+            android:id="@+id/textCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:singleLine="true"
+            android:layout_weight="0.14"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:text="Company Name"
+            android:textSize="@dimen/_14sdp"
+            android:textColor="@color/textGrey"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.04"
+            />
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.18"
+            android:text="Follow"
+            android:textAllCaps="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="@dimen/_60sdp"
+            android:layout_marginRight="@dimen/_60sdp"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/textGrey"
+        android:layout_weight="0.002"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.578"
+        android:orientation="vertical"
+        >
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:weightSum="4"
+        android:background="@color/bgColorBottomBar"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="0.09"
+        >
+
+
+        <ImageView
+            android:id="@+id/imageActionCompanyAbout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_info"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionCompanyUploads"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_upload"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionCompanyMembers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_following"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionCompanyFollowers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_followers"
+            />
+    </LinearLayout>
+
+</LinearLayout>

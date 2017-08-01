@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageCompany"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/companylogo"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyHandle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Handle"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Handle"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Name"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Name"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyIndustry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Industry"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Industry"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyInfo1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extra Info 1"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Extra Info 1"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyInfo2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extra Info 2"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Extra Info 2"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyAddress1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Address 1"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Address 1"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyAddress2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Address 2"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Address 2"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business City"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business City"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Country"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Country"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyPostCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Code"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Code"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Email"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Email"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyTel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Tel 1"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Tel 1"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyTel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Business Tel 2"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Business Tel 2"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyFax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fax"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Fax"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cell"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Cell"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Facebook Link"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Facebook Link"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyTwitter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Twitter Link"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Twitter Link"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyWebsite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Website Link"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Website Link"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+
+        <Button
+            android:id="@+id/btnUpdateProfle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:text="Update"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/colorEdit"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:background="@drawable/btn_bg_active"
+            />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/bg_splash"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layoutPhase1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:src="@drawable/add_image"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_mail"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_user"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_user"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User Name"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_user"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:background="@drawable/border_button"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:textColor="@color/colorPrimaryDark"
+            />
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/layoutPhase2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageUser2"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:src="@drawable/app_icon"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <EditText
+            android:id="@+id/editDOB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth"
+            android:clickable="false"
+            android:focusable="false"
+            android:singleLine="true"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_cake"
+            android:drawableRight="@drawable/ic_arrow"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:textColor="@color/colorEdit"
+            android:clickable="false"
+            android:focusable="false"
+            android:singleLine="true"
+            android:textSize="@dimen/_14sdp"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_country"
+            android:drawableRight="@drawable/ic_arrow"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_password"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <EditText
+            android:id="@+id/editConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_password"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:background="@drawable/border_button"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:textColor="@color/colorPrimaryDark"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:text="\u00A9 2016 - SwopInfo.com. All rights reserved.\n      Privacy Policy Terms and Conditions"
+            android:layout_gravity="center"
+            android:textColor="@color/colorEdit"
+            />
+    </LinearLayout>
+
+</LinearLayout>

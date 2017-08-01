@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/_10sdp"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frame"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_300sdp">
+
+                <ImageView
+                    android:id="@+id/imageFile"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_height="@dimen/_300sdp"
+                    android:src="@drawable/app_icon"
+                    android:scaleType="fitCenter"
+                    />
+
+                <!--<android.support.v4.view.ViewPager-->
+                    <!--android:id="@+id/pager"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_215sdp"-->
+                    <!--/>-->
+
+                <com.parasme.swopinfo.helper.CustomWebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_300sdp"></com.parasme.swopinfo.helper.CustomWebView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/_4sdp"
+                    android:layout_gravity="right|top"
+                    >
+                    <ImageView
+                        android:id="@+id/imageLike"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/ic_like_normal"
+                        />
+                    <ImageView
+                        android:id="@+id/imageDisLike"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:src="@drawable/ic_dislike_normal"
+                        />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:orientation="vertical"
+                android:layout_below="@+id/frame"
+                android:background="@drawable/border_group"
+                >
+
+                <TextView
+                    android:id="@+id/textUserFullName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile: "
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_views"
+                        />
+                    <TextView
+                        android:id="@+id/textViewCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_download"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        />
+                    <TextView
+                        android:id="@+id/textDownloadCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_score"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        />
+                    <TextView
+                        android:id="@+id/textScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+
+                    <TextView
+                        android:id="@+id/textDownload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Download"
+                        android:gravity="end"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/border_comment"
+                android:layout_below="@id/layout1"
+                >
+
+                <TextView
+                    android:id="@+id/textComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_20sdp"
+                    android:text="Comments"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:background="#FFF5F5F5"
+                    />
+
+                <EditText
+                    android:id="@+id/editComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:hint="Add Comment Here"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <Button
+                    android:id="@+id/btnAddComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_20sdp"
+                    android:text="Add"
+                    android:layout_gravity="center"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:background="@color/colorPrimary"
+                    />
+
+                <com.parasme.swopinfo.helper.NestedListView
+                    android:id="@+id/listComments"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="wrap_content">
+
+                </com.parasme.swopinfo.helper.NestedListView>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/share"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_size="mini"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/menuShare"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        fab:fab_expandDirection="up"
+        fab:fab_addButtonSize="mini"
+        fab:fab_addButtonColorNormal="@android:color/transparent"
+        fab:fab_addButtonColorPressed="@android:color/transparent"
+        fab:fab_addButtonPlusIconColor="@android:color/transparent"
+        android:layout_alignParentRight="true"
+        >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/fb"
+            fab:fab_colorNormal="#537cbe"
+            fab:fab_colorPressed="#537cbe"
+            fab:fab_size="mini"/>
+        />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#78cef1"
+            fab:fab_icon="@drawable/twi"
+            fab:fab_colorPressed="#78cef1"
+            fab:fab_size="mini"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnWhatsapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#FF029947"
+            fab:fab_icon="@drawable/whats"
+            fab:fab_colorPressed="#FF029947"
+            fab:fab_size="mini"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnLinkedIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/linkedin"
+            fab:fab_colorNormal="#FF0278B5"
+            fab:fab_colorPressed="#FF0278B5"
+            fab:fab_size="mini"/>
+        />
+
+
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnGPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/google"
+            fab:fab_colorNormal="#FFDC4B39"
+            fab:fab_colorPressed="#FFDC4B39"
+            fab:fab_size="mini"/>
+        />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnPinterest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#FFBD0A1E"
+            fab:fab_icon="@drawable/pinterest"
+            fab:fab_colorPressed="#FFBD0A1E"
+            fab:fab_size="mini"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/mail"
+            fab:fab_colorNormal="#8b8f91"
+            fab:fab_colorPressed="#8b8f91"
+            fab:fab_size="mini"/>
+        />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+</RelativeLayout>

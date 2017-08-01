@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:og="http://schemas.android.com/apk/res-auto"
+    android:minWidth="@dimen/_280sdp"
+    android:layout_marginLeft="@dimen/_10sdp"
+    android:layout_marginRight="@dimen/_10sdp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SwopInfo"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textColor="@color/colorBorder"
+        android:gravity="center_horizontal"
+        />
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:layout_margin="@dimen/_5sdp"
+        />
+
+    <me.kaelaela.opengraphview.OpenGraphView
+        android:id="@+id/og_view"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        og:bgColor="@android:color/white"
+        og:cornerRadius="4dp"
+        android:visibility="gone"
+        og:descTextColor="@color/base_gray"
+        og:faviconPlaceHolder="@color/light_gray"
+        og:imagePlaceHolder="@color/light_gray"
+        og:separateImage="true"
+        og:strokeColor="@color/light_gray"
+        og:titleColor="@color/base_gray"
+        og:urlTextColor="@color/base_gray"
+        />
+
+    <TextView
+        android:id="@+id/textShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select an option to share either to Newsfeed or to folder"
+        android:textSize="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/colorBorder"
+        android:gravity="center_horizontal"
+        />
+
+    <Button
+        android:id="@+id/btnNewsfeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share to Newsfeed"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/_5sdp"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:textColor="@color/colorPrimary"
+        android:background="@null"
+        />
+    <Button
+        android:id="@+id/btnFolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share to Folder"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/_5sdp"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@null"
+        />
+
+    <Button
+        android:id="@+id/btnCompany"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share to Company"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/_5sdp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@color/colorPrimary"
+        android:background="@null"
+        />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_15sdp"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/_5sdp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@null"
+        />
+
+</LinearLayout>

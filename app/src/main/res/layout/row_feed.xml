@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="@dimen/_7sdp"
+    android:layout_marginRight="@dimen/_7sdp"
+    android:background="@color/bgColorHome"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:weightSum="1"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_5sdp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_icon"
+            />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.85"
+            android:background="@color/bgColorHome"
+            android:paddingLeft="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/textUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:text="Lorem Ipsum"
+                />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="uploaded a new file"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_toRightOf="@id/textUserName"
+                />
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGrey"
+                android:text="1 Hour ago."
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_below="@+id/textView"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+    <!--COMMENT LAYOUT-->
+    <LinearLayout
+        android:id="@+id/layoutFileComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+        <LinearLayout
+            android:id="@+id/layoutAdditionalInfo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/imageUserFile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:scaleType="fitXY"
+                android:background="@color/bgColorHome"
+                android:src="@drawable/ic_file"
+                />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.85"
+                android:background="@color/bgColorHome"
+                android:paddingLeft="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/textUserNameFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Lorem Ipsum"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="uploaded a new file"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_toRightOf="@id/textUserNameFile"
+                    />
+
+
+                <TextView
+                    android:id="@+id/textTimeFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textGrey"
+                    android:text="1 Hour ago."
+                    android:visibility="gone"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_below="@+id/textViewFile"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="@color/bgColorHome"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:id="@+id/textComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:gravity="left|center"
+                android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content hereIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layoutIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content hereIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+                />
+
+            <ImageView
+                android:id="@+id/imageFileThumb"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_160sdp"
+                android:scaleType="fitCenter"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/app_logo"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--USER LAYOUT-->
+    <LinearLayout
+        android:id="@+id/layoutUser"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/bgColorHome"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Please welcome them by viewing their profile"
+            />
+    </LinearLayout>
+
+    <!--SHARE LAYOUT-->
+    <LinearLayout
+        android:id="@+id/layoutShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bgColorHome"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/textShared"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            android:autoLink="web"
+            android:layout_toRightOf="@+id/imageShareThumb"
+            android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.acted by the readable content of a page when looking at its layout.acted by the readable content of a "
+            />
+
+        <ImageView
+            android:id="@+id/imageShareThumb"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_160sdp"
+            android:src="@drawable/ic_file"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:scaleType="fitCenter"
+            />
+
+
+    </LinearLayout>
+
+    <!--Multiple Files LAYOUT-->
+    <LinearLayout
+        android:id="@+id/layoutMultipleFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bgColorHome"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/textMultipleFiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            android:autoLink="web"
+            android:layout_toRightOf="@+id/imageShareThumb"
+            android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.acted by the readable content of a page when looking at its layout.acted by the readable content of a "
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_multiple_files"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:scrollbars="vertical" />
+<!--            <RelativeLayout
+                android:id="@+id/layout_more_files"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_below="@+id/tv_all_offers">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circle1"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:src="@android:color/black"/>
+                <TextView
+                    android:id="@+id/tv_no_offers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
+                    android:text="+1"/>
+
+            </RelativeLayout>-->
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!--Preview Url LAYOUT-->
+    <LinearLayout
+        android:id="@+id/layoutPreview"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:visibility="visible"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminate="true" />
+
+        <me.kaelaela.opengraphview.OpenGraphView
+            android:id="@+id/og_view"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            fab:bgColor="@android:color/white"
+            fab:cornerRadius="4dp"
+            fab:descTextColor="@color/base_gray"
+            fab:faviconPlaceHolder="@color/light_gray"
+            fab:imagePlaceHolder="@color/light_gray"
+            fab:separateImage="true"
+            fab:strokeColor="@color/light_gray"
+            fab:titleColor="@color/base_gray"
+            fab:urlTextColor="@color/base_gray"
+            />
+    </LinearLayout>
+
+
+    <!--Layout Actions-->
+    <LinearLayout
+        android:id="@+id/layoutActions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/imageDisLike"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_marginRight="@dimen/_35sdp"
+                android:src="@drawable/ic_dislike_normal"
+                android:layout_gravity="right|center"
+                />
+
+            <ImageView
+                android:id="@+id/imageLike"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_marginRight="@dimen/_70sdp"
+                android:src="@drawable/ic_like_normal"
+                android:layout_gravity="right|center"
+                />
+
+            <Button
+                android:id="@+id/btnComment"
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="29dp"
+                android:background="@color/colorPrimaryDark"
+                android:textSize="@dimen/_8sdp"
+                android:text="Comment"
+                android:textColor="#fff"
+                android:layout_marginRight="@dimen/_105sdp"
+                android:layout_gravity="right|center"
+                />
+
+            <Button
+                android:id="@+id/btnShareMe"
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="29dp"
+                android:background="@color/colorPrimaryDark"
+                android:textSize="@dimen/_8sdp"
+                android:text="Share Me"
+                android:textColor="#fff"
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/_170sdp"
+                android:layout_gravity="right|center"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/share"
+                    android:layout_alignParentRight="true"
+                    fab:fab_size="normal"
+                    />
+
+                <com.getbase.floatingactionbutton.FloatingActionsMenu
+                    android:id="@+id/menuShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_expandDirection="left"
+                    fab:fab_addButtonSize="normal"
+                    fab:fab_addButtonColorNormal="@android:color/transparent"
+                    fab:fab_addButtonColorPressed="@android:color/transparent"
+                    fab:fab_addButtonPlusIconColor="@android:color/transparent"
+                    android:layout_alignParentRight="true"
+                    >
+
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnFacebook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_icon="@drawable/fb"
+                        fab:fab_colorNormal="#537cbe"
+                        fab:fab_colorPressed="#537cbe"
+                        fab:fab_size="normal"/>
+                    />
+
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnTwitter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_colorNormal="#78cef1"
+                        fab:fab_icon="@drawable/twi"
+                        fab:fab_colorPressed="#78cef1"
+                        fab:fab_size="normal"/>
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnWhatsapp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_colorNormal="#FF029947"
+                        fab:fab_icon="@drawable/whats"
+                        fab:fab_colorPressed="#FF029947"
+                        fab:fab_size="normal"/>
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnLinkedIn"
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        fab:fab_icon="@drawable/linkedin"
+                        fab:fab_colorNormal="#FF0278B5"
+                        fab:fab_colorPressed="#FF0278B5"
+                        fab:fab_size="normal"/>
+                    />
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnGPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_icon="@drawable/google"
+                        fab:fab_colorNormal="#FFDC4B39"
+                        fab:fab_colorPressed="#FFDC4B39"
+                        fab:fab_size="normal"/>
+                    />
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnPinterest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_colorNormal="#FFBD0A1E"
+                        fab:fab_icon="@drawable/pinterest"
+                        fab:fab_colorPressed="#FFBD0A1E"
+                        fab:fab_size="normal"/>
+
+
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnMail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_icon="@drawable/mail"
+                        fab:fab_colorNormal="#8b8f91"
+                        fab:fab_colorPressed="#8b8f91"
+                        fab:fab_size="normal"/>
+                    />
+
+                </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+        <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_below="@+id/btnShare"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editComment"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.71"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:hint="Add Comment Here"
+                        android:singleLine="true"
+                        android:textSize="@dimen/_12sdp"
+                        />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_weight="0.05"
+                        android:layout_height="1dp"/>
+                    <Button
+                        android:id="@+id/btnAddComment"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.2"
+                        android:layout_height="@dimen/_25sdp"
+                        android:text="Add"
+                        android:layout_alignParentRight="true"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:background="@color/colorPrimary"
+                        />
+                </LinearLayout>
+        -->
+
+    </LinearLayout>
+</LinearLayout>

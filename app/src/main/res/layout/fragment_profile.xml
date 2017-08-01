@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_weight="0.4"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitCenter"
+            android:src="@drawable/avatar7"
+            />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:layout_height="@dimen/_70sdp">
+
+            <TextView
+                android:id="@+id/textUserFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Gavin Simeon"
+                android:textSize="@dimen/_14sdp"
+                android:textColor="@color/textGrey"
+                />
+
+            <TextView
+                android:id="@+id/textProfileViews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_weight="0.13"
+                android:textStyle="bold"
+                android:layout_below="@+id/textUserFullName"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Profile Views: 20"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+        </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:text="Personal Details"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/textGrey"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfileEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Email Address"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfileFName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="First Name"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfileLName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Last Name"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <CheckBox
+            android:id="@+id/checkNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:text="Receive Email Notification"
+            android:textColor="@color/textGrey"
+            android:checked="true"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfileDOB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Birthday"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Birthday"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:clickable="false"
+            android:focusable="false"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfileLCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Country"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            android:drawableRight="@drawable/ic_arrow_dark"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:clickable="false"
+            android:focusable="false"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:text="Your Business Details"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/textGrey"
+            />
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Name"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Name"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Title"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Title"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCompanyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Company Title"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Employment Start Date"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Employment Start Date"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:clickable="false"
+            android:focusable="false"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editProfession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Profession"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Profession"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            android:drawableRight="@drawable/ic_arrow_dark"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:clickable="false"
+            android:focusable="false"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cell"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Cell"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editDirectTell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Direct Tell"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Direct Tell"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editFax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fax"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Fax"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCustomField1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Custom Field 1"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Custom Field 1"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editCustomField2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Custom Field 2"
+            android:textColorHint="@color/textGrey"
+            android:textColor="@color/textGrey"
+            android:textSize="@dimen/_14sdp"
+            app:met_floatingLabelText="Custom Field 2"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelTextColor="#000"
+            app:met_floatingLabelTextSize="@dimen/_10sdp"
+            app:met_singleLineEllipsis="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <Button
+            android:id="@+id/btnUpdateProfle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:text="Update"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/colorEdit"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:background="@drawable/btn_bg_active"
+            />
+
+        <Button
+            android:id="@+id/btnDeleteProfle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:text="Delete Profile"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/colorEdit"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:background="@drawable/btn_bg_active"
+            />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:abc="http://schemas.android.com/apk/com.parasme.swopinfo.helper.RippleBackground"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/_7sdp"
+        android:paddingRight="@dimen/_7sdp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layoutOwnProfile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55sdp"
+            android:weightSum="1"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/imageUser1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:scaleType="fitXY"
+                android:src="@drawable/avtar"
+                />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/text_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="Lorem Ipsum has been the industry's standard dummy text ever since the 1500s "
+                    />
+
+                <TextView
+                    android:id="@+id/textTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_status"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Click here to upload file..."
+                    android:layout_marginTop="@dimen/_2sdp"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_4sdp"
+            />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/listFeeds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="@dimen/_6sdp"
+                android:divider="@android:color/white"
+                ></ListView>
+
+            <!--
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/listFeeds1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scrollbars="vertical" />
+            -->
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+
+    <com.parasme.swopinfo.helper.RippleBackground
+        android:id="@+id/rippleBackground"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        app:rb_rippleAmount="3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_43sdp"
+        app:rb_duration="1400"
+        app:rb_scale="5"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_checkin"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_checkin111"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1px"
+            />
+    </com.parasme.swopinfo.helper.RippleBackground>
+
+</RelativeLayout>

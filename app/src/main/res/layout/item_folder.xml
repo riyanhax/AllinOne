@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout"
+    >
+
+    <RelativeLayout
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
+        <ImageView
+            android:id="@+id/image_folder_thumb"
+            android:layout_width="match_parent"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:layout_height="@dimen/_75sdp"
+            android:src="@drawable/ic_folder"
+            />
+        <ImageView
+            android:id="@+id/imageDelete"
+            android:layout_width="@dimen/_27sdp"
+            android:layout_height="@dimen/_27sdp"
+            android:src="@drawable/close"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_2sdp"
+        android:background="@color/bgColorBottomBar"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:id="@+id/text_folder_name"
+            android:layout_width="match_parent"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Loerm Ipsum"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/text_files"
+            android:layout_width="match_parent"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Files"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

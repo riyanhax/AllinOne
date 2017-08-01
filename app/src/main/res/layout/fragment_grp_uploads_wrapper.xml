@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginRight="@dimen/_12sdp"
+        android:layout_marginLeft="@dimen/_12sdp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+
+        <Button
+            android:id="@+id/btnUploads"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_weight="0.48"
+            android:background="@drawable/btn_bg_active"
+            android:text="Uploads"
+            android:textColor="@color/colorEdit"
+            android:textAllCaps="false"
+            />
+
+        <View
+            android:id="@+id/blankView1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_weight="0.04"
+            />
+
+        <Button
+            android:id="@+id/btnFolders"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_weight="0.48"
+            android:background="@drawable/btn_bg_inactive"
+            android:text="Folders"
+            android:visibility="gone"
+            android:textColor="@color/colorEdit"
+            android:textAllCaps="false"
+            />
+
+        <View
+            android:id="@+id/blankView2"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_weight="0.04"
+            />
+
+        <ImageView
+            android:id="@+id/btnImageAdd"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_weight="0.48"
+            android:textColor="@color/colorEdit"
+            android:background="@drawable/btn_bg_inactive"
+            android:src="@drawable/ic_plus"
+            android:textAllCaps="false"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutUploadWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        >
+
+    </LinearLayout>
+
+
+</LinearLayout>

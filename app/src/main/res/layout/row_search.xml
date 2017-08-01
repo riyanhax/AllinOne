@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/border_comment"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dcdada"
+        android:text="dfsalkjlkfd"
+        android:paddingLeft="@dimen/_8sdp"
+        android:padding="@dimen/_4sdp"
+        android:textColor="@color/colorPrimaryDark"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBorder"/>
+
+    <!--Layout Users-->
+    <LinearLayout
+        android:id="@+id/layoutUsers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/avtar"
+            android:layout_margin="@dimen/_8sdp"
+            android:scaleType="fitXY"
+            />
+    </LinearLayout>
+
+
+    <!--Layout Uploads-->
+    <LinearLayout
+        android:id="@+id/layoutUploads"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/imageFileThumb"
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/avtar"
+            android:layout_margin="@dimen/_8sdp"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+            android:id="@+id/textFileDesc"
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
+            android:layout_margin="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="sadfdsa jfas"
+            />
+
+    </LinearLayout>
+
+
+    <!--Layout Companies and Groups-->
+    <LinearLayout
+        android:id="@+id/layoutGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/imageGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/companylogo"
+            android:layout_margin="@dimen/_8sdp"
+            android:scaleType="fitStart"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/layoutCompanyDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/textExtraInfo1"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_height="wrap_content"
+                android:text="sadfdsa"
+                />
+
+            <TextView
+                android:id="@+id/textExtraInfo2"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_height="wrap_content"
+                android:text="jfas"
+                />
+
+            <TextView
+                android:id="@+id/textCity"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_height="wrap_content"
+                android:text="sadfdsa jfas"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

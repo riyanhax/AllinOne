@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#147956</color>
+    <color name="colorPrimaryDark">#FF0C4F38</color>
+    <color name="colorAccent">#147956</color>
+    <color name="colorEditHint">#e5f4f3f3</color>
+    <color name="colorEdit">#FFFFFF</color>
+    <color name="bgColorBottomBar">#FFE3E1E2</color>
+    <color name="colorBorder">#8f8f8f</color>
+    <color name="bgColorHome">#FFEFEDEE</color>
+    <color name="textGrey">#FF525051</color>
+    <color name="bgSwop">#fcf8e3</color>
+    <color name="colorSwopText">#c79954</color>
+    <color name="colorCardText">#48484a</color>
+    <color name="colorHighlightAvatar">#ae3ac494</color>
+
+    <!--Catcho colors-->
+    <color name="catcho_primary">#e9793d</color>
+    <color name="catcho_primary_dark">#d6692f</color>
+    <color name="catcho_text_light">#FFFFFF</color>
+
+    <!--Preview module colors-->
+    <color name="soft_grey_select_top">#e0dddd</color>
+    <color name="soft_grey_split">#d0d0d0</color>
+    <color name="soft_grey">#777</color>
+    <color name="soft_grey_choose">#aaa</color>
+    <color name="aa">#ff007de3</color>
+
+    <!-- Shadow -->
+    <color name="zeroth_shadow">#00CCCCCC</color>
+    <color name="first_shadow">#10CCCCCC</color>
+    <color name="second_shadow">#20CCCCCC</color>
+    <color name="third_shadow">#30CCCCCC</color>
+    <color name="fourth_shadow">#50CCCCCC</color>
+
+    <!--  -->
+    <color name="pressed_example">#CC33B5E5</color>
+
+</resources>

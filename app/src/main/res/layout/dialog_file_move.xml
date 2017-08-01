@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="@dimen/_270sdp"
+    android:minHeight="@dimen/_330sdp"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:layout_weight="1"
+    android:orientation="vertical" >
+
+
+    <TextView
+        android:id="@+id/textMove"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="@dimen/_14sdp"
+        android:text="Select Folder to Move to"
+        android:layout_weight="0.1"
+        />
+
+    <GridView
+        android:id="@+id/gridFolders"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/_5sdp"
+        android:layout_weight="0.8"
+        android:numColumns="3"
+        android:horizontalSpacing="@dimen/_10sdp"
+        ></GridView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_weight="0.35"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"/>
+
+        <Button
+            android:id="@+id/btnMove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Move"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_weight="0.35"
+            />
+    </LinearLayout>
+
+</LinearLayout>

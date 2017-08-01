@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_follower"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/avtar"
+        />
+        <TextView
+            android:id="@+id/textFollowerName"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:layout_below="@id/image_follower"
+            android:text="Lorem Ipsum"
+            android:textColor="@color/textGrey"
+            android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/image_delete"
+        android:layout_alignParentRight="true"
+        android:layout_width="@dimen/_27sdp"
+        android:visibility="gone"
+        android:layout_height="@dimen/_27sdp"
+        android:layout_margin="@dimen/_5sdp"
+        android:src="@drawable/close"/>
+</RelativeLayout>

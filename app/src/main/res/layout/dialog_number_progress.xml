@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="@dimen/_15sdp"
+    android:paddingBottom="@dimen/_15sdp"
+    android:paddingLeft="@dimen/_10sdp"
+    android:paddingRight="@dimen/_10sdp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:text="Downloading"
+        android:textStyle="bold"
+        android:textSize="@dimen/_13sdp"
+        android:padding="@dimen/_5sdp"
+        android:textColor="@color/colorPrimary"
+        android:layout_height="wrap_content" />
+
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:id="@+id/numberProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        custom:progress_unreached_color="#CCCCCC"
+        custom:progress_reached_color="@color/colorPrimary"
+        custom:progress_unreached_bar_height="0.75dp"
+        custom:progress_reached_bar_height="1.5dp"
+        custom:progress_text_size="@dimen/_10sdp"
+        custom:progress_text_color="@color/colorPrimary"
+        custom:progress_text_offset="1dp"
+        custom:progress_text_visibility="visible"
+        />
+</LinearLayout>

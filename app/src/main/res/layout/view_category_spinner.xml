@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/textViewCountry"
+    android:singleLine="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="hello"
+    android:gravity="center_horizontal"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:textColor="#000"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

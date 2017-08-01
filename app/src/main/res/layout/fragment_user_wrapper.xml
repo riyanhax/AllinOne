@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:weightSum="1"
+    android:layout_marginTop="@dimen/_1sdp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layoutUser"
+        android:layout_width="match_parent"
+        android:layout_weight="0.31"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_marginLeft="@dimen/_2sdp"
+        android:layout_marginRight="@dimen/_2sdp"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.67"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            >
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                >
+                <TextView
+                    android:id="@+id/textUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_weight="0.13"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:gravity="center"
+                    android:text="Gavin Simeon"
+                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/textGrey"
+                    />
+                <ImageView
+                    android:id="@+id/imageUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textUserName"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/avtar"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+
+                <Button
+                    android:id="@+id/btnFollow"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:text="Follow"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_centerHorizontal="true"
+                    android:textAllCaps="false"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+
+                <Button
+                    android:id="@+id/btnViewCard"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:text="View Card"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/btnFollow"
+                    android:textAllCaps="false"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+                <Button
+                    android:id="@+id/btnChat"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:text="Chat"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/btnViewCard"
+                    android:textAllCaps="false"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.05"
+            />
+
+        <RelativeLayout
+            android:id="@+id/layoutTitle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.27"
+            >
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/textCompany"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/textTitle"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+            <TextView
+                android:id="@+id/textProfileViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_below="@+id/textTitle"
+                android:paddingTop="@dimen/_2sdp"
+                />
+
+            <TextView
+                android:id="@+id/textUploadViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_toRightOf="@+id/textProfileViews"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_below="@+id/textTitle"
+                android:paddingTop="@dimen/_2sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                />
+
+            <TextView
+                android:id="@+id/textUploadDownloads"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_below="@+id/textTitle"
+                android:paddingTop="@dimen/_2sdp"
+                android:layout_toRightOf="@+id/textUploadViews"
+                android:layout_marginLeft="@dimen/_12sdp"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/textGrey"
+        android:layout_weight="0.002"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.598"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutBarMain"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:weightSum="5"
+        android:background="@color/bgColorBottomBar"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="0.09"
+        >
+
+
+        <ImageView
+            android:id="@+id/imageActionFeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_newsfeed"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionUploads"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_upload"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionFollowing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_following"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionFollower"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_followers"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionGroups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_groups"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

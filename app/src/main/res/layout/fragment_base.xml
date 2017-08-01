@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:weightSum="1"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.91"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutBarMain"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:weightSum="6"
+        android:background="@color/bgColorBottomBar"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="0.09"
+        >
+
+
+        <ImageView
+            android:id="@+id/imageActionFeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_newsfeed"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionUploads"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_upload"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionFollowing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_following"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionFollower"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_followers"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionGroups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_groups"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/line"
+            android:layout_weight="0.025"/>
+
+        <ImageView
+            android:id="@+id/imageActionBookmarks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.98"
+            android:src="@drawable/ic_bookmarks"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

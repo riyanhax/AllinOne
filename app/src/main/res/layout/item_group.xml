@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="@dimen/_115sdp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_group"
+        android:layout_width="@dimen/_115sdp"
+        android:layout_height="@dimen/_90sdp"
+        android:scaleType="fitXY"
+        android:src="@drawable/companylogo"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/border_group"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textGroupName"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:text="Neque Porro"
+            android:textColor="@color/textGrey"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/textOwnerName"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:text="Owner:Lorem Ipsum"
+            android:textSize="@dimen/_9sdp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/_5sdp"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/ic_member"
+                />
+            <TextView
+                android:id="@+id/textMemberCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:textColor="@color/textGrey"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/ic_file"
+                android:layout_marginLeft="@dimen/_20sdp"
+                />
+            <TextView
+                android:id="@+id/textFileCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:textColor="@color/textGrey"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

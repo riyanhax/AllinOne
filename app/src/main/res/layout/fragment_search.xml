@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:id="@+id/scrollView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/_10sdp"/>-->
+
+        <TextView
+            android:id="@+id/textHeaderUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Users"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="@dimen/_10sdp"
+            android:textStyle="bold"
+            />
+
+        <com.parasme.swopinfo.helper.NestedListView
+            android:id="@+id/listUsers"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/textHeaderUploads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Uploads"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="@dimen/_10sdp"
+            android:textStyle="bold"
+            />
+
+        <com.parasme.swopinfo.helper.NestedListView
+            android:id="@+id/listUploads"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/textHeaderGroups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="Groups"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="@dimen/_10sdp"
+            android:textStyle="bold"
+            />
+
+        <com.parasme.swopinfo.helper.NestedListView
+            android:id="@+id/listGroups"
+            android:layout_width="match_parent"
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/>
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/_10sdp"/>-->
+
+    </LinearLayout>
+
+</ScrollView>

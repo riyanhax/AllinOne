@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="@dimen/_250sdp"
+    android:minHeight="@dimen/_350sdp"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+
+    <TextView
+        android:id="@+id/textMove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center_horizontal"
+        android:text="Store Bookmark"
+        />
+
+    <EditText
+        android:id="@+id/editBookmarkURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:hint="Bookmark URL"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        >
+
+        <Button
+            android:id="@+id/btnFetchTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Fetch Title"
+            android:layout_alignParentRight="true"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            />
+
+        <EditText
+            android:id="@+id/editBookmarkTitle"
+            android:layout_width="match_parent"
+            android:layout_toLeftOf="@+id/btnFetchTitle"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:hint="Title"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        >
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Add"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

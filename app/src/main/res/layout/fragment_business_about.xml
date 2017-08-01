@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/layoutAboutNonMember"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:orientation="vertical"
+                android:background="@color/bgColorHome"
+                android:weightSum="1"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.25"
+                    android:textStyle="bold"
+                    android:textColor="@color/textGrey"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_14sdp"
+                    android:text="Company Address"
+                    />
+
+                <TextView
+                    android:id="@+id/textCompanyAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.85"
+                    android:maxLines="5"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/textGrey"
+                    android:text="Address"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:background="@color/colorEdit"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_85sdp"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:orientation="vertical"
+                android:background="@color/bgColorHome"
+                android:weightSum="4"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/textGrey"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_14sdp"
+                    android:text="Contact Numbers"
+                    />
+
+                <com.parasme.swopinfo.helper.ShimmerTextView
+                    android:id="@+id/textCompanyTel1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:textColor="@color/textGrey"
+                    android:text="Telephone Num: xxxxxxxx"
+                    />
+
+                <com.parasme.swopinfo.helper.ShimmerTextView
+                    android:id="@+id/textCompanyTel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:textColor="@color/textGrey"
+                    android:text="Telephone Num: xxxxxxxx"
+                    />
+
+                <com.parasme.swopinfo.helper.ShimmerTextView
+                    android:id="@+id/textCompanyFax"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:textColor="@color/textGrey"
+                    android:text="Fax: xxxxxxx"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:background="@color/colorEdit"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_55sdp"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:orientation="vertical"
+                android:background="@color/bgColorHome"
+                android:weightSum="2"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/textGrey"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_14sdp"
+                    android:text="Business Email"
+                    />
+
+                <com.parasme.swopinfo.helper.ShimmerTextView
+                    android:id="@+id/textCompanyMail"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:textColor="@color/textGrey"
+                    android:text="Email: xxx@yyy.zzz"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:background="@color/colorEdit"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_58sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@color/bgColorHome"
+                >
+
+                <ImageView
+                    android:id="@+id/image_web"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_web"
+                    />
+
+                <ImageView
+                    android:id="@+id/image_fb"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_facebook"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    />
+
+                <ImageView
+                    android:id="@+id/image_twitter"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:src="@drawable/ic_twitter"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

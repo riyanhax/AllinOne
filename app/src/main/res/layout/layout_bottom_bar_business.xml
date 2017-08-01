@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:weightSum="4"
+    android:background="@color/bgColorBottomBar"
+    android:paddingTop="@dimen/_5sdp"
+    android:paddingBottom="@dimen/_5sdp"
+    android:layout_gravity="bottom"
+    android:layout_height="@dimen/_40sdp">
+
+
+    <ImageView
+        android:id="@+id/imageActionBussAbout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.98"
+        android:src="@drawable/ic_info"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/line"
+        android:layout_weight="0.025"/>
+
+    <ImageView
+        android:id="@+id/imageActionBussUploads"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.98"
+        android:src="@drawable/ic_upload"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/line"
+        android:layout_weight="0.025"/>
+
+    <ImageView
+        android:id="@+id/imageActionBussFollowers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.98"
+        android:src="@drawable/ic_following"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/line"
+        android:layout_weight="0.025"/>
+
+    <ImageView
+        android:id="@+id/imageActionBussFollower"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.98"
+        android:src="@drawable/ic_followers"
+        />
+
+
+</LinearLayout>

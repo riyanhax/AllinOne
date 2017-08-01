@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/bg_splash"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:src="@drawable/app_icon"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <EditText
+            android:id="@+id/editUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User Name"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:singleLine="true"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_user"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:background="@drawable/border_button"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:textColor="@color/colorPrimaryDark"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            >
+
+            <TextView
+                android:id="@+id/textCreateAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_11sdp"
+                android:text="CREATE ACCOUNT"
+                android:textColor="@color/colorEdit"
+                android:layout_alignParentLeft="true"
+                />
+
+            <TextView
+                android:id="@+id/textLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_11sdp"
+                android:text="LOGIN"
+                android:textColor="@color/colorEdit"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

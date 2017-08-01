@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_400sdp"
+    android:orientation="vertical"
+    >
+
+    <GridView
+        android:id="@+id/gridAvatar"
+        android:numColumns="3"
+        android:horizontalSpacing="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_350sdp"
+        ></GridView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        >
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="?android:textAppearanceMedium"
+            />
+        <TextView
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+</LinearLayout>

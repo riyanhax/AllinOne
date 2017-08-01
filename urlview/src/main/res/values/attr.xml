@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OpenGraphView">
+        <attr name="bgColor" format="color" />
+        <attr name="titleColor" format="color" />
+        <attr name="descTextColor" format="color" />
+        <attr name="urlTextColor" format="color" />
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="strokeColor" format="color" />
+        <attr name="separateImage" format="boolean" />
+        <attr name="imagePlaceHolder" format="reference" />
+        <attr name="imagePosition" format="enum">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="faviconPlaceHolder" format="reference" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_5sdp"
+        >
+
+        <ImageView
+            android:id="@+id/image_upload_thumb"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:src="@drawable/ic_file"
+            />
+
+        <TextView
+            android:id="@+id/text_file_title"
+            android:layout_width="@dimen/_90sdp"
+            android:text="File Title file title file title"
+            android:layout_below="@+id/image_upload_thumb"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/image_delete"
+            android:layout_width="@dimen/_27sdp"
+            android:layout_height="@dimen/_27sdp"
+            android:src="@drawable/close"
+            android:layout_marginRight="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/image_upload_thumb"
+            android:layout_alignEnd="@+id/image_upload_thumb" />
+
+    </RelativeLayout>
+</LinearLayout>

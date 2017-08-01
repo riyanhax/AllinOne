@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_edit"
+        >
+
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:scaleType="fitXY"
+            android:src="@drawable/avtar"
+            />
+
+        <LinearLayout
+            android:id="@+id/layoutShareSomething"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_toRightOf="@id/imageUser"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:text="Share your thoughts here"
+                />
+
+            <EditText
+                android:id="@+id/editSwopText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_27sdp"
+                android:hint="Share something here..."
+                android:clickable="false"
+                android:focusable="false"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:paddingLeft="@dimen/_5sdp"
+                android:background="@drawable/border_edit"
+                android:textColor="@color/textGrey"
+                android:textSize="@dimen/_12sdp"
+                android:textColorHint="@color/textGrey"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

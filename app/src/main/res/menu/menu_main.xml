@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/menu_search"
+        android:title="Search"
+        appcompat:actionViewClass="android.support.v7.widget.SearchView"
+        appcompat:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_done"
+        android:title="Done"
+        android:visible="false"
+        appcompat:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_edit"
+        android:title="Edit"
+        android:visible="false"
+        appcompat:showAsAction="always"/>
+
+
+</menu>

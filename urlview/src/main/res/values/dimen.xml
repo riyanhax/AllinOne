@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_stroke_width">2dp</dimen>
+    <dimen name="default_content_padding">8dp</dimen>
+    <dimen name="default_image_size">92dp</dimen>
+</resources>

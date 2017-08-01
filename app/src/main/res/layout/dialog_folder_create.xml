@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_250sdp"
+    android:minWidth="@dimen/_250sdp"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:layout_weight="1"
+    android:orientation="vertical" >
+
+
+    <TextView
+        android:id="@+id/textMove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14sdp"
+        android:gravity="center"
+        android:text="Create New Folder to Move to"
+        />
+
+    <EditText
+        android:id="@+id/editFolderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Folder Name"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:textColorHint="@color/textGrey"
+        android:textColor="@color/textGrey"
+        android:backgroundTint="@color/textGrey"
+        android:textSize="@dimen/_14sdp"
+        android:singleLine="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_weight="0.35"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"/>
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_weight="0.35"
+            />
+    </LinearLayout>
+
+</LinearLayout>

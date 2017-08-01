@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardCornerRadius="8dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/country_photo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            android:maxHeight="@dimen/_140sdp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/app_logo"
+            android:contentDescription="@string/action_settings"
+            android:scaleType="fitXY" />
+
+        <RelativeLayout
+            android:id="@+id/layout_more_files"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:background="#5a000000"
+            android:visibility="gone"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_num_remaining_files"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="@dimen/_25sdp"
+                android:layout_centerInParent="true"
+                android:text="+1"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>

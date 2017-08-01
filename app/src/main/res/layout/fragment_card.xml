@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layoutDefaultCard"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:background="@drawable/border_card"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="@dimen/_220sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@android:color/white"
+                >
+
+                <!--HEADER-->
+                <RelativeLayout
+                    android:id="@+id/layoutCardHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_230sdp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_header"
+                        />
+
+                    <TextView
+                        fontPath="ufonts.com_humanst521_bt_roman.ttf"
+                        android:id="@+id/textCompanyName"
+                        android:layout_width="@dimen/_190sdp"
+                        android:textSize="@dimen/_13sdp"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:textColor="@android:color/white"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        fontPath="ufonts.com_humanst521_bt_roman.ttf"
+                        android:id="@+id/textUserName"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:layout_width="@dimen/_190sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:textStyle="bold"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:textColor="@android:color/white"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageCompanyLogo"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:src="@drawable/app_icon"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/_40sdp"
+                    />
+
+                <ImageView
+                    android:id="@+id/imageDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/card_divider"
+                    android:layout_below="@+id/layoutCardHeader"
+                    android:layout_toRightOf="@id/imageCompanyLogo"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_below="@+id/layoutCardHeader"
+                    android:layout_toRightOf="@+id/imageDivider"
+                    >
+
+                    <!--Layout Telephone 1-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:weightSum="1"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.09"
+                            android:textSize="@dimen/_12sdp"
+                            android:src="@drawable/card_telephone"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.04"
+                            />
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textTel1"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.87"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorCardText"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <!--Layout Telephone 2-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:weightSum="1"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.09"
+                            android:textSize="@dimen/_12sdp"
+                            android:src="@drawable/card_telephone"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.04"
+                            />
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textTel2"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.87"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorCardText"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <!--Layout Cell Number-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:weightSum="1"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.09"
+                            android:textSize="@dimen/_12sdp"
+                            android:src="@drawable/card_cell"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.04"
+                            />
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textCell"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.87"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorCardText"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <!--Layout Email-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:weightSum="1"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.09"
+                            android:textSize="@dimen/_12sdp"
+                            android:src="@drawable/card_mail"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.04"
+                            />
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textEmail"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.87"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorCardText"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <!--Layout Fax-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:weightSum="1"
+                        >
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.09"
+                            android:textSize="@dimen/_12sdp"
+                            android:src="@drawable/card_fax"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.04"
+                            />
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textFax"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.87"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorCardText"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FF0A4A11"
+                    android:padding="@dimen/_2sdp"
+                    android:textSize="@dimen/_7sdp"
+                    android:textColor="@android:color/white"
+                    android:text="Powered by SwopInfo"
+                    android:layout_alignParentBottom="true"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/imageCard"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="@dimen/_180sdp" />
+
+        <Button
+            android:id="@+id/btnCardAction"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_27sdp"
+            android:layout_below="@+id/layoutDefaultCard"
+            android:text="Upload your own"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/btn_bg_active"
+            android:textColor="#fff"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10sdp"
+            >
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/share"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                fab:fab_colorNormal="@color/colorPrimary"
+                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_size="mini"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/menuShare"
+                android:layout_width="wrap_content"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                fab:fab_expandDirection="up"
+                fab:fab_addButtonSize="mini"
+                fab:fab_addButtonColorNormal="@android:color/transparent"
+                fab:fab_addButtonColorPressed="@android:color/transparent"
+                fab:fab_addButtonPlusIconColor="@android:color/transparent"
+                android:layout_alignParentRight="true"
+                >
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnFacebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/fb"
+                    fab:fab_colorNormal="#537cbe"
+                    fab:fab_colorPressed="#537cbe"
+                    fab:fab_size="mini"/>
+                />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnTwitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#78cef1"
+                    fab:fab_icon="@drawable/twi"
+                    fab:fab_colorPressed="#78cef1"
+                    fab:fab_size="mini"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnWhatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#FF029947"
+                    fab:fab_icon="@drawable/whats"
+                    fab:fab_colorPressed="#FF029947"
+                    fab:fab_size="mini"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnLinkedIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/linkedin"
+                    fab:fab_colorNormal="#FF0278B5"
+                    fab:fab_colorPressed="#FF0278B5"
+                    fab:fab_size="mini"/>
+                />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnGPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/google"
+                    fab:fab_colorNormal="#FFDC4B39"
+                    fab:fab_colorPressed="#FFDC4B39"
+                    fab:fab_size="mini"/>
+                />
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnPinterest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#FFBD0A1E"
+                    fab:fab_icon="@drawable/pinterest"
+                    fab:fab_colorPressed="#FFBD0A1E"
+                    fab:fab_size="mini"/>
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/mail"
+                    fab:fab_colorNormal="#8b8f91"
+                    fab:fab_colorPressed="#8b8f91"
+                    fab:fab_size="mini"/>
+                />
+
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+    <!--
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layoutDefaultCard"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:background="@drawable/border_card"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="@dimen/_200sdp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/backpat"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    >
+
+                    <TextView
+                        android:id="@+id/textEdit"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.85"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:layout_marginLeft="@dimen/_25sdp"
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="Please Edit Profile"
+                        android:textColor="@android:color/black"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.15"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/app_icon"
+                        android:layout_margin="@dimen/_3sdp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textCompanyName"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:textSize="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Company"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/textUserName"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:textSize="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:text="SwopInfo User"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/layoutFax"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentBottom="true"
+                        android:weightSum="1"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.25"
+                            android:textSize="@dimen/_11sdp"
+                            android:text="Fax:"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textFax"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.75"
+                            android:textSize="@dimen/_11sdp"
+
+                            android:text="0121-23282"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutTel2"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="@dimen/_25sdp"
+                        android:orientation="horizontal"
+                        android:layout_above="@+id/layoutFax"
+                        android:weightSum="1"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.25"
+                            android:textSize="@dimen/_11sdp"
+
+                            android:text="Telephone 2:"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textTel2"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.75"
+                            android:textSize="@dimen/_11sdp"
+
+                            android:text="012-12585"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutTel1"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="@dimen/_25sdp"
+                        android:orientation="horizontal"
+                        android:layout_above="@+id/layoutTel2"
+                        android:weightSum="1"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.25"
+                            android:textSize="@dimen/_11sdp"
+
+                            android:text="Telephone 1:"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textTel1"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.75"
+                            android:textSize="@dimen/_11sdp"
+
+                            android:text="0121-95225"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutCell"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="@dimen/_25sdp"
+                        android:orientation="horizontal"
+                        android:layout_above="@+id/layoutTel1"
+                        android:weightSum="1"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.25"
+                            android:textSize="@dimen/_11sdp"
+                            android:text="Cell:"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textCell"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.75"
+                            android:textSize="@dimen/_11sdp"
+                            android:text="082478585"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:layout_above="@+id/layoutCell"
+                        android:weightSum="1"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.25"
+                            android:textSize="@dimen/_12sdp"
+                            android:text="Email:"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+
+                        <com.parasme.swopinfo.helper.ShimmerTextView
+                            android:id="@+id/textEmail"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.75"
+                            android:textSize="@dimen/_12sdp"
+                            android:text="user@swopinfo.com"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/imageCard"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="@dimen/_180sdp" />
+
+        <Button
+            android:id="@+id/btnCardAction"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_27sdp"
+            android:layout_below="@+id/layoutDefaultCard"
+            android:text="Upload your own"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/btn_bg_active"
+            android:textColor="#fff"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10sdp"
+            >
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/share"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                fab:fab_colorNormal="@color/colorPrimary"
+                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_size="mini"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/menuShare"
+                android:layout_width="wrap_content"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                fab:fab_expandDirection="up"
+                fab:fab_addButtonSize="mini"
+                fab:fab_addButtonColorNormal="@android:color/transparent"
+                fab:fab_addButtonColorPressed="@android:color/transparent"
+                fab:fab_addButtonPlusIconColor="@android:color/transparent"
+                android:layout_alignParentRight="true"
+                >
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnFacebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/fb"
+                    fab:fab_colorNormal="#537cbe"
+                    fab:fab_colorPressed="#537cbe"
+                    fab:fab_size="mini"/>
+                />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnTwitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#78cef1"
+                    fab:fab_icon="@drawable/twi"
+                    fab:fab_colorPressed="#78cef1"
+                    fab:fab_size="mini"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnWhatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#FF029947"
+                    fab:fab_icon="@drawable/whats"
+                    fab:fab_colorPressed="#FF029947"
+                    fab:fab_size="mini"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnLinkedIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/linkedin"
+                    fab:fab_colorNormal="#FF0278B5"
+                    fab:fab_colorPressed="#FF0278B5"
+                    fab:fab_size="mini"/>
+                />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnGPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/google"
+                    fab:fab_colorNormal="#FFDC4B39"
+                    fab:fab_colorPressed="#FFDC4B39"
+                    fab:fab_size="mini"/>
+                />
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnPinterest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="#FFBD0A1E"
+                    fab:fab_icon="@drawable/pinterest"
+                    fab:fab_colorPressed="#FFBD0A1E"
+                    fab:fab_size="mini"/>
+
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/mail"
+                    fab:fab_colorNormal="#8b8f91"
+                    fab:fab_colorPressed="#8b8f91"
+                    fab:fab_size="mini"/>
+                />
+
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        </RelativeLayout>
+    </RelativeLayout>
+    -->
