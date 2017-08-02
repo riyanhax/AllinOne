@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.fragment.FragmentFavourites;
+import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Category;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
@@ -52,7 +54,7 @@ public class FavouriteAdapter extends ArrayAdapter<Category> {
     class ViewHolder
     {
         TextView textCategoryName;
-        ImageView imageRemove;
+        ImageView imageRemove, imageCategoryIcon;
     }
 
     @Override
@@ -65,12 +67,14 @@ public class FavouriteAdapter extends ArrayAdapter<Category> {
             view = vi.inflate(resourceId, parent, false);
             viewHolder.textCategoryName = (TextView) view.findViewById(R.id.text_favourite);
             viewHolder.imageRemove = (ImageView) view.findViewById(R.id.img_remove);
+            viewHolder.imageCategoryIcon = (ImageView) view.findViewById(R.id.image_category_icon);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
         viewHolder.textCategoryName.setText(categoryArrayList.get(position).getCategoryName());
+        viewHolder.imageCategoryIcon.setImageResource(categoryArrayList.get(position).getCategoryIcon());
         viewHolder.imageRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +87,20 @@ public class FavouriteAdapter extends ArrayAdapter<Category> {
         return view;
     }
 
+    private void removeFav(String catId, final int position){
+        String ids="";
+        categoryArrayList.remove(position);
+        FragmentFavourites.savedIdsList.remove(catId);
+        Log.e("CH",FragmentFavourites.savedIdsList.toString());
+        for (int i = 0; i < FragmentFavourites.savedIdsList.size(); i++) {
+            ids = ids + FragmentFavourites.savedIdsList.get(i) + ",";
+        }
+        ids = ids.substring(0,ids.length()-1);
+        Log.e("new ids",ids);
+        SharedPreferenceUtility.getInstance().save(AppConstants.PREF_FAV_IDS,ids);
+        notifyDataSetChanged();
+    }
+/*
     private void removeFav(String catId, final int position) {
         final Activity activity = (Activity) context;
         String url = "http://dev.swopinfo.com/AddremoveFav.aspx?user_id="+ AppConstants.USER_ID+"&category_ids="+catId+"&action=delete";
@@ -106,6 +124,7 @@ public class FavouriteAdapter extends ArrayAdapter<Category> {
 
         }
     }
+*/
 
 
 }

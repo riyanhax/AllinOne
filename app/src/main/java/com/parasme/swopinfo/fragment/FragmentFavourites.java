@@ -3,6 +3,7 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,19 +18,15 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FavouriteAdapter;
-import com.parasme.swopinfo.adapter.SelectCategoryAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Category;
-import com.parasme.swopinfo.webservice.WebServiceHandler;
-import com.parasme.swopinfo.webservice.WebServiceListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by :- Mukesh Kumawat on 12-Jan-17.
@@ -44,9 +41,10 @@ public class FragmentFavourites extends Fragment {
     private AppCompatActivity mActivity;
     private String[] categories;
     private ListView listCategories;
-    private ArrayList<Category> categoryArrayList;
+    private ArrayList<Category> favArrayList;
     private MenuItem itemSearch, itemGo, itemEdit;
     public static ArrayList<String> favCatIds;
+    public static List<String> savedIdsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +53,7 @@ public class FragmentFavourites extends Fragment {
         setHasOptionsMenu(true);
         findViews(view);
 
-        categoryArrayList = new ArrayList<>();
+        favArrayList = new ArrayList<>();
         favCatIds = new ArrayList<>();
 
         getFavoriteCategories(AppConstants.USER_ID);
@@ -63,6 +61,33 @@ public class FragmentFavourites extends Fragment {
         return view;
     }
 
+    private void getFavoriteCategories(String userId){
+        String [] categories = getResources().getStringArray(R.array.categories);
+        TypedArray categoryIcons = getResources().obtainTypedArray(R.array.category_icons);
+
+        String ids = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
+        Log.e("SAVEDIDS",ids);
+        savedIdsList = new LinkedList<String>(Arrays.asList(ids.split(",")));
+
+        for (int i = 0; i < categories.length; i++) {
+            String id = String.valueOf(i+1);
+            Category category = new Category();
+            category.setCategoryId(i+1);
+            category.setCategoryIcon(categoryIcons.getResourceId(i,1));
+            category.setCategoryName(categories[i]);
+            category.setCategoryChecked(false);
+            if(savedIdsList.contains(id))
+               favArrayList.add(category);
+        }
+
+        if(favArrayList.size()>0)
+            listCategories.setAdapter(new FavouriteAdapter(mActivity, R.layout.row_favourites, favArrayList));
+        else
+            MyApplication.alertDialog(mActivity,"You have not added any favorites","Favorites");
+
+}
+
+/*
     private void getFavoriteCategories(String userId) {
         String url = "http://dev.swopinfo.com/Userfav.aspx?user_id="+userId;
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
@@ -82,10 +107,10 @@ public class FragmentFavourites extends Fragment {
                                     Category category = new Category();
                                     category.setCategoryId(jsonObject1.optInt("categoryid"));
                                     category.setCategoryName(jsonObject1.optString("categoryname"));
-                                    categoryArrayList.add(category);
+                                    favArrayList.add(category);
                                     favCatIds.add(jsonObject1.optInt("categoryid")+"");
                                 }
-                                listCategories.setAdapter(new FavouriteAdapter(mActivity, R.layout.row_favourites, categoryArrayList));
+                                listCategories.setAdapter(new FavouriteAdapter(mActivity, R.layout.row_favourites, favArrayList));
                             }
                             else
                                 MyApplication.alertDialog(mActivity,"You have not added any favorites","Favorites");
@@ -100,6 +125,7 @@ public class FragmentFavourites extends Fragment {
             e.printStackTrace();
         }
     }
+*/
 
 
 
@@ -139,12 +165,12 @@ public class FragmentFavourites extends Fragment {
         itemGo.setTitle("Go");
 
         itemSearch.setVisible(false);
-        itemGo.setVisible(FragmentHome.storeId == 0 ? false : true);
+        itemGo.setVisible(true);
         itemEdit.setVisible(true);
         itemGo.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                MainActivity.replaceFragment(new FragmentPromotions(), getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
                 return false;
             }
         });

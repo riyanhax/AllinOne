@@ -50,6 +50,61 @@
         <item>Log Out</item>
     </string-array>
 
+    <integer-array name="category_icons">
+        <item>@drawable/ic_cell</item>
+        <item>@drawable/ic_banks</item>
+        <item>@drawable/ic_books</item>
+        <item>@drawable/ic_cloths</item>
+        <item>@drawable/ic_eyewear</item>
+        <item>@drawable/ic_gifts</item>
+        <item>@drawable/ic_food</item>
+        <item>@drawable/ic_health</item>
+        <item>@drawable/ic_furniture</item>
+        <item>@drawable/ic_jewellery</item>
+        <item>@drawable/ic_medical</item>
+        <item>@drawable/ic_movies</item>
+        <item>@drawable/ic_pets</item>
+        <item>@drawable/ic_sports</item>
+        <item>@drawable/ic_toys</item>
+        <item>@drawable/ic_travel</item>
+    </integer-array>
+
+
+    <integer-array name="game">
+        <item>@drawable/game1</item>
+        <item>@drawable/game2</item>
+        <item>@drawable/game3</item>
+    </integer-array>
+
+    <integer-array name="hifi">
+        <item>@drawable/hifi1</item>
+        <item>@drawable/hifi2</item>
+        <item>@drawable/hifi3</item>
+        <item>@drawable/hifi4</item>
+    </integer-array>
+
+    <integer-array name="pick">
+        <item>@drawable/pick1</item>
+        <item>@drawable/pick2</item>
+        <item>@drawable/pick3</item>
+        <item>@drawable/pick4</item>
+        <item>@drawable/pick5</item>
+        <item>@drawable/pick6</item>
+        <item>@drawable/pick7</item>
+    </integer-array>
+
+    <integer-array name="spar">
+        <item>@drawable/spar1</item>
+        <item>@drawable/spar2</item>
+        <item>@drawable/spar3</item>
+    </integer-array>
+
+    <integer-array name="wool">
+        <item>@drawable/wool1</item>
+        <item>@drawable/wool2</item>
+        <item>@drawable/wool3</item>
+    </integer-array>
+
     <string-array name="categories">
         <item>Audio, Electronic, PC, Cellphone &amp; Photo</item>
         <item>Banks, Forex and Financial</item>
@@ -300,7 +355,11 @@
     <string name="title">Article Title: %s</string>
     <string name="details">Article Details: %s</string>
     <string name="text_rate">Thank you for giving us your valuable feedback. It helps us to improve our \nplatform.</string>
-    <string name="check_in_description"> * It makes business user able to promote their business with certain geographical areas\n * Add categories of interest to Favorites \n
-    * Variety of promotions on basis of their favorites \n * Share to social platforms from wide range of promotions.
+    <string name="check_in_description"> * SwopInfo Checkin Delivers You Real Time Promotions
+        \n * All you have to do is select your categories that interest you
+        \n * Confirm your favorites and you are on your way to receiving promotions in your specific area/store/mall
+        \n * You can change these favorites at any time to suit your needs
+        \n * Scroll up and down, click on the promotions and should they have more than one page swipe left or right, Thats it
+        \n * Share these promotions to friends/family and colleagues using our share button and in app chat.
     </string>
 </resources>

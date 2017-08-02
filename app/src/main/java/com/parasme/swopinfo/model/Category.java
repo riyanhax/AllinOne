@@ -5,7 +5,7 @@ package com.parasme.swopinfo.model;
  */
 
 public class Category {
-    int categoryId;
+    int categoryId, categoryIcon;
     String categoryName;
     boolean isCategoryChecked;
 
@@ -31,5 +31,13 @@ public class Category {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public int getCategoryIcon() {
+        return categoryIcon;
+    }
+
+    public void setCategoryIcon(int categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 }

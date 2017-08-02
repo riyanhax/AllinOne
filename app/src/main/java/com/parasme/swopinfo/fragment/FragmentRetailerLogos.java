@@ -3,7 +3,6 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -18,8 +17,8 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.PromotionsAdapter;
-import com.parasme.swopinfo.model.Category;
-import com.parasme.swopinfo.model.Store;
+import com.parasme.swopinfo.adapter.RetailerLogoAdapter;
+import com.parasme.swopinfo.model.Retailer;
 
 import java.util.ArrayList;
 
@@ -31,12 +30,13 @@ import java.util.ArrayList;
  * Mobile :- +917737556190
  */
 
-public class FragmentPromotions extends Fragment {
+public class FragmentRetailerLogos extends Fragment {
 
     private AppCompatActivity mActivity;
-    private ListView listCategories;
-    public static ArrayList<Store.Promotion> promotionArrayList;
+    private ListView listRetailerLogos;
+    private ArrayList<Retailer> retailerArrayList;
     private MenuItem itemSearch, itemFavorite;
+    public static int retailerPosition=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,15 +45,14 @@ public class FragmentPromotions extends Fragment {
         setHasOptionsMenu(true);
         findViews(view);
 
-        promotionArrayList = new ArrayList<>();
+        retailerArrayList = new ArrayList<>();
 
-        setArrayList();
+        listRetailerLogos.setAdapter(new RetailerLogoAdapter(mActivity, R.layout.row_retailer_logo, retailerArrayList));
 
-        listCategories.setAdapter(new PromotionsAdapter(mActivity, R.layout.row_promotion, promotionArrayList));
-
-        listCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listRetailerLogos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                retailerPosition = position;
                 MainActivity.replaceFragment(new FragmentPromotionPager(), getFragmentManager(), mActivity, R.id.content_frame);
 
             }
@@ -61,45 +60,10 @@ public class FragmentPromotions extends Fragment {
         return view;
     }
 
-    private void setArrayList() {
-        TypedArray gamePromos = getResources().obtainTypedArray(R.array.game);
-        TypedArray hifiPromos = getResources().obtainTypedArray(R.array.hifi);
-        TypedArray pickPromos = getResources().obtainTypedArray(R.array.pick);
-        TypedArray sparPromos = getResources().obtainTypedArray(R.array.spar);
-        TypedArray woolPromos = getResources().obtainTypedArray(R.array.wool);
-
-        switch (FragmentRetailerLogos.retailerPosition){
-            case 0:
-                for (int i = 0; i <gamePromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(gamePromos.getResourceId(i,0)));
-                }
-                break;
-            case 1:
-                for (int i = 0; i <hifiPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(hifiPromos.getResourceId(i,0)));
-                }
-                break;
-            case 2:
-                for (int i = 0; i <pickPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(pickPromos.getResourceId(i,0)));
-                }
-                break;
-            case 3:
-                for (int i = 0; i <sparPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(sparPromos.getResourceId(i,0)));
-                }
-                break;
-            case 4:
-                for (int i = 0; i <woolPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(woolPromos.getResourceId(i,0)));
-                }
-                break;
-        }
-    }
 
 
     private void findViews(View view) {
-        listCategories = (ListView) view.findViewById(R.id.list_promotions);
+        listRetailerLogos = (ListView) view.findViewById(R.id.list_promotions);
     }
 
     @Override
@@ -132,7 +96,7 @@ public class FragmentPromotions extends Fragment {
         itemFavorite = menu.findItem(R.id.menu_done);
         itemFavorite.setTitle("Favorites");
         itemSearch.setVisible(false);
-        itemFavorite.setVisible(false);
+        itemFavorite.setVisible(true);
         itemFavorite.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

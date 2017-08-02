@@ -4,24 +4,51 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:paddingTop="@dimen/_5sdp"
+    android:weightSum="1"
+    android:gravity="center_vertical"
     android:layout_height="wrap_content">
 
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content">
+<!--
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/_55sdp"
+        android:layout_height="@dimen/_55sdp"
+        android:src="@android:drawable/screen_background_light_transparent"
+        fab:civ_border_width="1px"
+        fab:civ_border_color="@color/colorPrimary"
+        />
+-->
 
-    <CheckBox
-        android:id="@+id/checkbox_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/image_category_icon"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_books"
+            android:padding="@dimen/_2sdp"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/text_category_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
         android:layout_height="wrap_content"
         android:text="Books"
+        android:maxLines="2"
         android:textAppearance="?android:textAppearanceMedium"
         android:layout_marginLeft="@dimen/_3sdp"
         android:textColor="@color/black"
         android:layout_gravity="center"
         />
 
+    <CheckBox
+        android:id="@+id/checkbox_category"
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

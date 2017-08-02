@@ -143,7 +143,10 @@ public class Store {
 
 
 
-    public class Promotion{
-
+    public static class Promotion{
+        public int image;
+        public Promotion(int image){
+            this.image = image;
+        }
     }
 }

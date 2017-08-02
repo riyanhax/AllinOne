@@ -3,6 +3,7 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,14 +68,18 @@ public class FragmentSelectCategories extends Fragment {
     }
 
     private void setListAdapter() {
+        String ids = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
+        TypedArray categoryIcons = getResources().obtainTypedArray(R.array.category_icons);
+
         for (int i = 0; i < categories.length; i++) {
             String id = String.valueOf(i+1);
             Category category = new Category();
             category.setCategoryId(i+1);
+            category.setCategoryIcon(categoryIcons.getResourceId(i,1));
             category.setCategoryName(categories[i]);
             category.setCategoryChecked(false);
 
-            if(!FragmentFavourites.favCatIds.contains(id))
+            if(!ids.contains(id))
                 categoryArrayList.add(category);
         }
         adapter = new SelectCategoryAdapter(mActivity, R.layout.row_select_category, categoryArrayList);
@@ -130,6 +135,20 @@ public class FragmentSelectCategories extends Fragment {
         });
     }
 
+    private void addToFav(String ids, String userId){
+        adapter.removeCategories(ids);
+        String savedIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
+        if(savedIds.equals("")){
+            SharedPreferenceUtility.getInstance().save(AppConstants.PREF_FAV_IDS,ids);
+        }
+        else{
+            savedIds = savedIds+","+ids;
+            SharedPreferenceUtility.getInstance().save(AppConstants.PREF_FAV_IDS,savedIds);
+        }
+        replaceFavFragment();
+    }
+
+/*
     private void addToFav(final String ids, String userId) {
         String url = "http://dev.swopinfo.com/AddremoveFav.aspx?user_id="+userId+"&category_ids="+ids+"&action=add";
         WebServiceHandler webServiceHandle = new WebServiceHandler(mActivity);
@@ -144,17 +163,6 @@ public class FragmentSelectCategories extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.optString("Response").equalsIgnoreCase("sucess")){
                                 adapter.removeCategories(ids);
-/*
-                                for (int i = 0; i < categoryArrayList.size(); i++) {
-                                    if(categoryArrayList.get(i).isCategoryChecked()) {
-                                        Log.e("check",categoryArrayList.get(i).getCategoryName());
-                                        FragmentFavourites.favCatIds.add(categoryArrayList.get(i).getCategoryId() + "");
-                                        categoryArrayList.remove(i);
-                                        adapter.notifyDataSetChanged();
-
-                                    }
-                                }
-*/
                             }
                         }catch (JSONException e){e.printStackTrace();}
                     }
@@ -167,6 +175,7 @@ public class FragmentSelectCategories extends Fragment {
             e.printStackTrace();
         }
     }
+*/
 
     private void replaceFavFragment() {
         Fragment fragment = new FragmentFavourites();

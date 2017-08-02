@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:textAppearance="?android:textAppearanceLarge"
-        android:paddingBottom="@dimen/_30sdp"
+        android:paddingBottom="@dimen/_10sdp"
         />
 
     <LinearLayout
@@ -45,16 +45,21 @@
             android:gravity="center"
             />
 
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="@dimen/_15sdp"
-            android:paddingLeft="@dimen/_8sdp"
-            android:paddingRight="@dimen/_8sdp"
-            android:lineSpacingExtra="@dimen/_5sdp"
-            android:text="@string/check_in_description"
-            />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="@dimen/_15sdp"
+                android:paddingLeft="@dimen/_8sdp"
+                android:paddingRight="@dimen/_8sdp"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:text="@string/check_in_description"
+                />
+
+        </ScrollView>
 
 
     </LinearLayout>

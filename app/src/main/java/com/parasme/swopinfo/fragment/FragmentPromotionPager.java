@@ -3,6 +3,7 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,14 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.PromotionPagerAdapter;
-import com.parasme.swopinfo.adapter.PromotionsAdapter;
-import com.parasme.swopinfo.model.Category;
+import com.parasme.swopinfo.model.Store;
 
 import java.util.ArrayList;
 
@@ -34,7 +32,7 @@ public class FragmentPromotionPager extends Fragment {
 
     private AppCompatActivity mActivity;
     private ViewPager pagerPromotions;
-    private ArrayList<Category> categoryArrayList;
+    private ArrayList<Store.Promotion> promotionArrayList;
     private MenuItem itemSearch, itemHome;
 
     @Override
@@ -44,13 +42,49 @@ public class FragmentPromotionPager extends Fragment {
         setHasOptionsMenu(true);
         findViews(view);
 
-        categoryArrayList = new ArrayList<>();
+        promotionArrayList = new ArrayList<>();
+        setArrayList();
 
-        pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity,  categoryArrayList));
+        pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
 
         return view;
     }
 
+    private void setArrayList() {
+        TypedArray gamePromos = getResources().obtainTypedArray(R.array.game);
+        TypedArray hifiPromos = getResources().obtainTypedArray(R.array.hifi);
+        TypedArray pickPromos = getResources().obtainTypedArray(R.array.pick);
+        TypedArray sparPromos = getResources().obtainTypedArray(R.array.spar);
+        TypedArray woolPromos = getResources().obtainTypedArray(R.array.wool);
+
+        switch (FragmentRetailerLogos.retailerPosition){
+            case 0:
+                for (int i = 0; i <gamePromos.length() ; i++) {
+                    promotionArrayList.add(new Store.Promotion(gamePromos.getResourceId(i,0)));
+                }
+                break;
+            case 1:
+                for (int i = 0; i <hifiPromos.length() ; i++) {
+                    promotionArrayList.add(new Store.Promotion(hifiPromos.getResourceId(i,0)));
+                }
+                break;
+            case 2:
+                for (int i = 0; i <pickPromos.length() ; i++) {
+                    promotionArrayList.add(new Store.Promotion(pickPromos.getResourceId(i,0)));
+                }
+                break;
+            case 3:
+                for (int i = 0; i <sparPromos.length() ; i++) {
+                    promotionArrayList.add(new Store.Promotion(sparPromos.getResourceId(i,0)));
+                }
+                break;
+            case 4:
+                for (int i = 0; i <woolPromos.length() ; i++) {
+                    promotionArrayList.add(new Store.Promotion(woolPromos.getResourceId(i,0)));
+                }
+                break;
+        }
+    }
 
 
     private void findViews(View view) {

@@ -91,6 +91,7 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
     {
         TextView textCategoryName;
         CheckBox checkBoxCategory;
+        ImageView imageCategoryIcon;
     }
 
     @Override
@@ -102,6 +103,7 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
             viewHolder = new ViewHolder();
             view = vi.inflate(resourceId, parent, false);
             viewHolder.textCategoryName = (TextView) view.findViewById(R.id.text_category_name);
+            viewHolder.imageCategoryIcon = (ImageView) view.findViewById(R.id.image_category_icon);
             viewHolder.checkBoxCategory = (CheckBox) view.findViewById(R.id.checkbox_category);
             view.setTag(viewHolder);
         } else {
@@ -110,6 +112,16 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
 
         viewHolder.textCategoryName.setText(categoryArrayList.get(position).getCategoryName());
         viewHolder.checkBoxCategory.setChecked(categoryArrayList.get(position).isCategoryChecked());
+        viewHolder.imageCategoryIcon.setImageResource(categoryArrayList.get(position).getCategoryIcon());
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("BOX",categoryArrayList.get(position).getCategoryName()+"__"+!categoryArrayList.get(position).isCategoryChecked());
+                categoryArrayList.get(position).setCategoryChecked(!categoryArrayList.get(position).isCategoryChecked());
+                notifyDataSetChanged();
+            }
+        });
 
         viewHolder.checkBoxCategory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +141,8 @@ public class SelectCategoryAdapter extends ArrayAdapter<Category> {
             if(categoryArrayList.get(i).isCategoryChecked())
                 ids = ids + categoryArrayList.get(i).getCategoryId()+",";
         }
-        ids = ids.substring(0,ids.length()-1);
+        if(!ids.equals(""))
+            ids = ids.substring(0,ids.length()-1);
         Log.e("ids",ids);
         return ids;
     }

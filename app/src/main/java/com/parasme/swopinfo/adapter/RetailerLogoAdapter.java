@@ -8,8 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.model.Category;
-import com.parasme.swopinfo.model.Store;
+import com.parasme.swopinfo.model.Retailer;
 
 import java.util.ArrayList;
 
@@ -17,18 +16,18 @@ import java.util.ArrayList;
  * Created by SoNu on 6/6/2016.
  */
 
-public class PromotionsAdapter extends ArrayAdapter<Store.Promotion> {
+public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
 
     private int resourceId;
-    private ArrayList<Store.Promotion> promotionArrayList;
+    private ArrayList<Retailer> retailerArrayList;
     private Context context;
     private ViewHolder viewHolder;
     private LayoutInflater vi;
 
-    public PromotionsAdapter(Context context, int resourceId, ArrayList<Store.Promotion> promotionArrayList) {
+    public RetailerLogoAdapter(Context context, int resourceId, ArrayList<Retailer> retailerArrayList) {
         // TODO Auto-generated constructor stub
         super(context,resourceId);
-        this.promotionArrayList = promotionArrayList;
+        this.retailerArrayList = retailerArrayList;
         this.context = context;
         this.resourceId=resourceId;
         vi = (LayoutInflater) context
@@ -38,13 +37,13 @@ public class PromotionsAdapter extends ArrayAdapter<Store.Promotion> {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return promotionArrayList.size();
+        return 5;
     }
 
 
     class ViewHolder
     {
-        ImageView imagePromotion;
+        ImageView imageRetailerLogo;
     }
 
     @Override
@@ -55,14 +54,29 @@ public class PromotionsAdapter extends ArrayAdapter<Store.Promotion> {
         {
             viewHolder = new ViewHolder();
             view = vi.inflate(resourceId, parent, false);
-            viewHolder.imagePromotion = (ImageView) view.findViewById(R.id.img_promotion);
+            viewHolder.imageRetailerLogo = (ImageView) view.findViewById(R.id.img_retailer_logo);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.imagePromotion.setImageResource(promotionArrayList.get(position).image);
-
+        switch (position){
+            case 0:
+                viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_game);
+                break;
+            case 1:
+                viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_hifi);
+                break;
+            case 2:
+                viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_pick);
+                break;
+            case 3:
+                viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_spar);
+                break;
+            case 4:
+                viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_wool);
+                break;
+        }
         return view;
     }
 

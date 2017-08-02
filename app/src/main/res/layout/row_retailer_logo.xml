@@ -6,11 +6,11 @@
 
 
     <ImageView
-        android:id="@+id/img_promotion"
+        android:id="@+id/img_retailer_logo"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_170sdp"
         android:scaleType="fitCenter"
-        android:src="@drawable/weloveswopinfo"
+        android:src="@drawable/logo_spar"
         android:layout_alignParentRight="true"
         />
 

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.model.Category;
+import com.parasme.swopinfo.model.Store;
 
 import java.util.ArrayList;
 
@@ -21,9 +22,9 @@ public class PromotionPagerAdapter extends PagerAdapter {
 
     Context mContext;
     LayoutInflater mLayoutInflater;
-    ArrayList<Category> mResources;
+    ArrayList<Store.Promotion> mResources;
 
-    public PromotionPagerAdapter(Context context, ArrayList<Category> mResources) {
+    public PromotionPagerAdapter(Context context, ArrayList<Store.Promotion> mResources) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mResources = mResources;
@@ -31,7 +32,7 @@ public class PromotionPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return mResources.size();
     }
 
     @Override
@@ -44,6 +45,7 @@ public class PromotionPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.promotion_pager_item, container, false);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_single_promotion);
+        imageView.setImageResource(mResources.get(position).image);
 
         container.addView(itemView);
 
