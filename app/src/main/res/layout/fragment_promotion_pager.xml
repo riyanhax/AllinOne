@@ -10,5 +10,27 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 
+    <com.parasme.swopinfo.helper.RippleBackground
+        android:id="@+id/rippleBackground"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        app:rb_rippleAmount="3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        app:rb_duration="1400"
+        app:rb_scale="5"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_business"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_business"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1px"
+            />
+    </com.parasme.swopinfo.helper.RippleBackground>
 
 </RelativeLayout>

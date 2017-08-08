@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -105,7 +106,7 @@ import static com.parasme.swopinfo.fragment.FragmentUploadsWrapper.textFilesCoun
  */
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends LocationActivity {
+public class MainActivity extends LocationActivity implements LocationActivity.LocationUpdater {
 
     private final String TAG = this.getClass().getName();
 
@@ -272,14 +273,14 @@ public class MainActivity extends LocationActivity {
                 Log.e(TAG,"App Lozic Login failed");
             }};
 
-            User user = new User();
-            user.setUserId(userId); //userId it can be any unique user identifier
-            user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
-            user.setEmail(userEmail); //optional
-            user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
-            user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
-            user.setImageLink(AppConstants.URL_DOMAIN+"upload/user"+ userId+"/profilepic.jpg"); //optional,pass your image link
-            new UserLoginTask(user, listener, this).execute((Void) null);
+        User user = new User();
+        user.setUserId(userId); //userId it can be any unique user identifier
+        user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
+        user.setEmail(userEmail); //optional
+        user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
+        user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
+        user.setImageLink(AppConstants.URL_DOMAIN+"upload/user"+ userId+"/profilepic.jpg"); //optional,pass your image link
+        new UserLoginTask(user, listener, this).execute((Void) null);
     }
 
     private void initPushForMessage(final String fcmToken) {
@@ -510,6 +511,16 @@ public class MainActivity extends LocationActivity {
         drawerLayout.closeDrawer(listLeftDrawer,true);
     }
 
+    @Override
+    public void onReceiveLocation(Location location) {
+
+    }
+
+    @Override
+    public void onRejectLocationRequest() {
+
+    }
+
 
     class MenuAdapter extends BaseAdapter {
 
@@ -592,46 +603,44 @@ public class MainActivity extends LocationActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //list of photos of seleced
-        if (data != null) {
-            Log.e("TAG", "onActivityResult: " );
-            List<String> photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
-            int size = photos.size();
+        if (requestCode == LocationActivity.REQUEST_CHECK_SETTINGS)
+            super.onActivityResult(requestCode, resultCode, data);
+        else{
+            if (data != null) {
+                Log.e("TAG", "onActivityResult: ");
+                List<String> photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
+                int size = photos.size();
 
-            if(getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentGroupDetail){
-                FragmentGroupDetail.fileArrayList.clear();
-                FragmentGroupDetail.textFilesCount.setVisibility(View.VISIBLE);
-                FragmentGroupDetail.textFilesCount.setText((size==1) ? "1 File Selected" : (size+" Files Selected"));
-                for (int i = 0; i < photos.size(); i++) {
-                    FragmentGroupDetail.fileArrayList.add(new File(photos.get(i)));
-                }
-            }
-
-            else if(getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentCompany) {
-                FragmentCompany.fileArrayList.clear();
-                FragmentCompany.textFilesCount.setVisibility(View.VISIBLE);
-                FragmentCompany.textFilesCount.setText((size==1) ? "1 File Selected" : (size+" Files Selected"));
-                for (int i = 0; i < photos.size(); i++) {
-                    FragmentCompany.fileArrayList.add(new File(photos.get(i)));
-                }
-            }
-
-            else if(getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentHome) {
-                FragmentHome.fileArrayList.clear();
-                FragmentHome.textFilesCount.setVisibility(View.VISIBLE);
-                FragmentHome.textFilesCount.setText((size==1) ? "1 File Selected" : (size+" Files Selected"));
-                for (int i = 0; i < photos.size(); i++) {
-                    FragmentHome.fileArrayList.add(new File(photos.get(i)));
-                }
-            }
-
-            else {
-                FragmentUploadsWrapper.fileArrayList.clear();
-                textFilesCount.setVisibility(View.VISIBLE);
-                textFilesCount.setText((size==1) ? "1 File Selected" : (size+" Files Selected"));
-                for (int i = 0; i < photos.size(); i++) {
-                    FragmentUploadsWrapper.fileArrayList.add(new File(photos.get(i)));
+                if (getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentGroupDetail) {
+                    FragmentGroupDetail.fileArrayList.clear();
+                    FragmentGroupDetail.textFilesCount.setVisibility(View.VISIBLE);
+                    FragmentGroupDetail.textFilesCount.setText((size == 1) ? "1 File Selected" : (size + " Files Selected"));
+                    for (int i = 0; i < photos.size(); i++) {
+                        FragmentGroupDetail.fileArrayList.add(new File(photos.get(i)));
+                    }
+                } else if (getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentCompany) {
+                    FragmentCompany.fileArrayList.clear();
+                    FragmentCompany.textFilesCount.setVisibility(View.VISIBLE);
+                    FragmentCompany.textFilesCount.setText((size == 1) ? "1 File Selected" : (size + " Files Selected"));
+                    for (int i = 0; i < photos.size(); i++) {
+                        FragmentCompany.fileArrayList.add(new File(photos.get(i)));
+                    }
+                } else if (getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentHome) {
+                    FragmentHome.fileArrayList.clear();
+                    FragmentHome.textFilesCount.setVisibility(View.VISIBLE);
+                    FragmentHome.textFilesCount.setText((size == 1) ? "1 File Selected" : (size + " Files Selected"));
+                    for (int i = 0; i < photos.size(); i++) {
+                        FragmentHome.fileArrayList.add(new File(photos.get(i)));
+                    }
+                } else {
+                    FragmentUploadsWrapper.fileArrayList.clear();
+                    textFilesCount.setVisibility(View.VISIBLE);
+                    textFilesCount.setText((size == 1) ? "1 File Selected" : (size + " Files Selected"));
+                    for (int i = 0; i < photos.size(); i++) {
+                        FragmentUploadsWrapper.fileArrayList.add(new File(photos.get(i)));
+                    }
                 }
             }
         }
@@ -640,6 +649,7 @@ public class MainActivity extends LocationActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        LocationActivity.locationUpdater = MainActivity.this;
     }
 
 

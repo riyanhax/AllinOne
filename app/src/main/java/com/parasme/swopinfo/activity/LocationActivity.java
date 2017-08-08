@@ -269,6 +269,7 @@ public class LocationActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("HELLO","fdsadffsfdsaf");
         switch (requestCode) {
             // Check for the integer request code originally supplied to startResolutionForResult().
             case REQUEST_CHECK_SETTINGS:
@@ -282,7 +283,7 @@ public class LocationActivity extends AppCompatActivity implements
                         if (locationUpdater!=null)
                             locationUpdater.onRejectLocationRequest();
                         progressDialog.dismiss();
-                        finish();
+                        //finish();
                         break;
                 }
                 break;
@@ -335,7 +336,7 @@ public class LocationActivity extends AppCompatActivity implements
                     if (locationUpdater!=null)
                         locationUpdater.onRejectLocationRequest();
                     progressDialog.dismiss();
-                    finish();
+                    //finish();
                 }
                 return;
             }
@@ -456,7 +457,7 @@ public class LocationActivity extends AppCompatActivity implements
                 mCurrentLocation = location;
                 locationUpdater.onReceiveLocation(location);
                 progressDialog.dismiss();
-                finish();
+                //finish();
             }
 
         }

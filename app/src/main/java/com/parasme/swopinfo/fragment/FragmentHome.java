@@ -168,6 +168,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         imgChecking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("LOCATION",LocationActivity.mCurrentLocation.getLatitude()+"");
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
                     ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
                 else

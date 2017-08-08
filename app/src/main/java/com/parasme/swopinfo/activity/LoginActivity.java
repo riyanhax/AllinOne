@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isWriteAllowed=false;
     private boolean isCameraAllowed=false;
+    private boolean isLocationAllowed=false;
     private WebView webView;
     private ProgressBar progressBar;
     private boolean isURLShown = false;
@@ -106,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Click(R.id.btnLogin)
     void clickLoginButton(){
-        if(isWriteAllowed && isCameraAllowed)
+        if(isWriteAllowed && isCameraAllowed && isLocationAllowed)
             validateAndLogin();
         else
             askPermissions();
@@ -229,8 +230,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void askPermissions() {
         Ask.on(this)
-                .forPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .withRationales("Write Permission is need to be allowed", "Camera Permission is need to be allowed") //optional
+                .forPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+                .withRationales("Write Permission is need to be allowed", "Camera Permission is need to be allowed","Location permission is needed") //optional
                 .go();
     }
 
@@ -243,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
     //optional
     @AskDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void accessFineLocationDenied() {
-        Log.e("Login", "Location  DENiED");
+        Log.e("Login", "Write  DENiED");
     }
 
     //optional
@@ -255,6 +256,18 @@ public class LoginActivity extends AppCompatActivity {
     //optional
     @AskDenied(Manifest.permission.CAMERA)
     public void accessCameraDenied() {
+        Log.e("Login", "Camera  DENiED");
+    }
+
+    //optional
+    @AskGranted(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void accessLocationGranted() {
+        isLocationAllowed=true;
+    }
+
+    //optional
+    @AskDenied(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void accessLocationDenied() {
         Log.e("Login", "Location  DENiED");
     }
 

@@ -3,10 +3,12 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +18,15 @@ import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.adapter.PromotionPagerAdapter;
+import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.model.Store;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.parasme.swopinfo.activity.MainActivity.replaceFragment;
 
 /**
  * Created by :- Mukesh Kumawat on 12-Jan-17.
@@ -34,6 +42,7 @@ public class FragmentPromotionPager extends Fragment {
     private ViewPager pagerPromotions;
     private ArrayList<Store.Promotion> promotionArrayList;
     private MenuItem itemSearch, itemHome;
+    private CircleImageView imgBusinessLink;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +55,21 @@ public class FragmentPromotionPager extends Fragment {
         setArrayList();
 
         pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
+
+        final RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.rippleBackground);
+        rippleBackground.startRippleAnimation();
+
+        imgBusinessLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new FragmentCompany();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isOwnCompany", false);
+                bundle.putInt(AppConstants.KEY_COMPANY_ID,54);
+                fragment.setArguments(bundle);
+                replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+            }
+        });
 
         return view;
     }
@@ -89,6 +113,7 @@ public class FragmentPromotionPager extends Fragment {
 
     private void findViews(View view) {
         pagerPromotions = (ViewPager) view.findViewById(R.id.view_pager_promotions);
+        imgBusinessLink = (CircleImageView) view.findViewById(R.id.img_business);
     }
 
     @Override
@@ -113,6 +138,7 @@ public class FragmentPromotionPager extends Fragment {
     public void onResume() {
         super.onResume();
         ((TextView) mActivity.findViewById(R.id.text_title)).setText("Promotions");
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -125,6 +151,11 @@ public class FragmentPromotionPager extends Fragment {
         itemHome.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Sharing Promo");
+                i.putExtra(Intent.EXTRA_TEXT, "https://www.smart.com.kh/sites/default/files/oview/en.png");
+                startActivity(Intent.createChooser(i, "Share Promo"));
                 return false;
             }
         });
@@ -136,5 +167,4 @@ public class FragmentPromotionPager extends Fragment {
         itemSearch.setVisible(true);
         itemHome.setVisible(false);
     }
-
 }
