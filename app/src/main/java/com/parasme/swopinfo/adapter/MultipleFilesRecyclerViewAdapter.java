@@ -2,6 +2,7 @@ package com.parasme.swopinfo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,10 @@ public class MultipleFilesRecyclerViewAdapter extends RecyclerView.Adapter<Multi
 
     @Override
     public void onBindViewHolder(MultipleFilesViewHolders holder, int position) {
-        Picasso.with(context).load(itemList.get(position).getThumbURL()).placeholder(R.drawable.document_gray).error(R.drawable.document_gray).into(holder.countryPhoto);
+        if(itemList.get(position).getThumbURL().contains("presentation.png") && itemList.get(position).getFileType().contains("image"))
+            Picasso.with(context).load(itemList.get(position).getFileURL()).resize(150,150).onlyScaleDown().placeholder(R.drawable.document_gray).error(R.drawable.document_gray).into(holder.countryPhoto);
+        else
+            Picasso.with(context).load(itemList.get(position).getThumbURL()).placeholder(R.drawable.document_gray).error(R.drawable.document_gray).into(holder.countryPhoto);
         if (itemList.size() > 4 && position == 3)
         {
             holder.layoutMoreFiles.setVisibility(View.VISIBLE);

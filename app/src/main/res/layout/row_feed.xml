@@ -162,8 +162,9 @@
             <ImageView
                 android:id="@+id/imageFileThumb"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_160sdp"
-                android:scaleType="fitCenter"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:src="@drawable/app_logo"
                 />
@@ -249,7 +250,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
+            <com.parasme.swopinfo.helper.NonScrollRecyclerView
                 android:id="@+id/recycler_view_multiple_files"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

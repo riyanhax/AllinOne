@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -57,6 +58,7 @@ import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.fragment.FragmentGroupDetail;
 import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.fragment.FragmentProfile;
+import com.parasme.swopinfo.fragment.FragmentRadio;
 import com.parasme.swopinfo.fragment.FragmentRateUs;
 import com.parasme.swopinfo.fragment.FragmentSearch;
 import com.parasme.swopinfo.fragment.FragmentSettings;
@@ -735,5 +737,19 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
         dialogPayment.show();
         return dialogPayment;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem itemLive= menu.findItem(R.id.menu_live);
+        itemLive.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                replaceFragment(new FragmentRadio(), getFragmentManager(), MainActivity.this, R.id.content_frame);
+                return false;
+            }
+        });
+        return super.onPrepareOptionsMenu(menu);
+
     }
 }

@@ -16,13 +16,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
+import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FavouriteAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Category;
+import com.parasme.swopinfo.model.Retailer;
+import com.parasme.swopinfo.model.Store;
+import com.parasme.swopinfo.webservice.WebServiceHandler;
+import com.parasme.swopinfo.webservice.WebServiceListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -77,7 +87,7 @@ public class FragmentFavourites extends Fragment {
             category.setCategoryName(categories[i]);
             category.setCategoryChecked(false);
             if(savedIdsList.contains(id))
-               favArrayList.add(category);
+                favArrayList.add(category);
         }
 
         if(favArrayList.size()>0)
@@ -85,7 +95,7 @@ public class FragmentFavourites extends Fragment {
         else
             MyApplication.alertDialog(mActivity,"You have not added any favorites","Favorites");
 
-}
+    }
 
 /*
     private void getFavoriteCategories(String userId) {
@@ -160,6 +170,8 @@ public class FragmentFavourites extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         itemSearch= menu.findItem(R.id.menu_search);
+        MenuItem itemLive= menu.findItem(R.id.menu_live);
+        itemLive.setVisible(false);
         itemGo = menu.findItem(R.id.menu_done);
         itemEdit = menu.findItem(R.id.menu_edit);
         itemGo.setTitle("Go");
@@ -170,7 +182,15 @@ public class FragmentFavourites extends Fragment {
         itemGo.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+/*
+                if(FragmentHome.retailerList.size()!=0)
+                    MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
+                else
+                    checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
+*/
                 MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
+
+
                 return false;
             }
         });
@@ -190,4 +210,60 @@ public class FragmentFavourites extends Fragment {
         itemGo.setVisible(false);
         itemEdit.setVisible(false);
     }
+
+    private void checkIn(String latitude, String longitude, String userId) {
+        String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
+        Log.e("catids", catIds);
+        String url = "http://dev.swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+                "&retailer_long="+longitude;
+
+        WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(final String response) {
+                Log.e("Checkin",response);
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.opt("Result") instanceof JSONArray){
+                                JSONArray jsonArray = jsonObject.optJSONArray("Result");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject retailerObject = jsonArray.getJSONObject(i);
+                                    Retailer retailer = new Retailer();
+                                    retailer.setRetailerLogo(retailerObject.optString("storelogo"));
+
+                                    ArrayList<Store.Promotion> promotionList = new ArrayList<>();
+
+                                    JSONArray promotionArray = retailerObject.optJSONArray("pro");
+                                    for (int j = 0; j < promotionArray.length(); j++) {
+                                        JSONObject promotionObject = promotionArray.optJSONObject(j);
+                                        Store.Promotion promotion = new Store.Promotion();
+                                        promotion.setImageURL(promotionObject.optString("promotionimg"));
+                                        promotionList.add(promotion);
+                                    }
+
+                                    retailer.setPromotions(promotionList);
+                                    if(promotionArray.length()!=0)
+                                        FragmentHome.retailerList.add(retailer);
+                                }
+
+                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+
+                            }
+                            else
+                                MyApplication.alertDialog(mActivity,"No Store found near you", "Check In");
+                        }catch (JSONException e){e.printStackTrace();}
+                    }
+                });
+            }
+        };
+        try {
+            webServiceHandler.get(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

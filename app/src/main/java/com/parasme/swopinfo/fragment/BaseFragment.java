@@ -27,7 +27,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener{
 
     protected View baseView;
     protected AppCompatActivity mActivity;
-    protected ImageView imageActionFeed,imageActionUploads,imageActionFollowing,imageActionFollower,imageActionGroups,imageActionBookmarks;
+    protected ImageView imageActionFeed,imageActionUploads,imageActionFollowing,imageActionFollower,imageActionGroups,
+            imageActionBookmarks;
     public static boolean isFollowersLoaded;
     public static boolean isFollowingLoaded;
     public static boolean isGroupsLoaded;

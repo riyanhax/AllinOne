@@ -42,7 +42,12 @@ import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Comment;
 import com.parasme.swopinfo.model.Feed;
+import com.parasme.swopinfo.model.Retailer;
+import com.parasme.swopinfo.model.Store;
 import com.parasme.swopinfo.model.Upload;
+import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
+import com.parasme.swopinfo.urlpreview.SourceContent;
+import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.MemoryPolicy;
@@ -63,6 +68,8 @@ import java.util.Date;
 import static com.parasme.swopinfo.fragment.FragmentAdd.broadcastArray;
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 import android.support.v4.widget.SwipeRefreshLayout;
+
+import okhttp3.FormBody;
 
 
 /**
@@ -89,10 +96,13 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     public static FeedAdapter adapter;
     private ImageView imgChecking;
     public static int storeId = 0;
+    public static ArrayList<Retailer> retailerList;
 
     @Override
     public void onResume() {
         super.onResume();
+
+        retailerList = new ArrayList<>();
 
         imageActionFeed.setImageResource(R.drawable.ic_newsfeed_active);
 
@@ -154,13 +164,14 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, feedArrayList));
+                            listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, feedArrayList, listFeeds));
                         }
                     });
             }
         });
 
         imgChecking = (ImageView) childView.findViewById(R.id.img_checkin);
+
 
         final RippleBackground rippleBackground=(RippleBackground)childView.findViewById(R.id.rippleBackground);
         rippleBackground.startRippleAnimation();
@@ -169,24 +180,28 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             @Override
             public void onClick(View v) {
                 Log.e("LOCATION",LocationActivity.mCurrentLocation.getLatitude()+"");
+/*
+                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
+                    checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
+                else
+                    showIntroDialog();
+*/
+
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
                     ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
                 else
                     showIntroDialog();
-                //checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
-
-/*
-                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                    ((MainActivity)mActivity).replaceFragment(new FragmentPromotions(),getFragmentManager(),mActivity,R.id.content_frame);
-                else
-                    showIntroDialog();
-*/
             }
         });
     }
 
+
     private void checkIn(String latitude, String longitude, String userId) {
-        String url = "http://dev.swopinfo.com/nearestmall.aspx?user_id="+userId+"&user_long="+longitude+"&user_lat="+latitude;
+        String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
+        Log.e("catids", catIds);
+        String url = "http://dev.swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+                "&retailer_long="+longitude;
+
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
@@ -197,16 +212,29 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                     public void run() {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject.opt("Result") instanceof JSONObject){
-                                JSONObject storeObject = jsonObject.optJSONObject("Result").optJSONArray("Store").optJSONObject(0);
-                                JSONArray categoryArray = jsonObject.optJSONObject("Result").optJSONArray("Category");
-                                JSONArray promotionArray = jsonObject.optJSONObject("Result").optJSONArray("Promotions");
-                                storeId = storeObject.optInt("StoreId");
+                            if(jsonObject.opt("Result") instanceof JSONArray){
+                                JSONArray jsonArray = jsonObject.optJSONArray("Result");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject retailerObject = jsonArray.getJSONObject(i);
+                                    Retailer retailer = new Retailer();
+                                    retailer.setRetailerLogo(retailerObject.optString("storelogo"));
 
-                                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                                    ((MainActivity)mActivity).replaceFragment(new FragmentPromotions(),getFragmentManager(),mActivity,R.id.content_frame);
-                                else
-                                    showIntroDialog();
+                                    ArrayList<Store.Promotion> promotionList = new ArrayList<>();
+
+                                    JSONArray promotionArray = retailerObject.optJSONArray("pro");
+                                    for (int j = 0; j < promotionArray.length(); j++) {
+                                        JSONObject promotionObject = promotionArray.optJSONObject(j);
+                                        Store.Promotion promotion = new Store.Promotion();
+                                        promotion.setImageURL(promotionObject.optString("promotionimg"));
+                                        promotionList.add(promotion);
+                                    }
+
+                                    retailer.setPromotions(promotionList);
+                                    if(promotionArray.length()!=0)
+                                        retailerList.add(retailer);
+                                }
+
+                                    ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
 
                             }
                             else
@@ -366,7 +394,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                         @Override
                         public void run() {
                             // When feeds api is called from its own screen
-                            adapter = new FeedAdapter(activity, R.layout.row_feed, feedArrayList);
+                            adapter = new FeedAdapter(activity, R.layout.row_feed, feedArrayList, listView);
                             listView.setAdapter(adapter);
                             swipeRefreshLayout.setRefreshing(false);
                             adapter.notifyDataSetChanged();
@@ -534,11 +562,11 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                 dialog.dismiss();
             }
         });
-        adb.setNegativeButton("Go to Favorites",new DialogInterface.OnClickListener() {
+        adb.setNegativeButton("Select Categories",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                MainActivity.replaceFragment(new FragmentFavourites(),getFragmentManager(),mActivity,R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentSelectCategories(),getFragmentManager(),mActivity,R.id.content_frame);
             }
         });
 

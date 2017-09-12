@@ -129,6 +129,9 @@ public class FragmentPromotions extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         itemSearch= menu.findItem(R.id.menu_search);
+        MenuItem itemLive= menu.findItem(R.id.menu_live);
+        itemLive.setVisible(false);
+
         itemFavorite = menu.findItem(R.id.menu_done);
         itemFavorite.setTitle("Favorites");
         itemSearch.setVisible(false);

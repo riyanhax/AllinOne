@@ -16,6 +16,7 @@ public class GcmService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
+
         sendNotification("Received GCM Message: " + data.toString());
         if(MobiComPushReceiver.isMobiComPushNotification(data)) {
             MobiComPushReceiver.processMessageAsync(this, data);

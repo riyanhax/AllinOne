@@ -55,6 +55,7 @@ public class FragmentPromotionPager extends Fragment {
         setArrayList();
 
         pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
+        //pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions()));
 
         final RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.rippleBackground);
         rippleBackground.startRippleAnimation();
@@ -144,6 +145,9 @@ public class FragmentPromotionPager extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         itemSearch= menu.findItem(R.id.menu_search);
+        MenuItem itemLive= menu.findItem(R.id.menu_live);
+        itemLive.setVisible(false);
+
         itemHome = menu.findItem(R.id.menu_done);
         itemHome.setTitle("Share");
         itemSearch.setVisible(false);

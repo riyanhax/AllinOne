@@ -16,7 +16,7 @@ public class Feed {
 
     private int userId, fileId, fileUserId, companyId, viewsCount, downloadsCount, statusInfoId, voteStatus;
     private String type, itemDate, comment, userFullName, fileName, fileTitle, thumbFileName, folderName, fileType, videoUrl, companyName,
-            companyThumbFileName, userThumb, thumbURL, itemTimeAgo, fileTime, previewTitle, previewPageURL, previewDescription, previewThumbURL;
+            companyThumbFileName, userThumb, thumbURL, itemTimeAgo, fileTime, previewTitle, previewPageURL, previewDescription, previewThumbURL, fileURL;
     private boolean isMenuExpanded, isErrorSet, isPreviewLoaded, userPicLoaded;
     private EditText commentEditText;
     private ArrayList<Comment> commentArrayList = new ArrayList<>();
@@ -309,5 +309,13 @@ public class Feed {
 
     public Bitmap getUserBitmap() {
         return this.userBitmap;
+    }
+
+    public String getFileURL() {
+        return fileURL;
+    }
+
+    public void setFileURL(String fileURL) {
+        this.fileURL = fileURL;
     }
 }

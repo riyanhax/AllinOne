@@ -27,6 +27,15 @@
         android:layout_margin="@dimen/_5sdp"
         />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true" />
+
     <me.kaelaela.opengraphview.OpenGraphView
         android:id="@+id/og_view"
         android:layout_width="match_parent"

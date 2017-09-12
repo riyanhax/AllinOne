@@ -40,11 +40,15 @@ import com.parasme.swopinfo.fragment.FragmentCompany;
 import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.NonScrollRecyclerView;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Comment;
 import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.model.Upload;
+import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
+import com.parasme.swopinfo.urlpreview.SourceContent;
+import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 
@@ -76,16 +80,15 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
     DisplayImageOptions optionsUserImage = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.drawable.avtar)
-                .showImageForEmptyUri(R.drawable.avtar)
-                .showImageOnFail(R.drawable.avtar)
-                .cacheInMemory(false)
-                .cacheOnDisk(false)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
+            .showImageForEmptyUri(R.drawable.avtar)
+            .showImageOnFail(R.drawable.avtar)
+            .cacheInMemory(false)
+            .cacheOnDisk(false)
+            .considerExifParams(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .build();
 
     DisplayImageOptions optionsFile = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.document_gray)
             .showImageForEmptyUri(R.drawable.document_gray)
             .showImageOnFail(R.drawable.document_gray)
             .cacheInMemory(false)
@@ -109,8 +112,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     private CommentAdapter commentAdapter;
     private ArrayList<Comment> commentArrayList;
     public static ArrayList<String> arrayList = new ArrayList<>();
+    public ListView listFeeds;
 
-    public FeedAdapter(Context context, int resourceId, ArrayList<Feed> feedArrayList ) {
+    public FeedAdapter(Context context, int resourceId, ArrayList<Feed> feedArrayList, ListView listFeeds) {
         // TODO Auto-generated constructor stub
         super(context,resourceId);
         this.feedArrayList = feedArrayList;
@@ -119,6 +123,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         vi = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         arrayList.clear();
+        this.listFeeds = listFeeds;
     }
 
     @Override
@@ -138,13 +143,14 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
         FloatingActionsMenu menuShare;
         Button btnComment,btnShareMe;
-        RecyclerView recyclerView;
+        NonScrollRecyclerView recyclerView;
 
-        //ProgressBar progressBar;
+        ProgressBar progressBar;
         // Preview
         LinearLayout layoutPreview,infoWrap,layoutPreviewContent;
         View loading;;
         OpenGraphView openGraphView;
+        TextCrawler textCrawler;
     }
 
     @Override
@@ -170,7 +176,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.imageShareThumb = (ImageView) view.findViewById(R.id.imageShareThumb);
             viewHolder.layoutFileComment = (LinearLayout) view.findViewById(R.id.layoutFileComment);
             viewHolder.layoutPreview = (LinearLayout) view.findViewById(R.id.layoutPreview);
-            viewHolder.recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_multiple_files);
+            viewHolder.recyclerView = (NonScrollRecyclerView) view.findViewById(R.id.recycler_view_multiple_files);
             viewHolder.layoutAdditionalInfo = (LinearLayout) view.findViewById(R.id.layoutAdditionalInfo);
             viewHolder.layoutMultipleFiles = (LinearLayout) view.findViewById(R.id.layoutMultipleFiles);
             viewHolder.layoutShare = (LinearLayout) view.findViewById(R.id.layoutShare);
@@ -188,13 +194,15 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.imageDislkike = (ImageView) view.findViewById(R.id.imageDisLike);
             viewHolder.btnComment = (Button) view.findViewById(R.id.btnComment);
             viewHolder.btnShareMe = (Button) view.findViewById(R.id.btnShareMe);
-            //viewHolder.progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+            viewHolder.progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
             viewHolder.infoWrap = (LinearLayout) view.findViewById(R.id.info_wrap);
             viewHolder.openGraphView = (OpenGraphView) view.findViewById(R.id.og_view);
             viewHolder.textPreviewTitle = (TextView) viewHolder.openGraphView.findViewById(R.id.og_title);
             viewHolder.textPreviewDescription = (TextView) viewHolder.openGraphView.findViewById(R.id.og_description);
             viewHolder.textPreviewURL = (TextView) viewHolder.openGraphView.findViewById(R.id.og_url);
             viewHolder.imagePreviewThumb = (ImageView) viewHolder.openGraphView.findViewById(R.id.og_image);
+            viewHolder.textCrawler  = new TextCrawler();
+
             //viewHolder.progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
             view.setTag(viewHolder);
         } else {
@@ -278,39 +286,37 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     private void loadUserOrCompanyThumb(String userThumbUrl, final ImageView imageView, final int position) {
         userThumbUrl=userThumbUrl.substring(1);
         userThumbUrl=AppConstants.URL_DOMAIN+userThumbUrl;
-        Log.e("POSSS",position+"");
 
         Bitmap imageBitmap = mBitmapCache.get(userThumbUrl + "?"+randomNumber);
 
         if(imageBitmap!=null) {
             imageView.setImageBitmap(imageBitmap);
-            Log.e("BmpCache","except comment");
         }
 
         else {
-                ImageLoader.getInstance()
-                        .displayImage(userThumbUrl + "?" + randomNumber, imageView, optionsUserImage, new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
+            ImageLoader.getInstance()
+                    .displayImage(userThumbUrl + "?" + randomNumber, imageView, optionsUserImage, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                mBitmapCache.put(imageUri, loadedImage);
-                                notifyDataSetChanged();
-                            }
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            mBitmapCache.put(imageUri, loadedImage);
+                            //notifyDataSetChanged();
+                        }
 
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
 
-                            }
-                        });
+                        }
+                    });
         }
 /*
         Picasso.with(getContext()).load(userThumbUrl)
@@ -565,8 +571,8 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     if(imageBitmap!=null)
                         viewHolder.imageShareThumb.setImageBitmap(imageBitmap);
                     else
-                    ImageLoader.getInstance()
-                            .displayImage(uploadArrayList.get(0).getThumbURL(), viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
+                        ImageLoader.getInstance()
+                                .displayImage(uploadArrayList.get(0).getThumbURL(), viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
 
                     //Picasso.with(getContext()).load(uploadArrayList.get(0).getThumbURL()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageShareThumb);
                 }
@@ -607,68 +613,161 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.layoutMultipleFiles.setVisibility(View.GONE);
         viewHolder.textShare.setVisibility(View.GONE);
         viewHolder.textView.setText("shared some info");
-        if(!feedArrayList.get(position).isPreviewLoaded()){
 
-            //viewHolder.progressBar.setVisibility(View.VISIBLE);
 
-            OnLoadListener onLoadListener = new OnLoadListener(){
-                @Override
-                public void onLoadFinish(OGData ogData) {
-                    //Log.e("TITLE",ogData.getTitle());
-                    //viewHolder.progressBar.setVisibility(View.GONE);
-                    feedArrayList.get(position).setPreviewLoaded(true);
-                    feedArrayList.get(position).setPreviewTitle(ogData.getTitle());
-                    feedArrayList.get(position).setPreviewDescription(ogData.getDescription());
-                    feedArrayList.get(position).setPreviewPageURL(ogData.getUrl());
-                    feedArrayList.get(position).setPreviewThumbURL(ogData.getImage());
-                    //notifyDataSetChanged();
-                }
-            };
 
-            viewHolder.openGraphView.setOnLoadListener(onLoadListener);
-            viewHolder.openGraphView.loadFrom(url);
-        }
-
-        else{
-            //viewHolder.progressBar.setVisibility(View.GONE);
-            viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
-            viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
-            viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
-            viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try{
-                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
-                        ((Activity)context).startActivity(myIntent);
-                    }catch (ActivityNotFoundException e){
-                        MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
+        if(!url.contains("24.com")){
+            viewHolder.progressBar.setVisibility(View.GONE);
+            if (!feedArrayList.get(position).isPreviewLoaded()) {
+                Log.e("AAAAA",url);
+                //feedArrayList.get(position).setPreviewLoaded(true);
+                OnLoadListener onLoadListener = new OnLoadListener() {
+                    @Override
+                    public void onLoadFinish(OGData ogData) {
+                        feedArrayList.get(position).setPreviewTitle(ogData.getTitle());
+                        feedArrayList.get(position).setPreviewDescription(ogData.getDescription());
+                        feedArrayList.get(position).setPreviewPageURL(ogData.getUrl());
+                        feedArrayList.get(position).setPreviewThumbURL(ogData.getImage());
+                        feedArrayList.get(position).setPreviewLoaded(true);
+                        notifyDataSetChanged();
+                        //updateURLView(position, ogData.getTitle(), ogData.getDescription(), ogData.getUrl(), ogData.getImage());
                     }
-                }
-            });
-            //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
-            Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
-            if(imageBitmap!=null)
-                viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
-            else
-            ImageLoader.getInstance()
-                    .displayImage(feedArrayList.get(position).getPreviewThumbURL(), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
+                };
 
-            //notifyDataSetChanged();
+                viewHolder.openGraphView.setOnLoadListener(onLoadListener);
+                viewHolder.openGraphView.loadFrom(url);
+            }
+
+            else{
+                viewHolder.openGraphView.loadFrom(url);
+/*
+                Log.e("BBBBBBB",url);
+                //viewHolder.progressBar.setVisibility(View.GONE);
+                viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
+                viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
+                viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
+                viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try{
+                            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
+                            ((Activity)context).startActivity(myIntent);
+                        }catch (ActivityNotFoundException e){
+                            MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
+                        }
+                    }
+                });
+                //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
+                Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
+                if(imageBitmap!=null)
+                    viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
+                else
+                    ImageLoader.getInstance()
+                            .displayImage(feedArrayList.get(position).getPreviewThumbURL(), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
+
+*/
+            }
+
         }
 
-        notifyDataSetChanged();
+        else {
+            if (!feedArrayList.get(position).isPreviewLoaded()) {
+                LinkPreviewCallback callback = new LinkPreviewCallback() {
+                    @Override
+                    public void onPre() {
+                        viewHolder.progressBar.setVisibility(View.VISIBLE);
+                        viewHolder.openGraphView.setVisibility(View.GONE);
+                    }
 
-/*
-        new Utils((Activity) context).getData(feedArrayList.get(position).getComment(), new Utils.URLPreview() {
-            @Override
-            public void onDataReceived(String title, String pageURL, String description, String thumbURL) {
-                viewHolder.progressBar.setVisibility(View.GONE);
-                viewHolder.layoutPreviewContent.setVisibility(View.VISIBLE);
-                viewHolder.textPreviewTitle.setText(title);
+                    @Override
+                    public void onPos(SourceContent sourceContent, boolean isNull) {
+                        if (feedArrayList.size() != 0){
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.openGraphView.setVisibility(View.VISIBLE);
+                            Log.e("DES", sourceContent.getDescription());
+                            feedArrayList.get(position).setPreviewLoaded(true);
+                            feedArrayList.get(position).setPreviewTitle(sourceContent.getTitle());
+                            feedArrayList.get(position).setPreviewDescription(sourceContent.getDescription());
+                            feedArrayList.get(position).setPreviewPageURL(sourceContent.getUrl());
+                            feedArrayList.get(position).setPreviewThumbURL(sourceContent.getImages().get(0));
+
+                            viewHolder.textPreviewTitle.setText(sourceContent.getTitle());
+                            viewHolder.textPreviewDescription.setText(sourceContent.getDescription());
+                            viewHolder.textPreviewURL.setText(sourceContent.getUrl());
+
+                            Bitmap imageBitmap = mBitmapCache.get(sourceContent.getImages().get(0));
+                            if (imageBitmap != null)
+                                viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
+                            else
+                                ImageLoader.getInstance()
+                                        .displayImage(sourceContent.getImages().get(0), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
+
+                        }
+                    }
+                };
+                viewHolder.textCrawler
+                        .makePreview(callback, url);
+
             }
-        });
+            else{
+                //viewHolder.progressBar.setVisibility(View.GONE);
+                viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
+                viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
+                viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
+                viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try{
+                            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
+                            ((Activity)context).startActivity(myIntent);
+                        }catch (ActivityNotFoundException e){
+                            MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
+                        }
+                    }
+                });
+                //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
+                Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
+                if(imageBitmap!=null)
+                    viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
+/*
+                else
+                    ImageLoader.getInstance()
+                            .displayImage(feedArrayList.get(position).getPreviewThumbURL(), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
 */
 
+            }
+
+        }
+
+
+
+    }
+
+    public boolean updateURLView(int position, String title, String description, String url, String image) {
+        int first = listFeeds.getFirstVisiblePosition();
+        int last = listFeeds.getLastVisiblePosition();
+        if(position < first || position > last) {
+            //just update your DataSet
+            //the next time getView is called
+            //the ui is updated automatically
+            return false;
+        }
+        else {
+            View convertView = listFeeds.getChildAt(position - first);
+            //this is the convertView that you previously returned in getView
+            //just fix it (for example:)
+            OpenGraphView openGraphView = (OpenGraphView) convertView.findViewById(R.id.og_view);
+            TextView textPreviewTitle = (TextView) openGraphView.findViewById(R.id.og_title);
+            TextView textPreviewDescription = (TextView) openGraphView.findViewById(R.id.og_description);
+            TextView textPreviewURL = (TextView) openGraphView.findViewById(R.id.og_url);
+            ImageView imagePreviewThumb = (ImageView) openGraphView.findViewById(R.id.og_image);
+            textPreviewTitle.setText(title);
+            textPreviewDescription.setText(description);
+            textPreviewURL.setText(url);
+
+
+            return true;
+        }
     }
 
     private void replaceUserFragment(int position) {
@@ -757,7 +856,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
                 else
                     ImageLoader.getInstance()
-                        .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                            .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
 
             }
             else {
@@ -770,7 +869,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
                 else
                     ImageLoader.getInstance()
-                        .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                            .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
             }
 
             viewHolder.textView.setText("uploaded a new file");
@@ -831,7 +930,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                                 mBitmapCache.put(imageUri, loadedImage);
-                                notifyDataSetChanged();
+                                //notifyDataSetChanged();
                             }
 
                             @Override
@@ -853,7 +952,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
                 else
                     ImageLoader.getInstance()
-                        .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                            .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
 
                 //Picasso.with(getContext()).load(feedArrayList.get(position).getThumbFileName()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
             }
@@ -866,7 +965,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
                 else
                     ImageLoader.getInstance()
-                        .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                            .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
 
                 //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
             }
@@ -1072,7 +1171,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     public ImageLoadingListener imageFileLoadingListener = new ImageLoadingListener() {
         @Override
         public void onLoadingStarted(String imageUri, View view) {
-
+            ((ImageView) view).setImageResource(R.drawable.app_logo);
         }
 
         @Override
@@ -1083,6 +1182,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         @Override
         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
             mBitmapCache.put(imageUri,loadedImage);
+            //notifyDataSetChanged();
         }
 
         @Override

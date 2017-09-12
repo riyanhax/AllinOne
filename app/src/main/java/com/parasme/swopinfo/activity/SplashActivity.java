@@ -1,5 +1,6 @@
 package com.parasme.swopinfo.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -22,9 +23,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -32,6 +36,9 @@ import com.parasme.swopinfo.fragment.FragmentAdd;
 import com.parasme.swopinfo.fragment.FragmentUser;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
+import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
+import com.parasme.swopinfo.urlpreview.SourceContent;
+import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.Picasso;
@@ -51,6 +58,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,19 +81,31 @@ import static com.parasme.swopinfo.helper.Utils.fixExif;
  */
 @EActivity(R.layout.activity_splash)
 public class SplashActivity extends AppCompatActivity {
-
     private static int SPLASH_TIME_OUT = 4000;
     private ArrayList<File> fileArrayList=new ArrayList<>();
     private String swopText = "";
     String arr[];
     private boolean isFilesFetched;
     private OpenGraphView openGraphView;
+    private ProgressBar progressBar;
+    private TextView textPreviewTitle;
+    private TextView textPreviewDescription;
+    private TextView textPreviewURL;
+    private ImageView imagePreviewThumb;
+    DisplayImageOptions optionsFile = new DisplayImageOptions.Builder()
+            .showImageForEmptyUri(R.drawable.document_gray)
+            .showImageOnFail(R.drawable.document_gray)
+            .cacheInMemory(false)
+            .cacheOnDisk(false)
+            .considerExifParams(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        Log.e("ppppP",getCurrentDate()+"__"+getCurrentTime());
         /*
         *         if (!TextUtils.isEmpty(clientGroupId)) {
             channel = ChannelService.getInstance(fragmentActivity).getChannelByClientGroupId(clientGroupId);
@@ -145,7 +166,7 @@ public class SplashActivity extends AppCompatActivity {
                 //if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN,false)){
                 AppConstants.AUTH_TOKEN = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_AUTH_TOKEN)+"";
                 String userId=SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
-                AppConstants.USER_ID=userId;
+                AppConstants.USER_ID = userId;
                 Log.e("splash", "getting details: "+true );
 
                 //Check if intro screen has seen or not
@@ -213,6 +234,7 @@ public class SplashActivity extends AppCompatActivity {
         Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
         TextView textShare = (TextView) dialog.findViewById(R.id.textShare);
         openGraphView = (OpenGraphView) dialog.findViewById(R.id.og_view);
+        progressBar = (ProgressBar) dialog.findViewById(R.id.progress_bar);
 
         if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_IS_BUSINESS))
             btnCompany.setVisibility(View.VISIBLE);
@@ -417,10 +439,65 @@ public class SplashActivity extends AppCompatActivity {
         return containedUrls;
     }
     public void initPreview(String url) {
-        openGraphView.setVisibility(View.VISIBLE);
-        openGraphView.clear();
-        openGraphView.loadFrom(url);
-        isFilesFetched = true;
+        if(!url.contains("24.com")) {
+            openGraphView.setVisibility(View.VISIBLE);
+            openGraphView.clear();
+            if (url.startsWith("http://"))
+                url = url.replace("http://", "https://");
+            openGraphView.loadFrom(url);
+            isFilesFetched = true;
+        }
+        else{
+            TextCrawler textCrawler = new TextCrawler();
+            textPreviewTitle = (TextView) openGraphView.findViewById(R.id.og_title);
+            textPreviewDescription = (TextView) openGraphView.findViewById(R.id.og_description);
+            textPreviewURL = (TextView) openGraphView.findViewById(R.id.og_url);
+            imagePreviewThumb = (ImageView) openGraphView.findViewById(R.id.og_image);
+
+            textCrawler.makePreview(callback, url);
+            isFilesFetched = true;
+        }
     }
 
+
+    private LinkPreviewCallback callback = new LinkPreviewCallback() {
+        @Override
+        public void onPre() {
+            openGraphView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPos(SourceContent sourceContent, boolean isNull) {
+            openGraphView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+
+            textPreviewTitle.setText(sourceContent.getTitle());
+            textPreviewDescription.setText(sourceContent.getDescription());
+            textPreviewURL.setText(sourceContent.getUrl());
+            ImageLoader.getInstance()
+                    .displayImage(sourceContent.getImages().get(0), imagePreviewThumb, optionsFile, null);
+
+        }
+    };
+
+    public String getCurrentDate() {
+        String formattedDate="";
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current date => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
+    public String getCurrentTime() {
+        String formattedDate="";
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
 }

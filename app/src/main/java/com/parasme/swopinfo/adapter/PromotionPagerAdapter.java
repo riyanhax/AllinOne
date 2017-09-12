@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.model.Category;
 import com.parasme.swopinfo.model.Store;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ public class PromotionPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.promotion_pager_item, container, false);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_single_promotion);
+        Picasso.with(mContext).load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(imageView);
         imageView.setImageResource(mResources.get(position).image);
 
         container.addView(itemView);

@@ -24,6 +24,7 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.SelectCategoryAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Category;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
@@ -118,6 +119,9 @@ public class FragmentSelectCategories extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         itemSearch= menu.findItem(R.id.menu_search);
+        MenuItem itemLive= menu.findItem(R.id.menu_live);
+        itemLive.setVisible(false);
+
         itemDone = menu.findItem(R.id.menu_done);
         itemSearch.setVisible(false);
         itemDone.setVisible(true);
@@ -125,9 +129,11 @@ public class FragmentSelectCategories extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 String ids = adapter.checkedCategoryIds();
-                if(ids.equals(""))
+                if(ids.equals("") && SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"").equals(""))
+                    MyApplication.alertDialog(mActivity,"Please select at least one category", "Favorites");
+                else if(ids.equals(""))
                     replaceFavFragment();
-                else
+                else if(!ids.equals(""))
                     addToFav(ids, AppConstants.USER_ID);
 
                 return false;
@@ -178,16 +184,22 @@ public class FragmentSelectCategories extends Fragment {
 */
 
     private void replaceFavFragment() {
-        Fragment fragment = new FragmentFavourites();
-        if(!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false)) {
-            SharedPreferenceUtility.getInstance().save(AppConstants.PREF_CHECK_IN_INTRO,true);
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("FirstIntro", true);
-            fragment.setArguments(bundle);
+        String favIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
+
+        if(favIds.equals("")){
+            MyApplication.alertDialog(mActivity, "Please add a category to favorite list first","Favorites");
         }
+        else {
+            Fragment fragment = new FragmentFavourites();
+            if (!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO, false)) {
+                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_CHECK_IN_INTRO, true);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("FirstIntro", true);
+                fragment.setArguments(bundle);
+            }
 
-        MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
-
+            MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+        }
     }
 
     @Override

@@ -15,7 +15,6 @@
                     android:textColor="#fff"
                     android:textSize="20sp"
                     android:text="Home"
-                    android:paddingRight="@dimen/_10sdp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:id="@+id/text_title" />

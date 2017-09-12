@@ -3,6 +3,12 @@
     >
 
     <item
+        android:id="@+id/menu_live"
+        android:title="Swop Live"
+        android:icon="@drawable/ic_live"
+        appcompat:showAsAction="always"/>
+
+    <item
         android:id="@+id/menu_search"
         android:title="Search"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"

@@ -145,8 +145,21 @@ public class Store {
 
     public static class Promotion{
         public int image;
+        public String imageURL;
         public Promotion(int image){
             this.image = image;
         }
+
+        public Promotion(){}
+
+        public String getImageURL() {
+            return imageURL;
+        }
+
+        public void setImageURL(String imageURL) {
+            this.imageURL = imageURL;
+        }
     }
+
+
 }

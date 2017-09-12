@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/layout"
+        >
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:visibility="invisible"
+            android:layout_height="match_parent"
+            />
+
+        <RelativeLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center"
+            >
+
+
+            <TextView
+                android:id="@+id/text_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textColor="@color/colorPrimary"
+                android:textAppearance="?android:textAppearanceMedium"
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/image_disc"
+            android:layout_width="@dimen/_170sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="@dimen/_170sdp"
+            android:src="@drawable/disc"
+            android:layout_below="@+id/layout2"
+            android:layout_marginTop="@dimen/_4sdp"
+            />
+
+        <com.parasme.swopinfo.helper.Indicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:bar_num="40"
+            app:bar_color="@color/colorPrimary"
+            app:step_num="70"
+            app:duration="20000"
+            android:layout_below="@+id/image_disc"
+            />
+
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:text="Go Back"
+            android:textAllCaps="false"
+            android:layout_alignParentLeft="true"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_10sdp"
+            />
+
+        <Button
+            android:id="@+id/btnBackgroundBack"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:text="Background Play"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:textAllCaps="false"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_10sdp"
+            />
+
+    </RelativeLayout>
+</RelativeLayout>

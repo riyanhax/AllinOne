@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.model.Retailer;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
+        //return retailerArrayList.size();
         return 5;
     }
 
@@ -60,6 +62,8 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
+//        Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+
         switch (position){
             case 0:
                 viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_game);
@@ -77,6 +81,7 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
                 viewHolder.imageRetailerLogo.setImageResource(R.drawable.logo_wool);
                 break;
         }
+
         return view;
     }
 
