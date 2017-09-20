@@ -1,82 +1,162 @@
 [
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_light.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_secondary_text_material_light.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_primary_text_material_light.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_primary_text_material_light.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_switch_thumb.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_switch_thumb.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_switch_thumb.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_switch_thumb.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_disable_only_material_dark.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_disable_only_material_dark.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_primary_text_material_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_primary_text_material_dark.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_disable_only_material_light.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_edittext.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_edittext.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_edittext.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_edittext.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_hint_foreground_material_light.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_hint_foreground_material_light.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_spinner.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_spinner.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_btn_colored_borderless_text_material.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_btn_colored_borderless_text_material.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_search_url_text.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_search_url_text.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_default.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_default.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_btn_colored_borderless_text_material.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_btn_colored_borderless_text_material.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_btn_colored_text_material.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_btn_colored_text_material.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_default.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_default.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_seek_thumb.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_seek_thumb.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_hint_foreground_material_light.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_hint_foreground_material_light.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_search_url_text.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_search_url_text.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_dark.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\switch_thumb_material_dark.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_switch_thumb.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_switch_thumb.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_btn_checkable.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_btn_checkable.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_material_light.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_material_light.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_material_light.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_material_light.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_btn_colored_text_material.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_btn_colored_text_material.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_seek_thumb.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_seek_thumb.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_primary_text_disable_only_material_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_primary_text_disable_only_material_dark.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_btn_colored_text_material.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_btn_colored_text_material.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_edittext.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_edittext.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_material_dark.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_material_dark.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_spinner.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_spinner.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_hint_foreground_material_dark.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_hint_foreground_material_dark.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_light.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\switch_thumb_material_light.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_switch_track.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_switch_track.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_btn_colored_borderless_text_material.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_btn_colored_borderless_text_material.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_light.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\switch_thumb_material_light.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_dark.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_secondary_text_material_dark.xml"
     },
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_dark.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_secondary_text_material_dark.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_light.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_btn_checkable.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_disable_only_material_dark.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_disable_only_material_light.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/switch_thumb_material_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_spinner.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_spinner.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/switch_thumb_material_light.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/switch_thumb_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_search_url_text.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_search_url_text.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_secondary_text_material_light.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_hint_foreground_material_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_hint_foreground_material_light.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_hint_foreground_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_dark.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_primary_text_disable_only_material_light.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_btn_checkable.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_seek_thumb.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_seek_thumb.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_secondary_text_material_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_material_dark.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_primary_text_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_hint_foreground_material_dark.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_switch_track.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_switch_track.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\color\\abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/color/abc_tint_default.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/color/abc_tint_default.xml"
     }
 ]

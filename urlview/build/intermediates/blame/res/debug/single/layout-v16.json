@@ -1,6 +1,10 @@
 [
     {
-        "merged": "D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\debug\\layout-v16\\notification_template_custom_big.xml",
-        "source": "C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v16\\notification_template_custom_big.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/debug/layout-v16/notification_template_custom_big.xml",
+        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/layout-v16/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\debug\\layout-v16\\notification_template_custom_big.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v16\\notification_template_custom_big.xml"
     }
 ]

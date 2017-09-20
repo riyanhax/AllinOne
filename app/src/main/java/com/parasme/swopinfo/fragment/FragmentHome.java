@@ -369,7 +369,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                 upload.setFolderName(jsonObject.getString("foldername"));
                                 upload.setScore(jsonObject.getInt("Score"));
                                 upload.setViewsCount(jsonObject.getInt("viewscount"));
-                                upload.setThumbURL("https://swopinfo.com"+jsonObject.getString("Thumbnailfilename").replace("~",""));
+                                upload.setThumbURL("http://41.185.92.249"+jsonObject.getString("Thumbnailfilename").replace("~",""));
                                 upload.setFileURL(Utils.createFileURL(jsonObject));
                                 upload.setFileType(jsonObject.optString("filetype"));
                                 upload.setUserVote(jsonObject.optInt("Vote"));

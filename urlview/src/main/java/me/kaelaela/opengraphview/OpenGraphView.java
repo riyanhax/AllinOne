@@ -211,6 +211,7 @@ public class OpenGraphView extends RelativeLayout {
                 @Override
                 public void onLoadSuccess(OGData ogData) {
                     super.onLoadSuccess(ogData);
+                    Log.e("OGDA",ogData.getTitle()+"___"+ogData.getDescription());
                     mOGCache.add(url, ogData);
                     loadImage(ogData.getImage());
                     loadFavicon(mUrl);

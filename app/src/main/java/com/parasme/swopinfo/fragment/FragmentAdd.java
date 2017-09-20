@@ -219,7 +219,8 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
                         try{
                             FragmentUploadsWrapper.fileArrayList.clear();
                             JSONObject jsonObject=new JSONObject(response);
-                            if(jsonObject.optString("Code").equals("200"))
+                            if(1==1)
+                            //if(jsonObject.optString("Code").equals("200"))
                             {
 
                                 if(!isFromShare){
@@ -260,8 +261,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
                                 }
                             }
                             else
-                                Snackbar.make(activity.findViewById(android.R.id.content),"Swop failed", Snackbar.LENGTH_LONG).show();
-
+                                Snackbar.make(activity.findViewById(android.R.id.content), "Swop failed", Snackbar.LENGTH_LONG).show();
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });

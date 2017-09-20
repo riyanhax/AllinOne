@@ -6,13 +6,13 @@
     <color name="mobitexter_main_color">#147956</color>
     <color name="primary_dark_color">#FF0C4F38</color>
 
-    <color name="instruction_color">#ff337ab7</color>
+    <color name="instruction_color">#FF0C4F38</color>
     <color name="empty_conversation_text_color">#838b83</color>
     <color name="edittext_hint_color">#bdbdbd</color>
 
     <color name="sent_message_text_color">#ffffffff</color>
     <color name="message_text_color">#ff000000</color>
-    <color name="sent_message_bg_color">#ff33B5E5</color>
+    <color name="sent_message_bg_color">#147956</color>
     <!--<color name="received_message_bg_color">#ffffffff</color>-->
     <color name="received_message_bg_color">#ffffffff</color>
 
@@ -33,7 +33,7 @@
 
     <color name="attachment_background_color">#FFFFFFFF</color>
 
-    <color name="incoming_call">#ff0099cc</color>
+    <color name="incoming_call">#147956</color>
     <color name="outgoing_call">#ff008000</color>
 
 
@@ -47,7 +47,7 @@
     <color name="applozic_theme_color_accent">#147956</color>
     <color name="applozic_theme_color_app">#147956</color>
     <color name="applozic_theme_color_control_activated">#FF0C4F38</color>
-    <color name="applozic_theme_color_control_highlight">#147956</color>
+    <color name="applozic_theme_color_control_highlight">#FF0C4F38</color>
     <color name="applozic_theme_primary_text">#FF000000</color>
     <color name="applozic_theme_secondary_text">#FFFFFFFF</color>
     <color name="applozic_theme_icons">#FF727272</color>
@@ -69,5 +69,7 @@
     <color name="apploizc_gray_color">#333333</color>
     <color name="apploizc_lite_gray_color">#666666</color>
     <color name="apploizc_custom_channel_message_text_color">#cccccc</color>
+    <color name="apploizc_reply_sent_message_bg_color">#C0C0C0</color>
+    <color name="apploizc_reply_received_message_bg_color">#F5F5F5</color>
 
 </resources>

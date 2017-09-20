@@ -1,6 +1,5 @@
 package com.applozic.mobicomkit.uiwidgets.schedule;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -19,11 +18,6 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 
     public SelectDateFragment() {
 
-    }
-
-    @SuppressLint("ValidFragment")
-    public SelectDateFragment(TextView selectedDate) {
-        this.selectedDate = selectedDate;
     }
 
     public void setScheduledDateView(View scheduledDateView) {

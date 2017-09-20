@@ -34,8 +34,8 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         applicationId "com.parasme.swopinfo"
@@ -43,9 +43,9 @@ android {
                                 // Project number pulled from dashboard, local value is ignored.
                                 onesignal_google_project_number: "742794843698"]
         minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 8
-        versionName "1.7"
+        targetSdkVersion 26
+        versionCode 9
+        versionName "1.8"
     }
     buildTypes {
         release {

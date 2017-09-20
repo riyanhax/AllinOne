@@ -615,6 +615,17 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.textView.setText("shared some info");
 
 
+        viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
+                    ((Activity)context).startActivity(myIntent);
+                }catch (ActivityNotFoundException e){
+                    MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
+                }
+            }
+        });
 
         if(!url.contains("24.com")){
             viewHolder.progressBar.setVisibility(View.GONE);
@@ -671,6 +682,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         }
 
         else {
+
             if (!feedArrayList.get(position).isPreviewLoaded()) {
                 LinkPreviewCallback callback = new LinkPreviewCallback() {
                     @Override
@@ -714,17 +726,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
                 viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
                 viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
-                viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try{
-                            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
-                            ((Activity)context).startActivity(myIntent);
-                        }catch (ActivityNotFoundException e){
-                            MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
-                        }
-                    }
-                });
+
                 //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
                 Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
                 if(imageBitmap!=null)

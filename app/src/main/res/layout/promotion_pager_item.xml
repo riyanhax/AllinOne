@@ -6,7 +6,7 @@
     <com.parasme.swopinfo.activity.TouchImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/weloveswopinfo"
+        android:src="@drawable/app_logo"
         android:id="@+id/image_single_promotion" />
 
 </LinearLayout>
