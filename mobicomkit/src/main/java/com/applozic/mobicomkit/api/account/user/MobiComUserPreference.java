@@ -58,6 +58,8 @@ public class MobiComUserPreference {
     private static String enable_auto_download_on_cellular = "enable_auto_download_on_cellular";
     private static String video_call_token = "video_call_token";
     private static String user_type_id = "user_type_id";
+    private static String application_info_call_done = "application_info_call_done";
+    private static String notification_sound_fileName = "notificationSoundFileName";
 
     public SharedPreferences sharedPreferences;
     private Context context;
@@ -515,4 +517,20 @@ public class MobiComUserPreference {
         sharedPreferences.edit().putString(user_type_id, userTypeId).commit();
     }
 
+
+    public boolean getApplicationInfoCall() {
+        return sharedPreferences.getBoolean(application_info_call_done, false);
+    }
+
+    public  void setApplicationInfoCallDone(boolean customerResponse) {
+        sharedPreferences.edit().putBoolean(application_info_call_done,customerResponse).commit();
+    }
+
+    public String getNotificationSoundFilePath() {
+        return sharedPreferences.getString(notification_sound_fileName, null);
+    }
+
+    public void setNotificationSoundFilePath(String soundUri) {
+        sharedPreferences.edit().putString(notification_sound_fileName, soundUri).commit();
+    }
 }

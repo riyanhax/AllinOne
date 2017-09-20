@@ -64,9 +64,9 @@ public class AppConstants {
 
     /************************** WEB SERVICE URLs*****************************/
 
-//    public static final String URL_DOMAIN = "https://swopinfo.com/";
+    public static final String URL_DOMAIN = "https://swopinfo.com/";
 
-    public static final String URL_DOMAIN = "http://41.185.92.249/";
+    //public static final String URL_DOMAIN = "http://41.185.92.249/";
     public static final String URL_FILE = URL_DOMAIN + "api/file/";
     public static final String URL_GROUP = URL_DOMAIN + "api/Group/";
     public static final String URL_USER_GROUP = URL_DOMAIN + "api/UserGroup/";
