@@ -218,6 +218,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                     JSONObject retailerObject = jsonArray.getJSONObject(i);
                                     Retailer retailer = new Retailer();
                                     retailer.setRetailerLogo(retailerObject.optString("storelogo"));
+                                    retailer.setStoreId(retailerObject.optString("storeID"));
 
                                     ArrayList<Store.Promotion> promotionList = new ArrayList<>();
 
@@ -238,7 +239,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
                             }
                             else
-                                alertDialog(mActivity,"No Store found near you", "Check In");
+                                alertDialog(mActivity,"No store found nearby you, Try with selecting more categories", "Check In");
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });

@@ -24,7 +24,7 @@
             android:id="@+id/editUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="User Name"
+            android:hint="Email"
             android:textColor="@color/colorEdit"
             android:textSize="@dimen/_14sdp"
             android:singleLine="true"

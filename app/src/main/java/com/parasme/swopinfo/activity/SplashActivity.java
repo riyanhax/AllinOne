@@ -1,17 +1,21 @@
 package com.parasme.swopinfo.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -25,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -162,34 +167,66 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }
         else{
-            if(getSharedPreferences("swopinfo", Context.MODE_PRIVATE).getBoolean(AppConstants.PREF_LOGIN, false)){
-                //if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN,false)){
-                AppConstants.AUTH_TOKEN = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_AUTH_TOKEN)+"";
-                String userId=SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
-                AppConstants.USER_ID = userId;
-                Log.e("splash", "getting details: "+true );
+            if (!((LocationManager) getSystemService(Context.LOCATION_SERVICE))
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+                builder.setTitle("Location Setting")
+                        .setMessage("GPS or Location is not enabled. Please enable from setting")
+                        .setCancelable(false)
+                        .setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(intent,1001);
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
 
-                //Check if intro screen has seen or not
-                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO,false))
-                    new FragmentUser().getUserDetails(AppConstants.URL_USER + SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID),true,SplashActivity.this);
-                else
-                    loadDefaultSplash();
             }
+
+            else
+            {
+                startNextActivity();
+            }
+        }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("ok","ok");
+        if (requestCode == 1001) {
+            Log.e("ok","ok11");
+            if (((LocationManager) getSystemService(Context.LOCATION_SERVICE))
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                Log.e("ok","ok222");
+                startNextActivity();
+            }
+            else{
+                Log.e("ok","ok4444");
+                Toast.makeText(SplashActivity.this, "Could not fetch location",Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(SplashActivity.this, SplashActivity_.class));
+                finish();
+            }
+        }
+    }
+    private void startNextActivity() {
+        if(getSharedPreferences("swopinfo", Context.MODE_PRIVATE).getBoolean(AppConstants.PREF_LOGIN, false)){
+            //if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN,false)){
+            AppConstants.AUTH_TOKEN = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_AUTH_TOKEN)+"";
+            String userId=SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
+            AppConstants.USER_ID = userId;
+            Log.e("splash", "getting details: "+true );
+
+            //Check if intro screen has seen or not
+            if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO,false))
+                new FragmentUser().getUserDetails(AppConstants.URL_USER + SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID),true,SplashActivity.this);
             else
                 loadDefaultSplash();
         }
-
-/*      When clicking a url containing swopinfo.com
-        This is moved to ShareActivity
         else
-        {
-            Intent intent = new Intent(SplashActivity.this,MainActivity_.class);
-            intent.putExtra("actionView",getIntent().getData().toString());
-            startActivity(intent);
-            finish();
-        }
-*/
-
+            loadDefaultSplash();
 
     }
 

@@ -196,6 +196,14 @@
                     android:src="@drawable/ic_twitter"
                     />
 
+                <ImageView
+                    android:id="@+id/image_location"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:src="@drawable/ic_bussiness_location"
+                    />
+
             </LinearLayout>
 
         </LinearLayout>

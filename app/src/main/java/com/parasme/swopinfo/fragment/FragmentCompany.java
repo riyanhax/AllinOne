@@ -78,7 +78,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
     private TextView textCompanyAddress;
     private ShimmerTextView textCompanyTel1,textCompanyTel2,textCompanyFax,textCompanyMail;
     private String websiteURL="", fbURL="", twitterURL="";
-    private ImageView imageWebsite,imageFacebook,imageTwitter;
+    private ImageView imageWebsite,imageFacebook,imageTwitter, imageLocation;
     private String followLinkId;
     private LinearLayout uploadWrapperLayout;
     private ArrayList<Folder> folderArrayList = new ArrayList<>();
@@ -212,6 +212,18 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
             });
         }
 
+        imageLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new FragmentMap();
+                Bundle bundle = new Bundle();
+                bundle.putString("company",textCompanyName.getText().toString());
+                fragment.setArguments(bundle);
+                MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+            }
+        });
+
+
         Shimmer shimmer = new Shimmer();
         Shimmer shimmer1 = new Shimmer();
         Shimmer shimmer2 = new Shimmer();
@@ -278,6 +290,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
         imageFacebook = (ImageView) childView.findViewById(R.id.image_fb);
         imageWebsite = (ImageView) childView.findViewById(R.id.image_web);
         imageTwitter = (ImageView) childView.findViewById(R.id.image_twitter);
+        imageLocation = (ImageView) childView.findViewById(R.id.image_location);
 
         getComapnyDetails(AppConstants.URL_COMAPNY + companyId+"");
 

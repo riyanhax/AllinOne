@@ -182,6 +182,7 @@ public class FragmentFavourites extends Fragment {
         itemGo.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+
 /*
                 if(FragmentHome.retailerList.size()!=0)
                     MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);

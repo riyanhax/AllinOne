@@ -612,11 +612,12 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                         try {
                             jsonUserObject = new JSONObject(response).optJSONObject("returnvalue");
                             userDetails = new Follow();
-                            if(jsonUserObject == null) {
+                            if (jsonUserObject == null) {
                                 activity.startActivity(new Intent(activity, LoginActivity_.class));
                                 activity.finish();
                             }
 
+                            else{
                             userDetails.setUserEmail(jsonUserObject.optString("userEmail"));
                             userDetails.setBusinessEmail(jsonUserObject.optString("businessEmail"));
                             userDetails.setCompanyId(jsonUserObject.optInt("companyid"));
@@ -627,10 +628,10 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                             userDetails.setBusinessTel(jsonUserObject.optString("businessDirecttel"));
                             userDetails.setBusinessFax(jsonUserObject.optString("businesscustomfax"));
 
-                            if(!fromSplash) {
-                                textUploadViews.setText("Views: "+jsonUserObject.optString("TotalFileViews"));
-                                textUploadDownloads.setText("Downloads: "+jsonUserObject.optString("TotalFileDownloads"));
-                                textProfileViews.setText("Profile Views: "+jsonUserObject.optString("ProfileViews"));
+                            if (!fromSplash) {
+                                textUploadViews.setText("Views: " + jsonUserObject.optString("TotalFileViews"));
+                                textUploadDownloads.setText("Downloads: " + jsonUserObject.optString("TotalFileDownloads"));
+                                textProfileViews.setText("Profile Views: " + jsonUserObject.optString("ProfileViews"));
 
                                 if (jsonUserObject.optInt("companyid") == 0) {
                                     btnCard.setVisibility(View.GONE);
@@ -641,18 +642,16 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                                     textCompany.setText(userDetails.getCompanyName());
                                 }
                                 prepareFeedView();
-                            }
-
-                            else
-                            {
+                            } else {
                                 AppConstants.UPLOAD_VIEWS = jsonUserObject.optString("TotalFileViews");
                                 AppConstants.UPLOAD_DOWNLOADS = jsonUserObject.optString("TotalFileDownloads");
                                 AppConstants.PROFILE_VIEWS = jsonUserObject.optString("ProfileViews");
                                 Intent i = new Intent(activity, MainActivity_.class);
-                                i.putExtra("startUserWrapper",false);
+                                i.putExtra("startUserWrapper", false);
                                 activity.startActivity(i);
                                 activity.finish();
                             }
+                        }
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });

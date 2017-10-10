@@ -535,12 +535,13 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.layoutUser.setVisibility(View.GONE);
             viewHolder.layoutFileComment.setVisibility(View.GONE);
             viewHolder.layoutShare.setVisibility(View.GONE);
-            viewHolder.textMultipleFiles.setText(feedArrayList.get(position).getComment());
+            viewHolder.textMultipleFiles.setText(uploadArrayList.get(0).getDescription());
             viewHolder.layoutMultipleFiles.setVisibility(View.VISIBLE);
             viewHolder.textView.setText("shared some info");
 
             setRecyclerView(uploadArrayList);
         }
+
         else{
             viewHolder.layoutUser.setVisibility(View.GONE);
             viewHolder.layoutFileComment.setVisibility(View.GONE);
@@ -627,6 +628,10 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             }
         });
 
+        // FOr fixing youtube thumb making issue
+        if (url.contains("youtu.be"))
+            url = url.replace("http:","https:");
+
         if(!url.contains("24.com")){
             viewHolder.progressBar.setVisibility(View.GONE);
             if (!feedArrayList.get(position).isPreviewLoaded()) {
@@ -641,7 +646,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                         feedArrayList.get(position).setPreviewThumbURL(ogData.getImage());
                         feedArrayList.get(position).setPreviewLoaded(true);
                         notifyDataSetChanged();
-                        //updateURLView(position, ogData.getTitle(), ogData.getDescription(), ogData.getUrl(), ogData.getImage());
                     }
                 };
 
@@ -651,32 +655,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
             else{
                 viewHolder.openGraphView.loadFrom(url);
-/*
-                Log.e("BBBBBBB",url);
-                //viewHolder.progressBar.setVisibility(View.GONE);
-                viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
-                viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
-                viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
-                viewHolder.layoutPreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try{
-                            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedArrayList.get(position).getComment()));
-                            ((Activity)context).startActivity(myIntent);
-                        }catch (ActivityNotFoundException e){
-                            MyApplication.alertDialog((Activity)context, "No Compatible App Found to View Page", "App Not Found");
-                        }
-                    }
-                });
-                //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
-                Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
-                if(imageBitmap!=null)
-                    viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
-                else
-                    ImageLoader.getInstance()
-                            .displayImage(feedArrayList.get(position).getPreviewThumbURL(), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
-
-*/
             }
 
         }

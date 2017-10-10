@@ -66,7 +66,7 @@ public class AppConstants {
 
     public static final String URL_DOMAIN = "https://swopinfo.com/";
 
-    //public static final String URL_DOMAIN = "http://41.185.92.249/";
+//    public static final String URL_DOMAIN = "http://dev.swopinfo.com/";
     public static final String URL_FILE = URL_DOMAIN + "api/file/";
     public static final String URL_GROUP = URL_DOMAIN + "api/Group/";
     public static final String URL_USER_GROUP = URL_DOMAIN + "api/UserGroup/";
@@ -92,4 +92,5 @@ public class AppConstants {
     public static final String URL_COMAPNY = URL_DOMAIN + "api/company/";
     public static final String URL_COMAPNY_REGISTER = URL_DOMAIN + "api/company/register";
     public static final String URL_COMAPNY_ACTIVATE = URL_DOMAIN + "api/company/registercomplete";
+    public static final String URL_CHECKIN_COUNT = URL_DOMAIN + "checkincounts.aspx?";
 }

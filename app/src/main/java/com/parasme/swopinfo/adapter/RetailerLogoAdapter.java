@@ -62,7 +62,7 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-//        Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+       //Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
 
         switch (position){
             case 0:

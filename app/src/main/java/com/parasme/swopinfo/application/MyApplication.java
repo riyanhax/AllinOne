@@ -33,7 +33,6 @@ public class MyApplication extends Application {
 		instance = this;
 		appContext = this;
 		super.attachBaseContext(base);
-
 	}
 
 	@Override

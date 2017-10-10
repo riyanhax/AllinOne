@@ -44,8 +44,8 @@ android {
                                 onesignal_google_project_number: "742794843698"]
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "1.9"
     }
     buildTypes {
         release {
@@ -118,13 +118,17 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.onesignal:OneSignal:3.+@aar'
     // Required for OneSignal, even if you have added FCM.
-    compile 'com.google.android.gms:play-services-gcm:10.0.1'
+    compile 'com.google.android.gms:play-services-gcm:10.2.0'
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.3'
-    compile 'com.google.firebase:firebase-invites:10.0.1'
+    compile 'com.google.firebase:firebase-invites:10.2.0'
     //    compile 'org.jsoup:jsoup:1.8.3'
     compile project(':mobicomkitui')
     compile project(':urlview')
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.google.android.gms:play-services-places:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

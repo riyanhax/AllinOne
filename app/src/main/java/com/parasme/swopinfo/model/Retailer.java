@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 public class Retailer {
     private String retailerName, retailerLogo;
+    private int retailerId;
     private ArrayList<Store.Promotion> promotions;
+    private String storeId;
 
     public String getRetailerName() {
         return retailerName;
@@ -32,5 +34,21 @@ public class Retailer {
 
     public void setPromotions(ArrayList<Store.Promotion> promotions) {
         this.promotions = promotions;
+    }
+
+    public int getRetailerId() {
+        return retailerId;
+    }
+
+    public void setRetailerId(int retailerId) {
+        this.retailerId = retailerId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 }

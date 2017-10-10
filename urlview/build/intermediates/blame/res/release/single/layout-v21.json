@@ -1,7 +1,7 @@
 [
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
-        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v21\\notification_action.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_custom_big.xml",
@@ -13,22 +13,22 @@
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/layout-v21/notification_action.xml",
-        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/layout-v21/notification_action.xml"
+        "source": "/home/mukesh/.android/build-cache/97c35970773b86410c2fcacd02526f606302fdcf/output/res/layout-v21/notification_action.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/layout-v21/notification_template_custom_big.xml",
-        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/layout-v21/notification_template_custom_big.xml"
+        "source": "/home/mukesh/.android/build-cache/97c35970773b86410c2fcacd02526f606302fdcf/output/res/layout-v21/notification_template_custom_big.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/layout-v21/notification_action_tombstone.xml",
-        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/layout-v21/notification_action_tombstone.xml"
+        "source": "/home/mukesh/.android/build-cache/97c35970773b86410c2fcacd02526f606302fdcf/output/res/layout-v21/notification_action_tombstone.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/layout-v21/notification_template_icon_group.xml",
-        "source": "/home/mukesh/.android/build-cache/e419ef692b5411eba4fb473421e492b7eb8a92b0/output/res/layout-v21/notification_template_icon_group.xml"
+        "source": "/home/mukesh/.android/build-cache/97c35970773b86410c2fcacd02526f606302fdcf/output/res/layout-v21/notification_template_icon_group.xml"
     },
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
-        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/D:\\Workspace\\SwopInfo\\urlview\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
+        "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/C:\\Users\\SoNu\\.android\\build-cache\\1c50adce217f1ed8c177261a18c5f157902cc6ad\\output\\res\\layout-v21\\notification_action.xml"
     }
 ]

@@ -451,7 +451,7 @@ public class LocationActivity extends AppCompatActivity implements
      */
     @Override
     public void onLocationChanged(Location location) {
-
+        Log.e("CHECKINGLOC",location.getLatitude()+"");
         if (locationUpdater!=null) {
             if (location!=null) {
                 mCurrentLocation = location;

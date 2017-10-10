@@ -20,8 +20,14 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.adapter.PromotionPagerAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.RippleBackground;
+import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Store;
+import com.parasme.swopinfo.webservice.WebServiceHandler;
+import com.parasme.swopinfo.webservice.WebServiceListener;
 
+import org.androidannotations.annotations.App;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,6 +57,8 @@ public class FragmentPromotionPager extends Fragment {
         setHasOptionsMenu(true);
         findViews(view);
 
+        //countCheckin();
+
         promotionArrayList = new ArrayList<>();
         setArrayList();
 
@@ -73,6 +81,25 @@ public class FragmentPromotionPager extends Fragment {
         });
 
         return view;
+    }
+
+    private void countCheckin() {
+        String userId = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
+        String retailerId = FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getRetailerId()+"";
+        String storeId = FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getStoreId();
+
+        WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("COunt",response);
+            }
+        };
+        try {
+            webServiceHandler.get("http://dev.swopinfo.com/checkincounts.aspx?user_id="+userId + "&retailerid_id="+retailerId+ "&storeid_id="+storeId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setArrayList() {
