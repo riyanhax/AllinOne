@@ -686,6 +686,10 @@ public class Utils {
 
             int angle = 0;
 
+            // If image is normal then return path as it is
+            if (orientation == 0)
+                return imagePath;
+
             if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
                 angle = 90;
             } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {

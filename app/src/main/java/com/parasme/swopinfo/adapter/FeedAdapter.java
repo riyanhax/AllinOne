@@ -674,7 +674,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                         if (feedArrayList.size() != 0){
                             viewHolder.progressBar.setVisibility(View.GONE);
                             viewHolder.openGraphView.setVisibility(View.VISIBLE);
-                            Log.e("DES", sourceContent.getDescription());
                             feedArrayList.get(position).setPreviewLoaded(true);
                             feedArrayList.get(position).setPreviewTitle(sourceContent.getTitle());
                             feedArrayList.get(position).setPreviewDescription(sourceContent.getDescription());
@@ -843,6 +842,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 String fileThumbUrl=feedArrayList.get(position).getThumbFileName();
                 fileThumbUrl=fileThumbUrl.substring(1);
                 fileThumbUrl=AppConstants.URL_DOMAIN+fileThumbUrl;
+                Log.e("UUUUUUUUUU",fileThumbUrl);
                 //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
                 Bitmap imageBitmap = mBitmapCache.get(fileThumbUrl);
                 if(imageBitmap!=null)

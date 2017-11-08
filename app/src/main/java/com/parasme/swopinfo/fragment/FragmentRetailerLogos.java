@@ -47,15 +47,16 @@ public class FragmentRetailerLogos extends Fragment {
 
         retailerArrayList = new ArrayList<>();
 
-        //listRetailerLogos.setAdapter(new RetailerLogoAdapter(mActivity, R.layout.row_retailer_logo, FragmentHome.retailerList));
-        listRetailerLogos.setAdapter(new RetailerLogoAdapter(mActivity, R.layout.row_retailer_logo, retailerArrayList));
+        listRetailerLogos.setAdapter(new RetailerLogoAdapter(mActivity, R.layout.row_retailer_logo, FragmentHome.retailerList));
+        //listRetailerLogos.setAdapter(new RetailerLogoAdapter(mActivity, R.layout.row_retailer_logo, retailerArrayList));
 
         listRetailerLogos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                retailerPosition = position;
-                MainActivity.replaceFragment(new FragmentPromotionPager(), getFragmentManager(), mActivity, R.id.content_frame);
-
+                if (!FragmentHome.retailerList.get(position).getStoreId().equals("0")) {
+                    retailerPosition = position;
+                    MainActivity.replaceFragment(new FragmentPromotionPager(), getFragmentManager(), mActivity, R.id.content_frame);
+                }
             }
         });
         return view;

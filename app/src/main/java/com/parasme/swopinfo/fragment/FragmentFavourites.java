@@ -183,13 +183,12 @@ public class FragmentFavourites extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-/*
                 if(FragmentHome.retailerList.size()!=0)
                     MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
                 else
                     checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
-*/
-                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
+
+//                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
 
 
                 return false;
@@ -215,7 +214,7 @@ public class FragmentFavourites extends Fragment {
     private void checkIn(String latitude, String longitude, String userId) {
         String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
         Log.e("catids", catIds);
-        String url = "http://dev.swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+        String url = "http://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
                 "&retailer_long="+longitude;
 
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
@@ -254,7 +253,8 @@ public class FragmentFavourites extends Fragment {
 
                             }
                             else
-                                MyApplication.alertDialog(mActivity,"No Store found near you", "Check In");
+                                MyApplication.alertDialog(mActivity,"Thanks for Checking in. We unfortunately do not have stores listed in this Geolocated area but will have soon. Please ask your Local Retailers to join so that you can benefit.", "Check In");
+//                                MyApplication.alertDialog(mActivity,"Thank you for checking in. There arnt any stores using the platform in your area yet. Please ask your local retailers to contact us to allow you the opportunity to shop and save.", "Check In");
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });

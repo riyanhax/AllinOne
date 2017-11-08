@@ -112,6 +112,11 @@
             android:theme="@style/AppTheme"
             />
 
+        <!-- this is for map, put map key here -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDt89zQbcvI94CWFSHjhX0ZKHeydtRTJqk" />
+
         <!--For Camera URI in Nougat-->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -150,10 +155,10 @@
         <meta-data android:name="main_folder_name"
             android:value="SwopInfo" /> <!-- Attachment Folder Name -->
 
+<!--
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDIqrcxJgu1GQBrCH7PuX5KBqIrHqdjkwU" />  <!--Replace with your geo api key from google developer console  -->
-        <!-- For testing purpose use AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI
-        To disable the location sharing via map add this line ApplozicSetting.getInstance(context).disableLocationSharingViaMap(); in onSuccess of Applozic UserLoginTask -->
+            android:value="AIzaSyDIqrcxJgu1GQBrCH7PuX5KBqIrHqdjkwU" />
+-->
 
         <meta-data android:name="activity.open.on.notification"
             android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" /> <!-- NOTE : Do NOT change this value -->

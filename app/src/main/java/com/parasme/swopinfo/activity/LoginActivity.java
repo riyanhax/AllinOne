@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -41,6 +43,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,24 +66,26 @@ import static com.parasme.swopinfo.application.MyApplication.initOneSignal;
 @EActivity(R.layout.activity_login)
 public class LoginActivity extends AppCompatActivity {
 
-    private boolean isWriteAllowed=false;
-    private boolean isCameraAllowed=false;
-    private boolean isLocationAllowed=false;
+    private boolean isWriteAllowed = false;
+    private boolean isCameraAllowed = false;
+    private boolean isLocationAllowed = false;
     private WebView webView;
     private ProgressBar progressBar;
     private boolean isURLShown = false;
-    private String playerId="";
+    private String playerId = "";
 
-    @ViewById EditText editUserName;
-    @ViewById EditText editPassword;
+    @ViewById
+    EditText editUserName;
+    @ViewById
+    EditText editPassword;
 
     @Click(R.id.textForgot)
-    void forgot(){
-        startActivity(new Intent(LoginActivity.this,ForgotPasswordActivity_.class));
+    void forgot() {
+        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity_.class));
     }
 
     @Click(R.id.textCreateAccount)
-    void click(){
+    void click() {
         final Dialog registerDialog = Utils.loadRegisterDialog(LoginActivity.this);
         Button btnIndividual = (Button) registerDialog.findViewById(R.id.btnIndividual);
         Button btnBusiness = (Button) registerDialog.findViewById(R.id.btnBusiness);
@@ -91,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 registerDialog.dismiss();
                 Intent i = new Intent(LoginActivity.this, SignUpActivity_.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
         });
 
@@ -106,16 +111,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Click(R.id.btnLogin)
-    void clickLoginButton(){
-        if(isWriteAllowed && isCameraAllowed && isLocationAllowed)
+    void clickLoginButton() {
+        if (isWriteAllowed && isCameraAllowed && isLocationAllowed)
             validateAndLogin();
         else
             askPermissions();
+
+//        Intent intent = new Intent();
+//        intent.setType("audio/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent,"title"),888);
     }
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         askPermissions();
+        new VersionChecker().execute();
+
     }
 
     private void validateAndLogin() {
@@ -124,10 +136,10 @@ public class LoginActivity extends AppCompatActivity {
             public void idsAvailable(String userId, String registrationId) {
                 String text = "OneSignal UserID:\n" + userId + "\n\n";
                 playerId = userId;
-                Log.e("ONESIN", "idsAvailable: "+userId +"____"+registrationId);
-                if(!userId.equals(""))
-                    SharedPreferenceUtility.getInstance().save(AppConstants.PREF_PLAYER_ID,userId);
-                    SharedPreferenceUtility.getInstance().save(AppConstants.PREF_GCM_TOKEN,registrationId);
+                Log.e("ONESIN", "idsAvailable: " + userId + "____" + registrationId);
+                if (!userId.equals(""))
+                    SharedPreferenceUtility.getInstance().save(AppConstants.PREF_PLAYER_ID, userId);
+                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_GCM_TOKEN, registrationId);
                 if (registrationId != null)
                     text += "Google Registration Id:\n" + registrationId;
                 else
@@ -135,86 +147,84 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        String userName=editUserName.getText().toString();
-        String userPassword=editPassword.getText().toString();
+        String userName = editUserName.getText().toString();
+        String userPassword = editPassword.getText().toString();
 
-        if(userName.equals("")){
+        if (userName.equals("")) {
             editUserName.setError("Field cannot be empty");
             editUserName.requestFocus();
             return;
         }
 
-        if(userPassword.equals("")){
+        if (userPassword.equals("")) {
             editPassword.setError("Field cannot be empty");
             editPassword.requestFocus();
             return;
         }
 
-        FormBody.Builder builder= WebServiceHandler.createBuilder(new String[]{"username","password","player_id"},new String[]{userName,userPassword,playerId});
-        WebServiceHandler webServiceHandler=new WebServiceHandler(LoginActivity.this);
-        webServiceHandler.serviceListener=new WebServiceListener() {
+        FormBody.Builder builder = WebServiceHandler.createBuilder(new String[]{"username", "password", "player_id"}, new String[]{userName, userPassword, playerId});
+        WebServiceHandler webServiceHandler = new WebServiceHandler(LoginActivity.this);
+        webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
             public void onResponse(String response) {
-                Log.e("LOGIN",response);
+                Log.e("LOGIN", response);
                 try {
                     final JSONObject jsonObject = new JSONObject(response);
-                    final String status=jsonObject.optString("status");
+                    final String status = jsonObject.optString("status");
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(status.equals("1")){
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_LOGIN,true);
-                                JSONObject returnObject=jsonObject.optJSONObject("returnvalue");
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID,returnObject.optInt("userid"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_NAME,returnObject.optString("username"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_EMAIL,returnObject.optString("userEmail"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME,returnObject.optString("userFirstname"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME,returnObject.optString("userLastname"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COMPANY_ID,returnObject.optInt("companyid"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_NOTIFICATION,returnObject.optBoolean("ReceiveEmailNotifications"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COUNTRY,returnObject.optString("country"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BDAY,returnObject.optString("bday"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TITLE,returnObject.optString("businessTitle"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMAIL,returnObject.optString("businessEmail"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CELL,returnObject.optString("businessCell"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TEL,returnObject.optString("businessDirecttel"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_FAX,returnObject.optString("businesscustomfax"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF1,returnObject.optString("businesscustomfield1"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF2,returnObject.optString("businesscustomfield2"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_STATUS,returnObject.optString("businessstatus"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMP_DATE,returnObject.optString("businessempdate"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_PROFESSION,returnObject.optString("businessprofession"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_COMPANY,returnObject.optString("businessCompanyName"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_AUTH_TOKEN,returnObject.optString("authenticationtoken"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_OWN_COMPANY_ID,returnObject.optInt("companyid"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_IS_BUSINESS,returnObject.optInt("companyid")==0 ? false : true);
+                            if (status.equals("1")) {
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_LOGIN, true);
+                                JSONObject returnObject = jsonObject.optJSONObject("returnvalue");
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID, returnObject.optInt("userid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_NAME, returnObject.optString("username"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_EMAIL, returnObject.optString("userEmail"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME, returnObject.optString("userFirstname"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME, returnObject.optString("userLastname"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COMPANY_ID, returnObject.optInt("companyid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_NOTIFICATION, returnObject.optBoolean("ReceiveEmailNotifications"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COUNTRY, returnObject.optString("country"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BDAY, returnObject.optString("bday"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TITLE, returnObject.optString("businessTitle"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMAIL, returnObject.optString("businessEmail"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CELL, returnObject.optString("businessCell"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TEL, returnObject.optString("businessDirecttel"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_FAX, returnObject.optString("businesscustomfax"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF1, returnObject.optString("businesscustomfield1"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF2, returnObject.optString("businesscustomfield2"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_STATUS, returnObject.optString("businessstatus"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMP_DATE, returnObject.optString("businessempdate"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_PROFESSION, returnObject.optString("businessprofession"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_COMPANY, returnObject.optString("businessCompanyName"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_AUTH_TOKEN, returnObject.optString("authenticationtoken"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_OWN_COMPANY_ID, returnObject.optInt("companyid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_IS_BUSINESS, returnObject.optInt("companyid") == 0 ? false : true);
 
                                 AppConstants.AUTH_TOKEN = returnObject.optString("authenticationtoken");
-                                String userId=returnObject.optInt("userid")+"";
-                                AppConstants.USER_ID=userId;
+                                String userId = returnObject.optInt("userid") + "";
+                                AppConstants.USER_ID = userId;
                                 Intent intent;
-                                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO,false))
-                                    intent = new Intent(LoginActivity.this,MainActivity_.class);
+                                if (SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO, false))
+                                    intent = new Intent(LoginActivity.this, MainActivity_.class);
                                 else
-                                    intent = new Intent(LoginActivity.this,FlowActivity.class);
+                                    intent = new Intent(LoginActivity.this, FlowActivity.class);
                                 startActivity(intent);
                                 finish();
-                            }
-                            else
-                                MyApplication.alertDialog(LoginActivity.this,"Login Failed. Wrong Username or Password","Alert");
+                            } else
+                                MyApplication.alertDialog(LoginActivity.this, "Login Failed. Wrong Username or Password", "Alert");
                         }
                     });
 
-                }
-                catch (JSONException e){
+                } catch (JSONException e) {
 
                 }
 
             }
         };
         try {
-            webServiceHandler.post(AppConstants.URL_LOGIN,builder);
+            webServiceHandler.post(AppConstants.URL_LOGIN, builder);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -231,14 +241,14 @@ public class LoginActivity extends AppCompatActivity {
     private void askPermissions() {
         Ask.on(this)
                 .forPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
-                .withRationales("Write Permission is need to be allowed", "Camera Permission is need to be allowed","Location permission is needed") //optional
+                .withRationales("Write Permission is need to be allowed", "Camera Permission is need to be allowed", "Location permission is needed") //optional
                 .go();
     }
 
     //optional
     @AskGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void accessFineLocationGranted() {
-        isWriteAllowed=true;
+        isWriteAllowed = true;
     }
 
     //optional
@@ -250,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
     //optional
     @AskGranted(Manifest.permission.CAMERA)
     public void accessCameraGranted() {
-        isCameraAllowed=true;
+        isCameraAllowed = true;
     }
 
     //optional
@@ -262,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
     //optional
     @AskGranted(Manifest.permission.ACCESS_FINE_LOCATION)
     public void accessLocationGranted() {
-        isLocationAllowed=true;
+        isLocationAllowed = true;
     }
 
     //optional
@@ -273,8 +283,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void copyAssets() {
         String folderName = "avatars";
-        final File file = new File(getApplicationContext().getFilesDir().getAbsolutePath()+"/"+folderName);
-        if(!file.exists())
+        final File file = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/" + folderName);
+        if (!file.exists())
             file.mkdir();
         AssetManager assetManager = getAssets();
         String[] files = null;
@@ -284,18 +294,17 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("tag", "Failed to get asset file list.", e);
         }
         if (files != null) for (String filename : files) {
-            Log.e("filepath",filename);
+            Log.e("filepath", filename);
             InputStream in = null;
             FileOutputStream fos = null;
             try {
-                in = assetManager.open(folderName+"/"+filename);
+                in = assetManager.open(folderName + "/" + filename);
                 File outFile = new File(file, filename);
                 fos = new FileOutputStream(outFile);
-                    copyFile(in, fos);
-            } catch(IOException e) {
+                copyFile(in, fos);
+            } catch (IOException e) {
                 Log.e("tag", "Failed to copy asset file: " + filename, e);
-            }
-            finally {
+            } finally {
                 if (in != null) {
                     try {
                         in.close();
@@ -313,11 +322,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void copyFile(InputStream in, OutputStream out) throws IOException {
-        Log.e("ok","ik");
+        Log.e("ok", "ik");
         byte[] buffer = new byte[2018];
-        int read=0;
-        while((read = in.read(buffer)) != -1){
+        int read = 0;
+        while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
         out.flush();
@@ -340,7 +350,7 @@ public class LoginActivity extends AppCompatActivity {
                 dialogPayment.dismiss();
                 Intent i = new Intent(LoginActivity.this, SubscriptionActivity_.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
         });
 
@@ -350,7 +360,7 @@ public class LoginActivity extends AppCompatActivity {
                 dialogPayment.dismiss();
                 Intent i = new Intent(LoginActivity.this, SubscriptionPaymentActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
         });
 
@@ -358,4 +368,32 @@ public class LoginActivity extends AppCompatActivity {
         return dialogPayment;
     }
 
+    public class VersionChecker extends AsyncTask<String, String, String> {
+
+        String newVersion;
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + "com.parasme.swopinfo" + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get()
+                        .select("div[itemprop=softwareVersion]")
+                        .first()
+                        .ownText();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return newVersion;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("CCCCCVER",s);
+        }
+    }
 }

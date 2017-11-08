@@ -57,13 +57,13 @@ public class FragmentPromotionPager extends Fragment {
         setHasOptionsMenu(true);
         findViews(view);
 
-        //countCheckin();
+        countCheckin();
 
         promotionArrayList = new ArrayList<>();
         setArrayList();
 
-        pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
-        //pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions()));
+        //pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
+        pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions()));
 
         final RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.rippleBackground);
         rippleBackground.startRippleAnimation();
@@ -96,7 +96,7 @@ public class FragmentPromotionPager extends Fragment {
             }
         };
         try {
-            webServiceHandler.get("http://dev.swopinfo.com/checkincounts.aspx?user_id="+userId + "&retailerid_id="+retailerId+ "&storeid_id="+storeId);
+            webServiceHandler.get("http://www.swopinfo.com/checkincounts.aspx?user_id="+userId + "&retailerid_id="+retailerId+ "&storeid_id="+storeId);
         } catch (IOException e) {
             e.printStackTrace();
         }

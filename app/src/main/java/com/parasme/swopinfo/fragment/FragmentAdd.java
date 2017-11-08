@@ -3,6 +3,7 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -146,6 +147,19 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
     public void uploadClick(EditText editSwopText, EditText editFolderName,EditText editTitle,EditText editDescription,EditText editYoutubeLink,EditText editTag,
                             Spinner spinnerBroadcast, CheckBox checkBoxComments, CheckBox checkBoxRatings, CheckBox checkBoxEmbedded, CheckBox checkBoxDownloads,Activity activity,String userId, String companyId, String groupId, ArrayList<File> fileArrayList){
 
+        for (int i = 0; i < fileArrayList.size(); i++) {
+            String extension = MimeTypeMap.getFileExtensionFromUrl((Uri.fromFile(fileArrayList.get(i))).toString());
+            String type="";
+            Log.e("1111111",extension);
+            if (extension != null) {
+                type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                Log.e("2222222",type);
+                if (type.contains("image"))
+                    fileArrayList.set(i, new File(Utils.fixExif(fileArrayList.get(i).getPath())));
+            }
+
+        }
+
         String swopText=editSwopText.getText().toString();
         String folderName=editFolderName.getText().toString();
         String title=editTitle.getText().toString();
@@ -232,7 +246,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
 //                                        activity.finish();
                                     }
                                     FragmentUploadsWrapper.fileArrayList.clear();
-                                    new FragmentHome().getFeeds(activity, FragmentHome.listFeeds,FragmentHome.swipeRefreshLayout);
+                                    //new FragmentHome().getFeeds(activity, FragmentHome.listFeeds,FragmentHome.swipeRefreshLayout);
 
 
                                     if(FragmentUploads.adapter == null)

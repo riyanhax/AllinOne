@@ -7,8 +7,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -68,6 +71,7 @@ import java.util.Date;
 import static com.parasme.swopinfo.fragment.FragmentAdd.broadcastArray;
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.widget.Toast;
 
 import okhttp3.FormBody;
 
@@ -80,7 +84,7 @@ import okhttp3.FormBody;
  * Mobile +917737556190
  */
 
-public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener, ImagePicker.Picker {
+public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener {
 
     private View childView;
     public static ListView listFeeds;
@@ -89,7 +93,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     public static ArrayList<Feed> feedArrayList = new ArrayList<>();
     private LinearLayout layout;
     public static Dialog dialogSwop;
-    public static ArrayList<File> fileArrayList=new ArrayList<>();
+    public ArrayList<File> fileArrayList=new ArrayList<>();
     public static SwipeRefreshLayout swipeRefreshLayout;
     private String TAG = getClass().getName();
     public static TextView textFilesCount;
@@ -97,6 +101,14 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     private ImageView imgChecking;
     public static int storeId = 0;
     public static ArrayList<Retailer> retailerList;
+
+
+    TextView textSelection;
+    private final int PICK_PHOTO=22, PICK_VIDEO=33, PICK_DOC=44, PICK_VOICE=55;
+    private RelativeLayout layoutSelection;
+    private LinearLayout layoutPick;
+
+    public static RippleBackground rippleBackground;
 
     @Override
     public void onResume() {
@@ -141,9 +153,9 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         ((EditText) childView.findViewById(R.id.editSwopText)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dialogSwop==null)
+//                if(dialogSwop==null)
                     loadDialog();
-                dialogSwop.show();
+//                dialogSwop.show();
             }
         });
 
@@ -173,24 +185,31 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         imgChecking = (ImageView) childView.findViewById(R.id.img_checkin);
 
 
-        final RippleBackground rippleBackground=(RippleBackground)childView.findViewById(R.id.rippleBackground);
+        rippleBackground = (RippleBackground)childView.findViewById(R.id.rippleBackground);
         rippleBackground.startRippleAnimation();
+
+
+        // If user is of south africa then only show check in button
+        if (MainActivity.fullAddress.contains("South Africa")) {
+            Log.e("VISI","VISIBLE");
+            rippleBackground.setVisibility(View.VISIBLE);
+        }
 
         imgChecking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("LOCATION",LocationActivity.mCurrentLocation.getLatitude()+"");
-/*
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
                     checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
                 else
                     showIntroDialog();
-*/
 
+/*
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
                     ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
                 else
                     showIntroDialog();
+*/
             }
         });
     }
@@ -199,7 +218,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     private void checkIn(String latitude, String longitude, String userId) {
         String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
         Log.e("catids", catIds);
-        String url = "http://dev.swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+        String url = "http://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
                 "&retailer_long="+longitude;
 
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
@@ -235,11 +254,16 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                         retailerList.add(retailer);
                                 }
 
-                                    ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+                                Retailer retailer = new Retailer();
+                                retailer.setStoreId("0");
+                                retailer.setRetailerLogo("https://www.ecigssa.co.za/data/attachments/99/99598-ff08bbcb3dbbe9846619354ee13b48d2.jpg");
+                                retailerList.add(retailer);
+
+                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
 
                             }
                             else
-                                alertDialog(mActivity,"No store found nearby you, Try with selecting more categories", "Check In");
+                                alertDialog(mActivity,"Thanks for Checking in. We unfortunately do not have stores listed in this Geolocated area but will have soon. Please ask your Local Retailers to join so that you can benefit.", "Check In");
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });
@@ -461,50 +485,110 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     }
 
     private void loadDialog() {
-        dialogSwop = new Dialog(mActivity);
+        final Dialog dialogSwop = new Dialog(mActivity);
         dialogSwop.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSwop.setContentView(R.layout.fragment_add);
+        dialogSwop.setContentView(R.layout.dialog_swop);
         dialogSwop.setCancelable(true);
         dialogSwop.setCanceledOnTouchOutside(true);
 
 
-        LinearLayout layoutSwop = (LinearLayout) dialogSwop.findViewById(R.id.layoutSwop);
-        final EditText editFolderName = (EditText) dialogSwop.findViewById(R.id.editFolderName);
         final EditText editSwop = (EditText) dialogSwop.findViewById(R.id.editSwop);
-        final EditText editTitle = (EditText) dialogSwop.findViewById(R.id.editTitle);
-        final EditText editDescription = (EditText) dialogSwop.findViewById(R.id.editDescription);
-        final EditText editYoutubeLink = (EditText) dialogSwop.findViewById(R.id.editYoutubeLink);
-        final EditText editTag = (EditText) dialogSwop.findViewById(R.id.editTag);
-        final Spinner spinnerBroadcast = (Spinner) dialogSwop.findViewById(R.id.spinnerBroadcast);
-        final CheckBox checkBoxComments = (CheckBox) dialogSwop.findViewById(R.id.checkBoxComments);
-        final CheckBox checkBoxRatings = (CheckBox) dialogSwop.findViewById(R.id.checkBoxRatings);
-        final CheckBox checkBoxEmbedded = (CheckBox) dialogSwop.findViewById(R.id.checkBoxEmbedded);
-        final CheckBox checkBoxDownloads = (CheckBox) dialogSwop.findViewById(R.id.checkBoxDownloads);
-        final Button btnUpload = (Button) dialogSwop.findViewById(R.id.btnUpload);
-        final Button btnSelectFile = (Button) dialogSwop.findViewById(R.id.btnSelectFile);
-        textFilesCount = (TextView) dialogSwop.findViewById(R.id.textFilesCount);
+        final Button btnPost = (Button) dialogSwop.findViewById(R.id.btnPost);
+        textSelection = (TextView) dialogSwop.findViewById(R.id.text_selection);
+        layoutSelection = (RelativeLayout) dialogSwop.findViewById(R.id.layout_selection);
+        layoutPick = (LinearLayout) dialogSwop.findViewById(R.id.layout_pick);
+        final LinearLayout layoutPhoto = (LinearLayout) dialogSwop.findViewById(R.id.layout_photo);
+        final LinearLayout layoutVideo = (LinearLayout) dialogSwop.findViewById(R.id.layout_video);
+        final LinearLayout layoutDoc = (LinearLayout) dialogSwop.findViewById(R.id.layout_doc);
+        final LinearLayout layoutVoice = (LinearLayout) dialogSwop.findViewById(R.id.layout_voice_note);
+        final ImageView imgDeselect = (ImageView) dialogSwop.findViewById(R.id.img_deselect);
 
-        layoutSwop.setVisibility(View.VISIBLE);
-        editFolderName.setVisibility(View.VISIBLE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, broadcastArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBroadcast.setAdapter(adapter);
-
-        btnSelectFile.setOnClickListener(new View.OnClickListener() {
+        layoutPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Utils(mActivity).selectDialog(new String[]{"Camera","Gallery","Files"},FragmentHome.this, FragmentHome.this);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Photo"),PICK_PHOTO);
 
             }
         });
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        layoutVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, mActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Video"),PICK_VIDEO);
+
             }
         });
 
+        layoutVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("audio/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Audio"),PICK_VOICE);
+
+            }
+        });
+
+        layoutDoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent .setType("*/*");
+                String[] mimetypes = {"application/pdf",
+                        "text/*",
+                        "application/vnd.ms-powerpoint",
+                        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                        "application/vnd.ms-excel",
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+                startActivityForResult(intent, PICK_DOC);
+
+
+//                Intent intent = new Intent();
+//                intent.setType("audio/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent,"Select Audio"),PICK_VOICE);
+
+            }
+        });
+
+
+        imgDeselect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutPick.setVisibility(View.VISIBLE);
+                layoutSelection.setVisibility(View.GONE);
+            }
+        });
+
+        btnPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String swopText = editSwop.getText().toString();
+                if (swopText.equals("") && fileArrayList.size()==0){
+                    editSwop.setError("Please enter some text share or select a file");
+                    editSwop.requestFocus();
+                    return;
+                }
+                dialogSwop.dismiss();
+                new FragmentAdd().uploadFile(AppConstants.USER_ID, "0", "0", "", " ", " ", " ", "true", "true", "true",
+                        "true", "true", "", fileArrayList, mActivity, null, swopText, false);
+//                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, mActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
+
+            }
+        });
+
+        dialogSwop.show();
     }
 
 
@@ -534,23 +618,6 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         WebServiceHandler.call.cancel();
     }
 
-    @Override
-    public void onImagePicked(Bitmap bitmap, String imagePath) {
-        fileArrayList.clear();
-        File file = new File(imagePath);
-        fileArrayList.add(file);
-        textFilesCount.setVisibility(View.VISIBLE);
-        textFilesCount.setText("1 Image Selected");
-    }
-
-    @Override
-    public void onVideoPicked(String videoPath) {
-        fileArrayList.clear();
-        File file = new File(videoPath);
-        fileArrayList.add(file);
-        textFilesCount.setVisibility(View.VISIBLE);
-        textFilesCount.setText("1 Video Selected");
-    }
 
     public void alertDialog(final Activity activity, final String message, final String title) {
         AlertDialog.Builder adb = new AlertDialog.Builder(activity);
@@ -573,5 +640,56 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
         adb.show();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("aaaaa","aaaaa");
+        String path="";
+        if (resultCode == getActivity().RESULT_OK) {
+            switch (requestCode){
+                case PICK_PHOTO:
+                    fileArrayList.clear();
+                    layoutSelection.setVisibility(View.VISIBLE);
+                    layoutPick.setVisibility(View.GONE);
+                    textSelection.setText("Photo Selected");
+                    path = Utils.getRealPathFromURI(mActivity, data.getData());
+                    Log.e("Selected Path", path);
+                    fileArrayList.add(new File(path));
+                    break;
+                case PICK_VIDEO:
+                    fileArrayList.clear();
+                    layoutSelection.setVisibility(View.VISIBLE);
+                    layoutPick.setVisibility(View.GONE);
+                    textSelection.setText("Video Selected");
+                    path = Utils.getRealPathFromURI(mActivity, data.getData());
+                    Log.e("Selected Path", path);
+                    fileArrayList.add(new File(path));
+                    break;
+                case PICK_DOC:
+                    fileArrayList.clear();
+                    layoutSelection.setVisibility(View.VISIBLE);
+                    layoutPick.setVisibility(View.GONE);
+                    textSelection.setText("Document Selected");
+                    path = Utils.getRealPathFromURI(mActivity, data.getData());
+                    Log.e("Selected Path", path);
+                    fileArrayList.add(new File(path));
+                    break;
+                case PICK_VOICE:
+                    fileArrayList.clear();
+                    layoutSelection.setVisibility(View.VISIBLE);
+                    layoutPick.setVisibility(View.GONE);
+                    textSelection.setText("Voice Selected");
+                    path = Utils.getRealPathFromURI(mActivity, data.getData());
+                    Log.e("Selected Path", path);
+                    fileArrayList.add(new File(path));
+                    break;
+            }
+
+        }
+    }
+
+
+
 
 }

@@ -63,6 +63,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -110,14 +111,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.e("ppppP",getCurrentDate()+"__"+getCurrentTime());
-        /*
-        *         if (!TextUtils.isEmpty(clientGroupId)) {
-            channel = ChannelService.getInstance(fragmentActivity).getChannelByClientGroupId(clientGroupId);
-            if (channel == null) {
-                return;
-            }
-*/
+
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);
 
@@ -128,33 +122,11 @@ public class SplashActivity extends AppCompatActivity {
         Log.e("playyer",SharedPreferenceUtility.getInstance().get(AppConstants.PREF_PLAYER_ID,""));
         String appPath = getApplicationContext().getFilesDir().getAbsolutePath();
         Log.e("HCECK", "onCreate: "+appPath );
-        //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
-
-/*
-        Intent intent = new AppInviteInvitation
-                .IntentBuilder("Send Invitations for SwopInfo app")
-                // Ensure valid length for any message used before calling otherwise this will throw
-                // an IllegalArgumentException if greater than MAX_MESSAGE_LENGTH.
-                .setMessage("Try out SwopInfo app now")
-                //.setDeepLink(Uri.parse("https://swopinfo.com"))
-                .setCallToActionText("Find data")
-                //.setEmailSubject("Hello")
-                //.setEmailHtmlContent("<p>Content</p>")
-                .build();
-        startActivityForResult(intent, 110);
-*/
     }
 
     @AfterViews
     protected void init(){
         Log.e("UUUUUU","aaa");
-
-//        File imgFile = new  File(getApplicationContext().getFilesDir().getAbsolutePath()+"/avatars/avatar1.png");
-//        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//
-//        ((ImageView) findViewById(R.id.image)).setImageBitmap(myBitmap);
-
-
 
 
         if(getIntent().getAction().equals(Intent.ACTION_SEND) || getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)){
@@ -203,6 +175,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.e("ok","ok222");
                 startNextActivity();
             }
+
             else{
                 Log.e("ok","ok4444");
                 Toast.makeText(SplashActivity.this, "Could not fetch location",Toast.LENGTH_SHORT).show();
@@ -219,6 +192,9 @@ public class SplashActivity extends AppCompatActivity {
             AppConstants.USER_ID = userId;
             Log.e("splash", "getting details: "+true );
 
+
+//            checkStoreVersion();
+
             //Check if intro screen has seen or not
             if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO,false))
                 new FragmentUser().getUserDetails(AppConstants.URL_USER + SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID),true,SplashActivity.this);
@@ -229,6 +205,7 @@ public class SplashActivity extends AppCompatActivity {
             loadDefaultSplash();
 
     }
+
 
     private void loadDefaultSplash() {
         Log.e("splash", "loadDefaultSplash: "+true );
@@ -537,4 +514,27 @@ public class SplashActivity extends AppCompatActivity {
         formattedDate = df.format(c.getTime());
         return formattedDate;
     }
+
+
+    private void checkStoreVersion() {
+        String url = "http://swopinfo.com/version.aspx?type=android";
+        WebServiceHandler webServiceHandler = new WebServiceHandler(SplashActivity.this);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("Version",response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+            }
+        };
+        try {
+            webServiceHandler.get(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

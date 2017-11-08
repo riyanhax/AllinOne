@@ -87,6 +87,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
     private String businessEmail="";
     private GridView gridUploadsMultipleSelection;
     private String selectedFolderName="";
+    private String businessAddress;
 
     @Override
     public void onResume() {
@@ -135,11 +136,15 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                             Log.e("Company", "run: "+response );
                             jsonObject = new JSONObject(response);
                             textCompanyName.setText(jsonObject.optString("CompanyName"));
-                            String address = jsonObject.optString("BussinessAdd1") + " "+ jsonObject.optString("BussinessAdd1")
+                            String address = jsonObject.optString("BussinessAdd1") + " "+ jsonObject.optString("BussinessAdd2")
                                     +"\n" + jsonObject.optString("BussinessCity") + "\n" + jsonObject.optString("BussinessCountry")
                                     +"\n" + jsonObject.optString("BussinessCode");
 
-                            Log.e("AADD", "run: "+address );
+                            businessAddress = jsonObject.optString("BussinessAdd1") + " "+ jsonObject.optString("BussinessAdd2")+ " "+
+                                    jsonObject.optString("BussinessCity")+" "+ jsonObject.optString("BussinessCode")+" "+
+                                    jsonObject.optString("BussinessCountry");
+
+                            Log.e("AADD", "run: "+address);
                             textCompanyAddress.setText(address);
                             textCompanyTel1.setText("Telephone 1: "+jsonObject.optString("BussinessTel1"));
                             textCompanyTel2.setText("Telephone 2: "+jsonObject.optString("BussinessTel2"));
@@ -218,6 +223,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                 Fragment fragment = new FragmentMap();
                 Bundle bundle = new Bundle();
                 bundle.putString("company",textCompanyName.getText().toString());
+                bundle.putString("address",businessAddress);
                 fragment.setArguments(bundle);
                 MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
             }

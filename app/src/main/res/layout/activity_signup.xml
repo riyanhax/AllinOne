@@ -202,7 +202,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_13sdp"
-            android:text="\u00A9 2016 - SwopInfo.com. All rights reserved.\n      Privacy Policy Terms and Conditions"
+            android:text="\u00A9 2017 - SwopInfo.com. All rights reserved.\n      Privacy Policy Terms and Conditions"
             android:layout_gravity="center"
             android:textColor="@color/colorEdit"
             />

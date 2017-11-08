@@ -67,8 +67,11 @@ import com.parasme.swopinfo.fragment.FragmentSubscriptionPayment;
 import com.parasme.swopinfo.fragment.FragmentUploads;
 import com.parasme.swopinfo.fragment.FragmentUploadsWrapper;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
+import com.parasme.swopinfo.webservice.WebServiceHandler;
+import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 
 import net.alhazmy13.catcho.library.Catcho;
@@ -83,11 +86,13 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.parasme.swopinfo.application.AppConstants.PREF_BUSINESS_CELL;
 import static com.parasme.swopinfo.application.AppConstants.PREF_BUSINESS_EMAIL;
@@ -119,6 +124,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     private Dialog dialogSearch;
     public static Activity activityContext;
     public String gcmToken;
+    public static String fullAddress="";
 
     @ViewById
     DrawerLayout drawerLayout;
@@ -176,66 +182,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
         drawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-
-        if(getIntent().getBooleanExtra("startUserWrapper",false)){
-            Fragment fragment=new FragmentUser();
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.KEY_USER_ID,getIntent().getStringExtra(AppConstants.KEY_USER_ID));
-            bundle.putString(AppConstants.KEY_USER_NAME,getIntent().getStringExtra(AppConstants.KEY_USER_NAME));
-            fragment.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-        }
-        else if(getIntent().hasExtra("actionView")){
-            String action = getIntent().getStringExtra("actionView");
-            if(action.contains("carduser")){
-                userId = action.split("=")[1];
-                Fragment fragment = new FragmentCard();
-                Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.KEY_USER_ID, userId);
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-            }
-            else if(action.contains("fileid")){
-                String fileId = action.split("=")[1];
-                Fragment fragment = new FragmentFile();
-                Bundle bundle = new Bundle();
-                bundle.putInt("fildeId",Integer.parseInt(fileId));
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-
-            }
-            else if(action.contains("groupprofile")){
-                String groupId = action.split("=")[1];
-                Fragment fragment = new FragmentGroupDetail();
-                Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.KEY_GROUP_ID,groupId);
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-
-            }
-        }
-
-        else if(getIntent().hasExtra("fromOneSignal")){
-            try {
-                JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("fromOneSignal"));
-                Log.e("MainActivity", "init: "+jsonObject.toString() );
-                if(jsonObject.optString("type").equals("file")){
-                    String fileId = jsonObject.optString("fileid");
-                    Fragment fragment = new FragmentFile();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("fildeId",Integer.parseInt(fileId));
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-                }
-                else
-                    replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        else
-            replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
-
     }
 
 
@@ -243,6 +189,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("oaaaaa","yahoo");
         MyApplication.initOneSignal(MyApplication.getInstance());
         activityContext = MainActivity.this;
         //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
@@ -469,7 +416,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     }
 
     private void drawerClick(int position) {
-        mTitle = navMenuTitles[position];
+        //mTitle = navMenuTitles[position];
         Fragment fragment=null;
         switch (position){
             case 0:
@@ -515,7 +462,9 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
     @Override
     public void onReceiveLocation(Location location) {
-
+        if (location!=null && fullAddress.equals(""))
+            getAddress(location.getLatitude()+"",location.getLongitude()+"");
+            //getAddress("-26.195246","28.034088");
     }
 
     @Override
@@ -532,7 +481,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
         public MenuAdapter() {
             // TODO Auto-generated constructor stub
             vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         }
 
         @Override
@@ -612,8 +560,25 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
         else{
             if (data != null) {
                 Log.e("TAG", "onActivityResult: ");
-                List<String> photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
-                int size = photos.size();
+                int size;
+                List<String> photos = new ArrayList<>();
+                Bundle bundle = data.getExtras();
+
+                if (bundle != null) {
+                    for (String key : bundle.keySet()) {
+                        Object value = bundle.get(key);
+                        Log.e("HELLO", String.format("%s %s (%s)", key,
+                                value.toString(), value.getClass().getName()));
+                    }
+                }
+
+                photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
+                if (photos==null) {
+                    photos = new ArrayList<>();
+                    photos.add(data.getStringExtra(GalleryActivity.VIDEO));
+                }
+
+                size = photos.size();
 
                 if (getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentGroupDetail) {
                     FragmentGroupDetail.fileArrayList.clear();
@@ -630,12 +595,14 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
                         FragmentCompany.fileArrayList.add(new File(photos.get(i)));
                     }
                 } else if (getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentHome) {
+/*
                     FragmentHome.fileArrayList.clear();
                     FragmentHome.textFilesCount.setVisibility(View.VISIBLE);
                     FragmentHome.textFilesCount.setText((size == 1) ? "1 File Selected" : (size + " Files Selected"));
                     for (int i = 0; i < photos.size(); i++) {
                         FragmentHome.fileArrayList.add(new File(photos.get(i)));
                     }
+*/
                 } else {
                     FragmentUploadsWrapper.fileArrayList.clear();
                     textFilesCount.setVisibility(View.VISIBLE);
@@ -650,13 +617,14 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        super.attachBaseContext(newBase);
         LocationActivity.locationUpdater = MainActivity.this;
     }
 
 
 
     public boolean isUserInApplozic(String userID){
+
         if(TextUtils.isEmpty(userID)){
             Log.e("UserId","is null");
         }
@@ -752,4 +720,107 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
         return super.onPrepareOptionsMenu(menu);
 
     }
+
+
+    private void getAddress(String latitude, String longitude) {
+        fullAddress = " ";  // TO avoid multiple hit of api on received location as it triggered repeatedly.
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latitude+","+longitude+"&key=AIzaSyABGigUX5fvihfR8Bc8WnCScS3XXWK2B78&sensor=true";
+
+        WebServiceHandler webServiceHandler = new WebServiceHandler(MainActivity.this);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(final String response) {
+                Log.e("Address Response",response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.optString("status").equalsIgnoreCase("ok")){
+                                JSONObject jsonObject1 = jsonObject.getJSONArray("results").getJSONObject(0);
+                                fullAddress = jsonObject1.optString("formatted_address");
+                                Log.e("Address",fullAddress);
+                                if (fullAddress.contains("South Africa") && FragmentHome.rippleBackground!=null)
+                                    FragmentHome.rippleBackground.setVisibility(View.VISIBLE);
+
+                                replaceFragmentAccordingly();
+                            }
+                            else
+                                Log.e("Address Err","Could not get address");
+
+                        }catch (JSONException e){e.printStackTrace();}
+                    }
+                });
+            }
+        };
+        try {
+            webServiceHandler.get(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void replaceFragmentAccordingly() {
+        if(getIntent().getBooleanExtra("startUserWrapper",false)){
+            Fragment fragment=new FragmentUser();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.KEY_USER_ID,getIntent().getStringExtra(AppConstants.KEY_USER_ID));
+            bundle.putString(AppConstants.KEY_USER_NAME,getIntent().getStringExtra(AppConstants.KEY_USER_NAME));
+            fragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+        }
+
+        else if(getIntent().hasExtra("actionView")){
+            String action = getIntent().getStringExtra("actionView");
+            if(action.contains("carduser")){
+                String userId = action.split("=")[1];
+                Fragment fragment = new FragmentCard();
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.KEY_USER_ID, userId);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+            }
+            else if(action.contains("fileid")){
+                String fileId = action.split("=")[1];
+                Fragment fragment = new FragmentFile();
+                Bundle bundle = new Bundle();
+                bundle.putInt("fildeId",Integer.parseInt(fileId));
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+
+            }
+            else if(action.contains("groupprofile")){
+                String groupId = action.split("=")[1];
+                Fragment fragment = new FragmentGroupDetail();
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.KEY_GROUP_ID,groupId);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+
+            }
+        }
+
+        else if(getIntent().hasExtra("fromOneSignal")){
+            try {
+                JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("fromOneSignal"));
+                Log.e("MainActivity", "init: "+jsonObject.toString() );
+                if(jsonObject.optString("type").equals("file")){
+                    String fileId = jsonObject.optString("fileid");
+                    Fragment fragment = new FragmentFile();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("fildeId",Integer.parseInt(fileId));
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+                }
+                else
+                    replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
+
+    }
+
 }

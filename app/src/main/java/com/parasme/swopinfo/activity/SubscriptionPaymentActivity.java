@@ -2,9 +2,12 @@ package com.parasme.swopinfo.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,7 +18,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -44,7 +55,7 @@ import okhttp3.FormBody;
  * Created by SoNu on 7/28/2017.
  */
 
-public class SubscriptionPaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class SubscriptionPaymentActivity extends LocationActivity implements View.OnClickListener, LocationActivity.LocationUpdater {
 
     private Button btnReadMore, btnClickHere, btnSubmit;
     private EditText editEmail, editFName, editLName, editUserName, editDOB, editCountry, editPassword, editConfirmPassword, editCompanyName,
@@ -56,6 +67,11 @@ public class SubscriptionPaymentActivity extends AppCompatActivity implements Vi
     private Dialog dialogCountry;
     private ListView listViewCountry;
     private String referenceGUID;
+    private TextView textLocation;
+    private RadioGroup radioGroupLocation;
+    private double latitude, longitude;
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private RelativeLayout layout;
 
     /**
      *
@@ -87,11 +103,31 @@ public class SubscriptionPaymentActivity extends AppCompatActivity implements Vi
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_subscription_payment);
 
         initalizeViews();
+        autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.e(TAG, "Place: " + place.getName());
+                latitude = place.getLatLng().latitude;
+                longitude = place.getLatLng().longitude;
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.e(TAG, "An error occurred: " + status);
+            }
+        });
+
 
         Intent intent = new Intent(SubscriptionPaymentActivity.this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
@@ -101,9 +137,27 @@ public class SubscriptionPaymentActivity extends AppCompatActivity implements Vi
 
         loadCountryDialog();
 
+
+        radioGroupLocation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                if (i == R.id.radio_btn_current){
+                    layout.setVisibility(View.GONE);
+                    latitude = LocationActivity.mCurrentLocation.getLatitude();
+                    longitude = LocationActivity.mCurrentLocation.getLongitude();
+                }
+                else{
+                    layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void initalizeViews() {
+        textLocation = (TextView) findViewById(R.id.text_location);
+        radioGroupLocation = (RadioGroup) findViewById(R.id.rgroup_location);
+        layout = (RelativeLayout) findViewById(R.id.layout);
+
         btnReadMore = (Button) findViewById(R.id.btnReadMore);
         btnClickHere = (Button) findViewById(R.id.btnClickHere);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
@@ -410,6 +464,21 @@ public class SubscriptionPaymentActivity extends AppCompatActivity implements Vi
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onReceiveLocation(Location location) {
+
+    }
+
+    @Override
+    public void onRejectLocationRequest() {
+
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocationActivity.locationUpdater = SubscriptionPaymentActivity.this;
     }
 
 }

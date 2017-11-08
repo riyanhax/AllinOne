@@ -95,6 +95,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     @AfterViews
     protected void init(){
+
     }
 
     private void validateAndSubmit() {
@@ -110,7 +111,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
 
-        FormBody.Builder builder= WebServiceHandler.createBuilder(new String[]{"username"},new String[]{userName});
+        FormBody.Builder builder= WebServiceHandler.createBuilder(new String[]{"userEmail"},new String[]{userName});
         WebServiceHandler webServiceHandler=new WebServiceHandler(ForgotPasswordActivity.this);
         webServiceHandler.serviceListener=new WebServiceListener() {
             @Override

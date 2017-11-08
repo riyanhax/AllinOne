@@ -251,13 +251,14 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         downloadCount = uploadData.getDownloadsCount()+"";
         viewCount = uploadData.getViewsCount()+"";
         String fileType = uploadData.getFileType();
+        Log.e("FILETYPE,",fileType);
 
         if(fileType.equalsIgnoreCase("videourl")){
             finalWebViewURL = uploadData.getVideoURL();
             textDownload.setVisibility(View.GONE);
         }
 
-        else if(fileType.contains("image") || fileType.contains("video")){
+        else if(fileType.contains("image") || fileType.contains("video") || fileType.contains("audio")){
             finalWebViewURL = uploadData.getFileURL();
         }
 
