@@ -67,6 +67,7 @@
         <item>@drawable/ic_sports</item>
         <item>@drawable/ic_toys</item>
         <item>@drawable/ic_travel</item>
+        <item>@drawable/ic_vehicle</item>
     </integer-array>
 
 
@@ -122,6 +123,7 @@
         <item>Sport, Outdoor &amp; Gear</item>
         <item>Toys, Education &amp; Hobbies</item>
         <item>Travel &amp; Estate Agencies</item>
+        <item>Motor Vehicles &amp; Spares</item>
     </string-array>
 
 

@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.activity.LoginActivity_;
+import com.parasme.swopinfo.activity.LoginActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 
@@ -70,7 +70,7 @@ public class FragmentTest extends Fragment{
                 if(url.equals(AppConstants.URL_DOMAIN+"login.cshtml")) {
                     SharedPreferenceUtility.getInstance().clearSharedPreferences();
                     // replaceFragment(new FragmentHome_(),getFragmentManager());
-                    mActivity.startActivity(new Intent(mActivity, LoginActivity_.class));
+                    mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
                     mActivity.finish();
                 }
 

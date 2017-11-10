@@ -190,7 +190,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
 
         // If user is of south africa then only show check in button
-        if (MainActivity.fullAddress.contains("South Africa")) {
+        //if (MainActivity.fullAddress.contains("South Africa")) {
+        if (1==1) {
             Log.e("VISI","VISIBLE");
             rippleBackground.setVisibility(View.VISIBLE);
         }

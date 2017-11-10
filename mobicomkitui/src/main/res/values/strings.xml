@@ -34,6 +34,7 @@
     <string name="applozic_user_already_in_a_group">Already added to the [groupType]</string>
     <string name="applozic_contacts_loading_info">Loading please wait...</string>
     <string name="applozic_contacts_loading_error">You need to have network access for loading contacts</string>
+    <string name="applozic_enter_group_name">Please enter a group name to proceed..</string>
 
 
     <!--
@@ -73,7 +74,7 @@
     <string name="phone_call_permission">Phone call permission are needed to access</string>
     <string name="phone_camera_permission">Camera permission are needed to access</string>
     <string name="record_audio">Audio recording permission needed</string>
-
+    <string name="camera_audio_permission">Camera and record audio permission are needed to access</string>
 
     <string name="contact_permission_not_granted">Permission were not granted for Contact</string>
     <string name="storage_permission_not_granted">Permissions were not granted for Storage</string>
@@ -83,7 +84,7 @@
     <string name="phone_call_permission_not_granted">Permission were not granted for Phone call</string>
     <string name="phone_camera_permission_not_granted">Permission were not granted for Camera</string>
     <string name="record_audio_permission_not_granted">Permissions were not granted for Audio recording</string>
-
+    <string name="audio_or_camera_permission_not_granted">Permission were not granted for Camera or Audio recording</string>
 
     <string name="contact_permission_granted">Contacts Permission have been granted</string>
     <string name="storage_permission_granted">Storage Permissions have been granted</string>
@@ -93,6 +94,7 @@
     <string name="phone_call_permission_granted">Phone call Permission has been granted</string>
     <string name="phone_camera_permission_granted">Camera permission has been granted</string>
     <string name="record_audio_permission_granted">Audio Record permissions has been granted</string>
+    <string name="phone_camera_and_audio_permission_granted">Camera and audio permissions has been granted</string>
     <string name="mobicom_max_attachment_warning">Max attachment limit reached</string>
     <string name="mobicom_select_attachment_text">Select at least one attachment</string>
     <string name="audio_recording_send_text">Tap on Start to record audio</string>

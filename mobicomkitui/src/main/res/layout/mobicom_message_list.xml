@@ -409,6 +409,19 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:scaleType="center"
+                android:src="@drawable/mobicom_ic_action_send"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/record_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_circle"
+                android:clickable="true"
+                android:gravity="center"
+                android:scaleType="center"
                 android:src="@drawable/applozic_mic_pressed"
                 android:visibility="visible" />
 

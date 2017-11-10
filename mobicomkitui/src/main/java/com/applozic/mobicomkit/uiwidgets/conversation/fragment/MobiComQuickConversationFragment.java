@@ -641,6 +641,11 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     }
 
     public void updateLastSeenStatus(final String userId) {
+
+        if(alCustomizationSettings == null){
+            return;
+        }
+
         if (!alCustomizationSettings.isOnlineStatusMasterList()) {
             return;
         }

@@ -50,8 +50,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
 import org.jsoup.helper.StringUtil;
 import org.w3c.dom.Text;
 
@@ -85,7 +83,7 @@ import static com.parasme.swopinfo.helper.Utils.fixExif;
  * Email mukeshkmtskr@gmail.com
  * Mobile +917737556190
  */
-@EActivity(R.layout.activity_splash)
+
 public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 4000;
     private ArrayList<File> fileArrayList=new ArrayList<>();
@@ -110,21 +108,19 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_splash);
 
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);
 
-        String str = "https://commonsbow_Rose_(3366550029)jpg";
-        str = str.substring(str.lastIndexOf(".")+1, str.length());
-        Log.e("str",str);
 
         Log.e("playyer",SharedPreferenceUtility.getInstance().get(AppConstants.PREF_PLAYER_ID,""));
         String appPath = getApplicationContext().getFilesDir().getAbsolutePath();
         Log.e("HCECK", "onCreate: "+appPath );
+
+        init();
     }
 
-    @AfterViews
     protected void init(){
         Log.e("UUUUUU","aaa");
 
@@ -133,7 +129,7 @@ public class SplashActivity extends AppCompatActivity {
             initAndLoadDialog();
         }
         else if(getIntent().getAction().equals(Intent.ACTION_VIEW)){
-            Intent intent = new Intent(SplashActivity.this,MainActivity_.class);
+            Intent intent = new Intent(SplashActivity.this,MainActivity.class);
             intent.putExtra("actionView",getIntent().getData().toString());
             startActivity(intent);
             finish();
@@ -223,14 +219,14 @@ public class SplashActivity extends AppCompatActivity {
                 Intent i=null;
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN,false)){
                     if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO,false)){
-                        i = new Intent(SplashActivity.this, MainActivity_.class);
+                        i = new Intent(SplashActivity.this, MainActivity.class);
                         i.putExtra("startUserWrapper",false);
                     }
                     else
                         i = new Intent(SplashActivity.this, FlowActivity.class);
                 }
                 else
-                    i = new Intent(SplashActivity.this, LoginActivity_.class);
+                    i = new Intent(SplashActivity.this, LoginActivity.class);
 
                 startActivity(i);
                 finish();
@@ -310,10 +306,12 @@ public class SplashActivity extends AppCompatActivity {
                                 path = Utils.saveFileFromBitmap(bitmap, filef, false);
 
                             }
+
                         } else {
                             String uri = arr[i];
                             String extension = uri.substring(uri.lastIndexOf(".") + 1, uri.length());
-                            if (extension.equals(fileMimeType.split("/")[1])) {
+                            Log.e("EXTENSION", extension+"__"+fileMimeType.split("/")[1]);
+                            if (extension.equals(fileMimeType.split("/")[1]) || extension.equals("mp3")) {
                                 Log.e("CHECK", "Ending with extension");
                                 path = Utils.getRealPathFromURI(SplashActivity.this, Uri.parse(arr[i]));
                             } else {
@@ -399,7 +397,7 @@ public class SplashActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SplashActivity.this,MainActivity_.class));
+                startActivity(new Intent(SplashActivity.this,MainActivity.class));
                 finish();
             }
         });

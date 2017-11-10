@@ -12,8 +12,6 @@ import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.MainActivity_;
-import com.parasme.swopinfo.activity.SplashActivity_;
 import com.parasme.swopinfo.fragment.FragmentFile;
 
 import org.json.JSONObject;
@@ -40,7 +38,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                     Log.e("OneSignalExample11", data.toString());
                     String fileId = data.optString("fileid");
                     if (MainActivity.activityContext.getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentFile){
-                        Intent intent = new Intent(MainActivity.activityContext, MainActivity_.class);
+                        Intent intent = new Intent(MainActivity.activityContext, MainActivity.class);
                         intent.putExtra("fromOneSignal", data.toString());
                         MainActivity.activityContext.startActivity(intent);
                         MainActivity.activityContext.finish();
@@ -58,7 +56,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
         }
         // The following can be used to open an Activity of your choice.
         // Replace - getApplicationContext() - with any Android Context.
-        Intent intent = new Intent(appContext, MainActivity_.class);
+        Intent intent = new Intent(appContext, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if(data!=null)
             intent.putExtra("fromOneSignal",data.toString());

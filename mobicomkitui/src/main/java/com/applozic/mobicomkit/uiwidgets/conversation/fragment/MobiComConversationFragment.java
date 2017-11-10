@@ -134,6 +134,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,7 +175,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
     protected Channel channel;
     protected Integer currentConversationId;
     protected EditText messageEditText;
-    protected ImageButton sendButton;
+    protected ImageButton sendButton, recordButton;
     protected ImageButton attachButton;
     protected Spinner sendType;
     protected LinearLayout individualMessageSendLayout, mainEditTextLinearLayout;
@@ -254,6 +255,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
     private float distCanMove = dp(80);
     private EditText errorEditTextView;
     private ImageView audioRecordIconImageView;
+    WeakReference<ImageButton> recordButtonWeakReference;
 
     public static int dp(float value) {
         return (int) Math.ceil(1 * value);
@@ -320,10 +322,11 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
         individualMessageSendLayout = (LinearLayout) list.findViewById(R.id.individual_message_send_layout);
         slideImageView = (ImageView) list.findViewById(R.id.slide_image_view);
         sendButton = (ImageButton) individualMessageSendLayout.findViewById(R.id.conversation_send);
+        recordButton = (ImageButton) individualMessageSendLayout.findViewById(R.id.record_button);
         mainEditTextLinearLayout = (LinearLayout) list.findViewById(R.id.main_edit_text_linear_layout);
         audioRecordFrameLayout = (FrameLayout) list.findViewById(R.id.audio_record_frame_layout);
         Configuration config = getResources().getConfiguration();
-
+        recordButtonWeakReference = new WeakReference<ImageButton>(recordButton);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                 sendButton.setScaleX(-1);
@@ -393,8 +396,16 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
         deliveredIcon = getResources().getDrawable(R.drawable.applozic_ic_action_message_delivered);
 
         listView.setLongClickable(true);
+
+        recordButton.setVisibility(alCustomizationSettings.isRecordButton() ? View.VISIBLE : View.GONE);
+        sendButton.setVisibility(alCustomizationSettings.isRecordButton() ? View.GONE : View.VISIBLE);
+
         GradientDrawable bgShape = (GradientDrawable) sendButton.getBackground();
         bgShape.setColor(Color.parseColor(alCustomizationSettings.getSendButtonBackgroundColor().trim()));
+
+        GradientDrawable bgShapeRecordButton = (GradientDrawable) recordButton.getBackground();
+        bgShapeRecordButton.setColor(Color.parseColor(alCustomizationSettings.getSendButtonBackgroundColor().trim()));
+
         attachButton = (ImageButton) individualMessageSendLayout.findViewById(R.id.attach_button);
 
         sendType = (Spinner) extendedSendingOptionLayout.findViewById(R.id.sendTypeSpinner);
@@ -466,8 +477,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             }
         };
 
-
-        sendButton.setOnTouchListener(new View.OnTouchListener() {
+        recordButton.setOnTouchListener(new View.OnTouchListener() {
 
 
             @Override
@@ -498,7 +508,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                         applozicAudioRecordManager.cancelAudio();
                         messageEditText.requestFocus();
                     }
-                    x = x + ApplozicAudioRecordAnimation.getX(sendButton);
+                    x = x + ApplozicAudioRecordAnimation.getX(recordButton);
                     FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) slideTextLinearlayout
                             .getLayoutParams();
                     if (startedDraggingX != -1) {
@@ -567,20 +577,20 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                     if (!TextUtils.isEmpty(s.toString()) && s.toString().trim().length() > 0 && !typingStarted) {
                         //Log.i(TAG, "typing started event...");
                         typingStarted = true;
+                        handleSendAndRecordButtonView(true);
                         Intent intent = new Intent(getActivity(), ApplozicMqttIntentService.class);
                         intent.putExtra(ApplozicMqttIntentService.CHANNEL, channel);
                         intent.putExtra(ApplozicMqttIntentService.CONTACT, contact);
                         intent.putExtra(ApplozicMqttIntentService.TYPING, typingStarted);
-                        sendButton.setImageResource(R.drawable.mobicom_ic_action_send);
                         getActivity().startService(intent);
                     } else if (s.toString().trim().length() == 0 && typingStarted) {
                         //Log.i(TAG, "typing stopped event...");
                         typingStarted = false;
+                        handleSendAndRecordButtonView(false);
                         Intent intent = new Intent(getActivity(), ApplozicMqttIntentService.class);
                         intent.putExtra(ApplozicMqttIntentService.CHANNEL, channel);
                         intent.putExtra(ApplozicMqttIntentService.CONTACT, contact);
                         intent.putExtra(ApplozicMqttIntentService.TYPING, typingStarted);
-                        sendButton.setImageResource(R.drawable.applozic_mic_pressed);
                         getActivity().startService(intent);
                     }
 
@@ -639,40 +649,53 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             }
         });
 
+
+        recordButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                if (!isToastVisible && !typingStarted) {
+                                                    vibrate();
+                                                    errorEditTextView.requestFocus();
+                                                    errorEditTextView.setError(getResources().getString(R.string.hold_to_record_release_to_send));
+                                                    isToastVisible = true;
+                                                    new CountDownTimer(3000, 1000) {
+
+                                                        @Override
+                                                        public void onTick(long millisUntilFinished) {
+                                                        }
+
+                                                        @Override
+                                                        public void onFinish() {
+                                                            errorEditTextView.setError(null);
+                                                            messageEditText.requestFocus();
+                                                            isToastVisible = false;
+
+                                                        }
+                                                    }.start();
+                                                } else {
+                                                    errorEditTextView.setError(null);
+                                                    isToastVisible = false;
+                                                }
+                                                emoticonsFrameLayout.setVisibility(View.GONE);
+                                                sendMessage();
+                                                handleSendAndRecordButtonView(false);
+                                                errorEditTextView.setVisibility(View.VISIBLE);
+                                            }
+                                        }
+        );
+
         sendButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
-                                              if (!isToastVisible && !typingStarted) {
-                                                  vibrate();
-                                                  errorEditTextView.requestFocus();
-                                                  errorEditTextView.setError(getResources().getString(R.string.hold_to_record_release_to_send));
-                                                  isToastVisible = true;
-                                                  new CountDownTimer(3000, 1000) {
-
-                                                      @Override
-                                                      public void onTick(long millisUntilFinished) {
-                                                      }
-
-                                                      @Override
-                                                      public void onFinish() {
-                                                          errorEditTextView.setError(null);
-                                                          messageEditText.requestFocus();
-                                                          isToastVisible = false;
-
-                                                      }
-                                                  }.start();
-                                              } else {
-                                                  errorEditTextView.setError(null);
-                                                  isToastVisible = false;
-                                              }
                                               emoticonsFrameLayout.setVisibility(View.GONE);
                                               sendMessage();
-                                              sendButton.setVisibility(VISIBLE);
-                                              sendButton.setImageResource(R.drawable.applozic_mic_pressed);
-                                              errorEditTextView.setVisibility(VISIBLE);
+                                              if(contact != null && !contact.isBlocked() || channel != null){
+                                                  handleSendAndRecordButtonView(false);
+                                              }
                                           }
                                       }
         );
+
 
         closeAttachmentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -755,6 +778,11 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
         return list;
     }
 
+    public void handleSendAndRecordButtonView(boolean isSendButtonVisible) {
+        sendButton.setVisibility(alCustomizationSettings.isRecordButton() ? isSendButtonVisible ? View.VISIBLE : View.GONE : View.VISIBLE);
+        recordButton.setVisibility(alCustomizationSettings.isRecordButton() ? isSendButtonVisible ? View.GONE : View.VISIBLE : View.GONE);
+    }
+
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {
@@ -784,6 +812,10 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
 
     @Override
     public void onLongPress(MotionEvent event) {
+        if(contact != null && contact.isBlocked()){
+            userBlockDialog(false, contact, false);
+            return;
+        }
         isToastVisible = true;
         errorEditTextView.requestFocus();
         errorEditTextView.setError(null);
@@ -814,8 +846,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             t.start();
             count = 0;
         }
-
-        sendButton.getParent()
+        recordButton.getParent()
                 .requestDisallowInterceptTouchEvent(true);
         audioRecordFrameLayout.setVisibility(View.VISIBLE);
         mainEditTextLinearLayout.setVisibility(View.GONE);
@@ -1093,7 +1124,12 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                         menuItems[i].equals(getResources().getString(R.string.copy))) {
                     continue;
                 }
-                if (((channel != null && Channel.GroupType.OPEN.getValue().equals(channel.getType())) || message.isCall() || (message.hasAttachment() && !message.isAttachmentDownloaded())) && (menuItems[i].equals(getResources().getString(R.string.forward)) ||
+
+                if (menuItems[i].equals(getResources().getString(R.string.forward)) && !alCustomizationSettings.isForwardOption()) {
+                    continue;
+                }
+
+                if (((channel != null && Channel.GroupType.OPEN.getValue().equals(channel.getType())) || message.isCall() || (message.hasAttachment() && !message.isAttachmentDownloaded()) || message.isVideoOrAudioCallMessage()) && (menuItems[i].equals(getResources().getString(R.string.forward)) ||
                         menuItems[i].equals(getResources().getString(R.string.resend)))) {
                     continue;
                 }
@@ -1101,7 +1137,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                     continue;
                 }
 
-                if (menuItems[i].equals(getResources().getString(R.string.reply)) &&  (!alCustomizationSettings.isReplyOption() || message.isAttachmentUploadInProgress() || TextUtils.isEmpty(message.getKeyString()) || !message.isSentToServer() || (channel != null && Channel.GroupType.OPEN.getValue().equals(channel.getType())) || (message.hasAttachment() && !message.isAttachmentDownloaded()) || channel != null && !ChannelService.getInstance(getActivity()).processIsUserPresentInChannel(channel.getKey()) || message.isVideoOrAudioCallMessage() || contact != null && contact.isDeleted() ) ) {
+                if (menuItems[i].equals(getResources().getString(R.string.reply)) && (!alCustomizationSettings.isReplyOption() || message.isAttachmentUploadInProgress() || TextUtils.isEmpty(message.getKeyString()) || !message.isSentToServer() || (channel != null && Channel.GroupType.OPEN.getValue().equals(channel.getType())) || (message.hasAttachment() && !message.isAttachmentDownloaded()) || channel != null && !ChannelService.getInstance(getActivity()).processIsUserPresentInChannel(channel.getKey()) || message.isVideoOrAudioCallMessage() || contact != null && contact.isDeleted())) {
                     continue;
                 }
 
@@ -1240,18 +1276,9 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             if (contact != null) {
                 if (contact.isBlocked()) {
                     userBlockDialog(false, contact, false);
-                } else {
-                    try {
-                        String activityName = ApplozicSetting.getInstance(getActivity()).getActivityCallback(ApplozicSetting.RequestCode.VIDEO_CALL);
-                        Class activityToOpen = Class.forName(activityName);
-                        Intent intent = new Intent(getActivity(), activityToOpen);
-                        intent.putExtra("CONTACT_ID", contact.getUserId());
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                }   else {
+                    ((ConversationActivity) getActivity()).processVideoCall(contact, currentConversationId);
                 }
-
             }
         }
         if (id == R.id.muteGroup) {
@@ -1413,14 +1440,14 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             return;
         }
 
-        if(userNotAbleToChatLayout != null && individualMessageSendLayout != null){
+        if (userNotAbleToChatLayout != null && individualMessageSendLayout != null) {
             userNotAbleToChatLayout.setVisibility(withUserContact.isDeleted() ? VISIBLE : View.GONE);
             individualMessageSendLayout.setVisibility(withUserContact.isDeleted() ? View.GONE : VISIBLE);
             bottomlayoutTextView.setText(R.string.user_has_been_deleted_text);
         }
 
         if (menu != null) {
-            menu.findItem(R.id.userBlock).setVisible(alCustomizationSettings.isBlockOption() ? !withUserContact.isDeleted() && !withUserContact.isBlocked(): alCustomizationSettings.isBlockOption());
+            menu.findItem(R.id.userBlock).setVisible(alCustomizationSettings.isBlockOption() ? !withUserContact.isDeleted() && !withUserContact.isBlocked() : alCustomizationSettings.isBlockOption());
             menu.findItem(R.id.userUnBlock).setVisible(alCustomizationSettings.isBlockOption() ? !withUserContact.isDeleted() && withUserContact.isBlocked() : alCustomizationSettings.isBlockOption());
             menu.findItem(R.id.refresh).setVisible(alCustomizationSettings.isRefreshOption() ? !withUserContact.isDeleted() : alCustomizationSettings.isRefreshOption());
 
@@ -1668,8 +1695,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             Toast.makeText(getActivity(), R.string.file_not_selected, Toast.LENGTH_LONG).show();
             return;
         }
-        sendButton.setVisibility(VISIBLE);
-        sendButton.setImageResource(R.drawable.mobicom_ic_action_send);
+        handleSendAndRecordButtonView(true);
         errorEditTextView.setVisibility(View.GONE);
         filePath = Uri.parse(file.getAbsolutePath()).toString();
         if (TextUtils.isEmpty(filePath)) {
@@ -1685,7 +1711,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             returnCursor.moveToFirst();
             Long fileSize = returnCursor.getLong(sizeIndex);
-            int maxFileSize = alCustomizationSettings.getMaxAttachmentSizeAllowed() * 1024 * 1024;
+            long maxFileSize = alCustomizationSettings.getMaxAttachmentSizeAllowed() * 1024 * 1024;
             if (fileSize > maxFileSize) {
                 Toast.makeText(getActivity(), R.string.info_attachment_max_allowed_file_size, Toast.LENGTH_LONG).show();
                 return;
@@ -2121,6 +2147,7 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
             }
         });
     }
+
     public void updateDownloadStatus(final Message message) {
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -2932,6 +2959,12 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                 }
             });
             if (initial) {
+                if (recordButtonWeakReference != null) {
+                    ImageButton recordButton = recordButtonWeakReference.get();
+                    if (recordButton != null) {
+                        recordButton.setEnabled(false);
+                    }
+                }
                 sendButton.setEnabled(false);
                 messageEditText.setEnabled(false);
             }
@@ -3144,6 +3177,12 @@ abstract public class MobiComConversationFragment extends Fragment implements Vi
                 channelKey = messageList.get(messageList.size() - 1).getGroupId();
             }
             if (initial) {
+                if (recordButtonWeakReference != null) {
+                    ImageButton recordButton = recordButtonWeakReference.get();
+                    if (recordButton != null) {
+                        recordButton.setEnabled(true);
+                    }
+                }
                 sendButton.setEnabled(true);
                 messageEditText.setEnabled(true);
             }

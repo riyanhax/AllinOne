@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -76,11 +77,6 @@ import com.tangxiaolv.telegramgallery.GalleryActivity;
 
 import net.alhazmy13.catcho.library.Catcho;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -112,7 +108,6 @@ import static com.parasme.swopinfo.fragment.FragmentUploadsWrapper.textFilesCoun
  * Mobile +917737556190
  */
 
-@EActivity(R.layout.activity_main)
 public class MainActivity extends LocationActivity implements LocationActivity.LocationUpdater {
 
     private final String TAG = this.getClass().getName();
@@ -126,21 +121,40 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     public String gcmToken;
     public static String fullAddress="";
 
-    @ViewById
     DrawerLayout drawerLayout;
-    @ViewById ListView listLeftDrawer;
-    @ViewById
+    ListView listLeftDrawer;
     Toolbar toolbar;
+    TextView text_title;
 
-    @ViewById TextView text_title;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
+        activityContext = MainActivity.this;
 
-    @ItemClick(R.id.listLeftDrawer)
-    void itemClick(int position){
-        drawerClick(position);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        listLeftDrawer = (ListView) findViewById(R.id.listLeftDrawer);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        text_title = (TextView) findViewById(R.id.text_title);
+
+        listLeftDrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                drawerClick(i);
+            }
+        });
+
+        MyApplication.initOneSignal(MyApplication.getInstance());
+
+        init();
+
+        if(!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_APPLOZIC_LOGIN,false))
+            appLozicLogin(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"", SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" "+SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME), SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_EMAIL)+"");
     }
 
 
-    @AfterViews
+
     protected void init(){
         AppConstants.AUTH_TOKEN = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_AUTH_TOKEN)+"";
         String userId=SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
@@ -185,17 +199,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     }
 
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e("oaaaaa","yahoo");
-        MyApplication.initOneSignal(MyApplication.getInstance());
-        activityContext = MainActivity.this;
-        //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
-        if(!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_APPLOZIC_LOGIN,false))
-            appLozicLogin(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"", SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" "+SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME), SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_EMAIL)+"");
-    }
 
 
     private void appLozicLogin(String userId, String userName, String userEmail) {
@@ -332,7 +335,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
                         SharedPreferenceUtility.getInstance().save(AppConstants.PREF_INTRO,true);
                         // replaceFragment(new FragmentHome_(),getFragmentManager());
-                        startActivity(new Intent(MainActivity.this, LoginActivity_.class));
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
                         finish();
 
@@ -469,7 +472,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
     @Override
     public void onRejectLocationRequest() {
-
+        Log.e("REJECT","LOCATION");
     }
 
 
@@ -740,7 +743,8 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
                                 JSONObject jsonObject1 = jsonObject.getJSONArray("results").getJSONObject(0);
                                 fullAddress = jsonObject1.optString("formatted_address");
                                 Log.e("Address",fullAddress);
-                                if (fullAddress.contains("South Africa") && FragmentHome.rippleBackground!=null)
+                                //if (fullAddress.contains("South Africa") && FragmentHome.rippleBackground!=null)
+                                if (FragmentHome.rippleBackground!=null)
                                     FragmentHome.rippleBackground.setVisibility(View.VISIBLE);
 
                                 replaceFragmentAccordingly();
@@ -761,6 +765,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     }
 
     private void replaceFragmentAccordingly() {
+        Log.e("Replaceing","PRELACING");
         if(getIntent().getBooleanExtra("startUserWrapper",false)){
             Fragment fragment=new FragmentUser();
             Bundle bundle = new Bundle();

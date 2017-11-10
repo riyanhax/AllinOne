@@ -105,7 +105,7 @@ public class ConversationFragment extends MobiComConversationFragment implements
         }
         sendType.setSelection(1);
 
-        messageEditText.setHint(alCustomizationSettings.getEditTextHintText());
+        messageEditText.setHint(R.string.enter_message_hint);
 
         multimediaPopupGrid.setVisibility(View.GONE);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),

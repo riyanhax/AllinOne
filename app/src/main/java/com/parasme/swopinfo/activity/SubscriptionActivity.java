@@ -1,6 +1,7 @@
 package com.parasme.swopinfo.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +14,6 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * Created by :- Mukesh Kumawat on 02-Feb-17.
@@ -25,13 +23,22 @@ import org.androidannotations.annotations.ViewById;
  * Mobile :- +917737556190
  */
 
-@EActivity(R.layout.fragment_subscription)
 public class SubscriptionActivity extends AppCompatActivity {
 
-    @ViewById WebView webView;
-    @ViewById ProgressBar progressBar;
+    WebView webView;
+    ProgressBar progressBar;
 
-    @AfterViews
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_subscription);
+
+        webView = (WebView) findViewById(R.id.webView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        init();
+    }
+
     protected void init(){
         progressBar.setVisibility(View.VISIBLE);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -48,7 +55,7 @@ public class SubscriptionActivity extends AppCompatActivity {
                 if(url.equals(AppConstants.URL_DOMAIN+"login.cshtml")) {
                     SharedPreferenceUtility.getInstance().clearSharedPreferences();
                     // replaceFragment(new FragmentHome_(),getFragmentManager());
-                    startActivity(new Intent(SubscriptionActivity.this, LoginActivity_.class));
+                    startActivity(new Intent(SubscriptionActivity.this, LoginActivity.class));
                     finish();
                 }
 

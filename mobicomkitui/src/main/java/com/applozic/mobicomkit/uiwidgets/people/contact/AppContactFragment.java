@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
 import com.applozic.mobicomkit.api.account.user.RegisteredUsersAsyncTask;
 import com.applozic.mobicomkit.broadcast.BroadcastService;
+import com.applozic.mobicomkit.channel.database.ChannelDatabaseService;
 import com.applozic.mobicomkit.contact.AppContactService;
 import com.applozic.mobicomkit.contact.BaseContactService;
 import com.applozic.mobicomkit.contact.database.ContactDatabase;
@@ -48,11 +49,14 @@ import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.AlCustomizationSettings;
 import com.applozic.mobicomkit.uiwidgets.R;
 import com.applozic.mobicomkit.uiwidgets.alphanumbericcolor.AlphaNumberColorUtil;
+import com.applozic.mobicomkit.uiwidgets.async.AlGetMembersFromContactGroupListTask;
+import com.applozic.mobicomkit.uiwidgets.async.ApplozicGetMemberFromContactGroupTask;
 import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
 import com.applozic.mobicommons.commons.core.utils.Utils;
 import com.applozic.mobicommons.commons.image.ImageLoader;
 import com.applozic.mobicommons.people.OnContactsInteractionListener;
 import com.applozic.mobicommons.people.SearchListFragment;
+import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
 
 import java.util.ArrayList;
@@ -149,6 +153,59 @@ public class AppContactFragment extends ListFragment implements SearchListFragme
         // Add a cache to the image loader
         mImageLoader.addImageCache(getActivity().getSupportFragmentManager(), 0.1f);
         mImageLoader.setImageFadeIn(false);
+        if (!TextUtils.isEmpty(MobiComUserPreference.getInstance(context).getContactsGroupId())) {
+            ChannelDatabaseService channelDatabaseService = ChannelDatabaseService.getInstance(context);
+            userIdArray = channelDatabaseService.getChannelMemberByName(MobiComUserPreference.getInstance(context).getContactsGroupId(), String.valueOf(Channel.GroupType.CONTACT_GROUP.getValue()));
+            if (Utils.isInternetAvailable(getContext())) {
+                ApplozicGetMemberFromContactGroupTask.GroupMemberListener eventMemberListener = new ApplozicGetMemberFromContactGroupTask.GroupMemberListener() {
+                    @Override
+                    public void onSuccess(String[] userIdArrays, Context context) {
+                        if (isAdded()) {
+                            userIdArray = new String[userIdArrays.length];
+                            userIdArray = userIdArrays;
+                            getLoaderManager().initLoader(ContactSelectionFragment.ContactsQuery.QUERY_ID, null, AppContactFragment.this);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String response, Context context) {
+
+                    }
+                };
+                ApplozicGetMemberFromContactGroupTask applozicGetMemberFromContactGroupTask = new ApplozicGetMemberFromContactGroupTask(getActivity(), MobiComUserPreference.getInstance(context).getContactsGroupId(), String.valueOf(Channel.GroupType.CONTACT_GROUP.getValue()), eventMemberListener);
+                applozicGetMemberFromContactGroupTask.execute();
+            } else if (userIdArray != null) {
+                getLoaderManager().initLoader(ContactSelectionFragment.ContactsQuery.QUERY_ID, null, AppContactFragment.this);
+            }
+        } else if (MobiComUserPreference.getInstance(getContext()).getContactGroupIdList() != null && !MobiComUserPreference.getInstance(getContext()).getContactGroupIdList().isEmpty()) {
+            List<String> groupList = new ArrayList<String>();
+            groupList.addAll(MobiComUserPreference.getInstance(getContext()).getContactGroupIdList());
+
+            final ProgressDialog progressBar = new ProgressDialog(getContext());
+            progressBar.setMessage(getContext().getResources().getString(R.string.processing_please_wait));
+            progressBar.show();
+
+            AlGetMembersFromContactGroupListTask.GetMembersFromGroupIdListListener listener = new AlGetMembersFromContactGroupListTask.GetMembersFromGroupIdListListener() {
+                @Override
+                public void onSuccess(Context context, String response, String[] contactList) {
+                    progressBar.dismiss();
+                    userIdArray = contactList;
+                    getLoaderManager().initLoader(ContactSelectionFragment.ContactsQuery.QUERY_ID, null, AppContactFragment.this);
+                }
+
+                @Override
+                public void onFailure(Context context, String response, Exception e) {
+                    progressBar.dismiss();
+                    Toast.makeText(getContext(), "Failed to load contacts : Response : " + response + "\nException : " + e, Toast.LENGTH_SHORT).show();
+                }
+            };
+
+            if (MobiComUserPreference.getInstance(getContext()).isContactGroupNameList()) {
+                new AlGetMembersFromContactGroupListTask(getContext(), listener, null, groupList, "9").execute();
+            } else {
+                new AlGetMembersFromContactGroupListTask(getContext(), listener, groupList, null, "9").execute();
+            }
+        }
 
     }
 
@@ -209,7 +266,7 @@ public class AppContactFragment extends ListFragment implements SearchListFragme
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemsCount) {
-                if ((alCustomizationSettings.isRegisteredUserContactListCall() || ApplozicSetting.getInstance(getActivity()).isRegisteredUsersContactCall()) && Utils.isInternetAvailable(getActivity().getApplicationContext())) {
+                if ((alCustomizationSettings.isRegisteredUserContactListCall() || ApplozicSetting.getInstance(getActivity()).isRegisteredUsersContactCall()) && Utils.isInternetAvailable(getActivity().getApplicationContext()) && TextUtils.isEmpty(userPreference.getContactsGroupId())) {
                     if (totalItemsCount < previousTotalItemCount) {
                         currentPage = startingPageIndex;
                         previousTotalItemCount = totalItemsCount;
@@ -248,7 +305,7 @@ public class AppContactFragment extends ListFragment implements SearchListFragme
         // If there's a previously selected search item from a saved state then don't bother
         // initializing the loader as it will be restarted later when the query is populated into
         // the action bar search view (see onQueryTextChange() in onCreateOptionsMenu()).
-        if (mPreviouslySelectedSearchItem == 0) {
+        if (mPreviouslySelectedSearchItem == 0 && TextUtils.isEmpty(userPreference.getContactsGroupId()) && userPreference.getContactGroupIdList() == null) {
             // Initialize the loader, and create a loader identified by ContactsQuery.QUERY_ID
             getLoaderManager().initLoader(ContactsQuery.QUERY_ID, null, this);
         }

@@ -7,13 +7,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.parasme.swopinfo.activity.MainActivity_;
-import com.parasme.swopinfo.activity.SplashActivity_;
+import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 
-import org.androidannotations.annotations.App;
 
 import java.io.File;
 import java.io.IOException;
@@ -143,7 +141,7 @@ public class WebServiceHandler {
 
 
     public void get(String url) throws IOException {
-        if(!url.contains("NewsFeed") && ((Activity)context) instanceof MainActivity_)
+        if(!url.contains("NewsFeed") && ((Activity)context) instanceof MainActivity)
             progressDialog.show();
 
         Log.e("GETURL",url);

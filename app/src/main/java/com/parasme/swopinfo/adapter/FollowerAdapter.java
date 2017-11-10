@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.MainActivity_;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.fragment.FragmentCompany;
 import com.parasme.swopinfo.fragment.FragmentGroupDetail;
@@ -124,7 +123,7 @@ public class FollowerAdapter extends ArrayAdapter<Follow> {
 
                 if(((Activity)context).getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentUser)
                 {
-                    Intent i = new Intent((Activity) context,MainActivity_.class);
+                    Intent i = new Intent((Activity) context,MainActivity.class);
                     i.putExtra("startUserWrapper",true);
                     i.putExtra(AppConstants.KEY_USER_ID,followArrayList.get(position).getUserId()+"");
                     i.putExtra(AppConstants.KEY_USER_NAME,followArrayList.get(position).getFullName());

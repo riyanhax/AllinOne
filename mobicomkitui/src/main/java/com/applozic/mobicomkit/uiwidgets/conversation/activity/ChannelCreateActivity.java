@@ -74,8 +74,7 @@ public class ChannelCreateActivity extends AppCompatActivity implements Activity
     private static final int REQUEST_CODE_ATTACH_PHOTO = 901;
     private static final String TAG = "ChannelCreateActivity";
     public static String GROUP_TYPE = "GroupType";
-    public static String CONTACTS_GROUP_ID = "ContactsGroupId";
-    public String contactsGroupId;
+
     MobiComUserPreference userPreference;
     AlCustomizationSettings alCustomizationSettings;
     ConnectivityReceiver connectivityReceiver;
@@ -109,7 +108,7 @@ public class ChannelCreateActivity extends AppCompatActivity implements Activity
         connectivityReceiver = new ConnectivityReceiver();
         userPreference = MobiComUserPreference.getInstance(ChannelCreateActivity.this);
         mActionBar = getSupportActionBar();
-        if(!TextUtils.isEmpty(alCustomizationSettings.getThemeColorPrimary()) && !TextUtils.isEmpty(alCustomizationSettings.getThemeColorPrimaryDark())){
+        if (!TextUtils.isEmpty(alCustomizationSettings.getThemeColorPrimary()) && !TextUtils.isEmpty(alCustomizationSettings.getThemeColorPrimaryDark())) {
             mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(alCustomizationSettings.getThemeColorPrimary())));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setStatusBarColor(Color.parseColor(alCustomizationSettings.getThemeColorPrimaryDark()));
@@ -138,7 +137,6 @@ public class ChannelCreateActivity extends AppCompatActivity implements Activity
         fileClientService = new FileClientService(this);
         if (getIntent() != null) {
             groupType = getIntent().getIntExtra(GROUP_TYPE, Channel.GroupType.PUBLIC.getValue().intValue());
-            contactsGroupId = getIntent().getStringExtra(CONTACTS_GROUP_ID);
         }
        /* groupType = getIntent().getIntExtra(GROUP_TYPE, Channel.GroupType.PRIVATE.getValue().intValue());
         if(groupType.equals(Channel.GroupType.BROADCAST.getValue().intValue())){
@@ -163,22 +161,20 @@ public class ChannelCreateActivity extends AppCompatActivity implements Activity
         if (id == R.id.Next) {
             boolean check = true;
             if (channelName.getText().toString().trim().length() == 0 || TextUtils.isEmpty(channelName.getText().toString())) {
+                Toast.makeText(this, getResources().getString(R.string.applozic_enter_group_name), Toast.LENGTH_SHORT).show();
                 focus = channelName;
                 focus.requestFocus();
                 check = false;
             }
             if (check) {
                 Utils.toggleSoftKeyBoard(ChannelCreateActivity.this, true);
-                if (alCustomizationSettings.getTotalRegisteredUserToFetch() > 0 && (alCustomizationSettings.isRegisteredUserContactListCall() || ApplozicSetting.getInstance(this).isRegisteredUsersContactCall())&& !userPreference.getWasContactListServerCallAlreadyDone()) {
+                if (alCustomizationSettings.getTotalRegisteredUserToFetch() > 0 && (alCustomizationSettings.isRegisteredUserContactListCall() || ApplozicSetting.getInstance(this).isRegisteredUsersContactCall()) && !userPreference.getWasContactListServerCallAlreadyDone()) {
                     processDownloadRegisteredUsers();
                 } else {
                     Intent intent = new Intent(ChannelCreateActivity.this, ContactSelectionActivity.class);
                     intent.putExtra(ContactSelectionActivity.CHANNEL, channelName.getText().toString());
                     if (!TextUtils.isEmpty(groupIconImageLink)) {
                         intent.putExtra(ContactSelectionActivity.IMAGE_LINK, groupIconImageLink);
-                    }
-                    if (contactsGroupId != null) {
-                        intent.putExtra(ContactSelectionActivity.CONTACTS_GROUP_ID, contactsGroupId);
                     }
                     intent.putExtra(ContactSelectionActivity.GROUP_TYPE, groupType);
                     startActivity(intent);

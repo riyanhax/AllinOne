@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.activity.LoginActivity_;
+import com.parasme.swopinfo.activity.LoginActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -36,7 +36,6 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.ViewById;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -497,7 +496,7 @@ public class FragmentProfile extends Fragment implements ImagePicker.Picker, Vie
                             if(new JSONObject(response).optString("Code").equals("200")){
                                 SharedPreferenceUtility.getInstance().clearSharedPreferences();
                                 // replaceFragment(new FragmentHome_(),getFragmentManager());
-                                mActivity.startActivity(new Intent(mActivity, LoginActivity_.class));
+                                mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
                                 mActivity.finish();
                             }
                         }catch (JSONException e){e.printStackTrace();}

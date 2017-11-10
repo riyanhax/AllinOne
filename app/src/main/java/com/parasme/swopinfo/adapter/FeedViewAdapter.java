@@ -29,7 +29,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.MainActivity_;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentCompany;
@@ -578,7 +577,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewHolders> imple
         fragment.setArguments(bundle);
 
         if(((Activity)context).getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentUser){
-            Intent i = new Intent((Activity) context,MainActivity_.class);
+            Intent i = new Intent((Activity) context,MainActivity.class);
             i.putExtra("startUserWrapper",true);
             i.putExtra(AppConstants.KEY_USER_ID,feedArrayList.get(position).getUserId()+"");
             i.putExtra(AppConstants.KEY_USER_NAME,feedArrayList.get(position).getUserFullName());
@@ -598,7 +597,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewHolders> imple
         fragment.setArguments(bundle);
 
         if(((Activity)context).getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentUser){
-            Intent i = new Intent((Activity) context,MainActivity_.class);
+            Intent i = new Intent((Activity) context,MainActivity.class);
             i.putExtra("startUserWrapper",true);
             i.putExtra(AppConstants.KEY_USER_ID,arrayList.get(0).getUserId()+"");
             i.putExtra(AppConstants.KEY_USER_NAME,arrayList.get(0).getUserFullName());

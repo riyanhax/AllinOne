@@ -21,10 +21,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.MainActivity_;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -63,7 +63,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
     private View childView;
     private EditText editFolderName,editSwopText;
     private EditText editTitle;
-    private EditText editDescription;
+    private SocialAutoCompleteTextView editDescription;
     private EditText editYoutubeLink;
     private EditText editTag;
     private Spinner  spinnerBroadcast;
@@ -96,7 +96,11 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
         editSwopText = (EditText) childView.findViewById(R.id.editSwop);
         editFolderName = (EditText) childView.findViewById(R.id.editFolderName);
         editTitle = (EditText) childView.findViewById(R.id.editTitle);
-        editDescription = (EditText) childView.findViewById(R.id.editDescription);
+        editDescription = (SocialAutoCompleteTextView) childView.findViewById(R.id.editDescription);
+        editDescription.setHashtagColor(getResources().getColor(R.color.colorPrimary));
+        editDescription.setMentionColor(getResources().getColor(R.color.colorPrimary));
+        editDescription.setThreshold(1);
+
         editYoutubeLink = (EditText) childView.findViewById(R.id.editYoutubeLink);
         editTag = (EditText) childView.findViewById(R.id.editTag);
         spinnerBroadcast = (Spinner) childView.findViewById(R.id.spinnerBroadcast);
@@ -263,7 +267,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
                                 }
 
                                 else{
-                                    activity.startActivity(new Intent(activity,MainActivity_.class));
+                                    activity.startActivity(new Intent(activity,MainActivity.class));
                                     if(android.os.Build.VERSION.SDK_INT >= 21)
                                     {
                                         activity.finish();

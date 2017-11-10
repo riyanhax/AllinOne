@@ -85,7 +85,7 @@
                 android:textColorHint="@color/textGrey"
                 />
 
-            <EditText
+            <com.hendraanggrian.widget.SocialAutoCompleteTextView
                 android:id="@+id/editDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"

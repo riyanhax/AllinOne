@@ -103,6 +103,11 @@ bintray {
     }
 }
 
+repositories {
+    maven { url 'https://maven.google.com' }
+    jcenter()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:$SUPPORT_APP_COMPAT_VERSION"

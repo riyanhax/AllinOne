@@ -1,5 +1,6 @@
 package com.applozic.mobicomkit.uiwidgets.instruction;
 
+import android.Manifest;
 import android.app.Activity;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -97,6 +98,20 @@ public class ApplozicPermissions {
             showSnackBar(R.string.storage_permission, PermissionsUtils.PERMISSIONS_STORAGE, PermissionsUtils.REQUEST_STORAGE_FOR_PROFILE_PHOTO);
         } else {
             PermissionsUtils.requestPermissions(activity, PermissionsUtils.PERMISSIONS_STORAGE, PermissionsUtils.REQUEST_STORAGE_FOR_PROFILE_PHOTO);
+        }
+    }
+
+    public void requestCameraAndRecordPermission() {
+        if (PermissionsUtils.shouldShowRequestForContactPermission(activity)) {
+            showSnackBar(!PermissionsUtils.checkPermissionForCameraAndMicrophone(activity)?R.string.camera_audio_permission:!PermissionsUtils.isAudioRecordingPermissionGranted(activity)?R.string.record_audio:!PermissionsUtils.isCameraPermissionGranted(activity)?R.string.phone_camera_permission:R.string.camera_audio_permission, new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, PermissionsUtils.REQUEST_CAMERA_AUDIO);
+        } else {
+            PermissionsUtils.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, PermissionsUtils.REQUEST_CAMERA_AUDIO);
+        }
+    }
+
+    public void checkRuntimePermissionForCameraAndAudioRecording() {
+        if (PermissionsUtils.checkSelfPermissionForLocation(activity)) {
+            requestCameraAndRecordPermission();
         }
     }
 

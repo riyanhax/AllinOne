@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
@@ -29,10 +30,6 @@ import com.vistrav.ask.annotations.AskGranted;
 
 import net.alhazmy13.catcho.library.Catcho;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,55 +45,73 @@ import okhttp3.FormBody;
  * Mobile +917737556190
  */
 
-@EActivity(R.layout.activity_forgot)
 public class ForgotPasswordActivity extends AppCompatActivity {
 
 
-    @ViewById EditText editUserName;
 
-    @Click(R.id.textCreateAccount)
-    void click(){
-        final Dialog registerDialog = Utils.loadRegisterDialog(ForgotPasswordActivity.this);
-        Button btnIndividual = (Button) registerDialog.findViewById(R.id.btnIndividual);
-        Button btnBusiness = (Button) registerDialog.findViewById(R.id.btnBusiness);
+    EditText editUserName;
+    TextView textCreateAccount, textLogin;
+    Button btnSubmit;
 
-        btnIndividual.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_forgot);
+        Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
+
+        editUserName = (EditText) findViewById(R.id.editUserName);
+        textCreateAccount = (TextView) findViewById(R.id.textCreateAccount);
+        textLogin = (TextView) findViewById(R.id.textLogin);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+
+        textCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerDialog.dismiss();
-                Intent i = new Intent(ForgotPasswordActivity.this, SignUpActivity_.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+
+                final Dialog registerDialog = Utils.loadRegisterDialog(ForgotPasswordActivity.this);
+                Button btnIndividual = (Button) registerDialog.findViewById(R.id.btnIndividual);
+                Button btnBusiness = (Button) registerDialog.findViewById(R.id.btnBusiness);
+
+                btnIndividual.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        registerDialog.dismiss();
+                        Intent i = new Intent(ForgotPasswordActivity.this, SignUpActivity.class);
+                        startActivity(i);
+                        overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                    }
+                });
+
+                btnBusiness.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        registerDialog.dismiss();
+                        Intent i = new Intent(ForgotPasswordActivity.this, SubscriptionActivity.class);
+                        startActivity(i);
+                        overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                    }
+                });
+                registerDialog.show();
+
             }
         });
 
-        btnBusiness.setOnClickListener(new View.OnClickListener() {
+        textLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerDialog.dismiss();
-                Intent i = new Intent(ForgotPasswordActivity.this, SubscriptionActivity_.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                startActivity(new Intent(ForgotPasswordActivity.this,LoginActivity.class));
+                finish();
             }
         });
-        registerDialog.show();
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validateAndSubmit();
+            }
+        });
     }
 
-    @Click(R.id.textLogin)
-    void login(){
-        startActivity(new Intent(ForgotPasswordActivity.this,LoginActivity_.class));
-        finish();
-    }
-
-    @Click(R.id.btnSubmit)
-    void clickLoginButton(){
-            validateAndSubmit();
-    }
-
-    @AfterViews
-    protected void init(){
-
-    }
 
     private void validateAndSubmit() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -138,12 +153,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
     }
 
 }

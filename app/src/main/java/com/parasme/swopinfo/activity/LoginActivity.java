@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
@@ -37,13 +38,10 @@ import com.vistrav.ask.annotations.AskGranted;
 
 import net.alhazmy13.catcho.library.Catcho;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,7 +61,6 @@ import static com.parasme.swopinfo.application.MyApplication.initOneSignal;
  * Mobile +917737556190
  */
 
-@EActivity(R.layout.activity_login)
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isWriteAllowed = false;
@@ -74,61 +71,78 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isURLShown = false;
     private String playerId = "";
 
-    @ViewById
-    EditText editUserName;
-    @ViewById
-    EditText editPassword;
+    EditText editUserName, editPassword;
+    TextView textForgot, textCreateAccount;
+    Button btnLogin;
 
-    @Click(R.id.textForgot)
-    void forgot() {
-        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity_.class));
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
 
-    @Click(R.id.textCreateAccount)
-    void click() {
-        final Dialog registerDialog = Utils.loadRegisterDialog(LoginActivity.this);
-        Button btnIndividual = (Button) registerDialog.findViewById(R.id.btnIndividual);
-        Button btnBusiness = (Button) registerDialog.findViewById(R.id.btnBusiness);
+        editUserName = (EditText) findViewById(R.id.editUserName);
+        editPassword = (EditText) findViewById(R.id.editPassword);
+        textForgot = (TextView) findViewById(R.id.textForgot);
+        textCreateAccount = (TextView) findViewById(R.id.textCreateAccount);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
 
-        btnIndividual.setOnClickListener(new View.OnClickListener() {
+        copyAssets();
+
+
+        textForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerDialog.dismiss();
-                Intent i = new Intent(LoginActivity.this, SignUpActivity_.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
 
-        btnBusiness.setOnClickListener(new View.OnClickListener() {
+        textCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerDialog.dismiss();
-                Dialog dialog = loadDialog();
+                final Dialog registerDialog = Utils.loadRegisterDialog(LoginActivity.this);
+                Button btnIndividual = (Button) registerDialog.findViewById(R.id.btnIndividual);
+                Button btnBusiness = (Button) registerDialog.findViewById(R.id.btnBusiness);
+
+                btnIndividual.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        registerDialog.dismiss();
+                        Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
+                        startActivity(i);
+                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                    }
+                });
+
+                btnBusiness.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        registerDialog.dismiss();
+                        Dialog dialog = loadDialog();
+                    }
+                });
+                registerDialog.show();
             }
         });
-        registerDialog.show();
-    }
 
-    @Click(R.id.btnLogin)
-    void clickLoginButton() {
-        if (isWriteAllowed && isCameraAllowed && isLocationAllowed)
-            validateAndLogin();
-        else
-            askPermissions();
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isWriteAllowed && isCameraAllowed && isLocationAllowed)
+                    validateAndLogin();
+                else
+                    askPermissions();
+            }
+        });
 
-//        Intent intent = new Intent();
-//        intent.setType("audio/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent,"title"),888);
-    }
-
-    @AfterViews
-    protected void init() {
         askPermissions();
-        new VersionChecker().execute();
-
+        //new VersionChecker().execute();
     }
+
+
+
+
+
 
     private void validateAndLogin() {
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
@@ -207,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                                 AppConstants.USER_ID = userId;
                                 Intent intent;
                                 if (SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO, false))
-                                    intent = new Intent(LoginActivity.this, MainActivity_.class);
+                                    intent = new Intent(LoginActivity.this, MainActivity.class);
                                 else
                                     intent = new Intent(LoginActivity.this, FlowActivity.class);
                                 startActivity(intent);
@@ -230,13 +244,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        copyAssets();
-
-        //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
-    }
 
     private void askPermissions() {
         Ask.on(this)
@@ -348,7 +355,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogPayment.dismiss();
-                Intent i = new Intent(LoginActivity.this, SubscriptionActivity_.class);
+                Intent i = new Intent(LoginActivity.this, SubscriptionActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }

@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.MainActivity_;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentFollowing;
@@ -29,7 +28,6 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.App;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -145,7 +143,7 @@ public class FollowingAdapter extends ArrayAdapter<Follow> {
 
                 if(((Activity)context).getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentUser)
                 {
-                    Intent i = new Intent((Activity) context,MainActivity_.class);
+                    Intent i = new Intent((Activity) context,MainActivity.class);
                     i.putExtra("startUserWrapper",true);
                     i.putExtra(AppConstants.KEY_USER_ID, followingArrayList.get(position).getFollowingId()+"");
                     i.putExtra(AppConstants.KEY_USER_NAME, followingArrayList.get(position).getFullName());

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -258,7 +259,11 @@ public class FragmentUploadsWrapper extends BaseFragment implements FileSelectio
         final EditText editFolderName = (EditText) view.findViewById(R.id.editFolderName);
         final EditText editSwop = (EditText) view.findViewById(R.id.editSwop);
         final EditText editTitle = (EditText) view.findViewById(R.id.editTitle);
-        final EditText editDescription = (EditText) view.findViewById(R.id.editDescription);
+        final SocialAutoCompleteTextView editDescription = (SocialAutoCompleteTextView) view.findViewById(R.id.editDescription);
+        editDescription.setHashtagColor(getResources().getColor(R.color.colorPrimary));
+        editDescription.setMentionColor(getResources().getColor(R.color.colorPrimary));
+        editDescription.setThreshold(1);
+
         final EditText editYoutubeLink = (EditText) view.findViewById(R.id.editYoutubeLink);
         final EditText editTag = (EditText) view.findViewById(R.id.editTag);
         final Spinner spinnerBroadcast = (Spinner) view.findViewById(R.id.spinnerBroadcast);

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,11 +30,6 @@ import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 
 import net.alhazmy13.catcho.library.Catcho;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,7 +47,6 @@ import okhttp3.MultipartBody;
  * Mobile +917737556190
  */
 
-@EActivity(R.layout.activity_signup)
 public class SignUpActivity extends AppCompatActivity implements ImagePicker.Picker{
 
     private ArrayList<String> countryNameList = new ArrayList<>();
@@ -63,81 +58,102 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
     private ArrayList<EditText> editTextArrayList2 =new ArrayList<>();
     private String imagePath="";
 
-    @ViewById EditText editCountry;
-    @ViewById EditText editEmail;
-    @ViewById EditText editFirstName;
-    @ViewById EditText editLastName;
-    @ViewById EditText editUserName;
-    @ViewById EditText editPassword;
-    @ViewById EditText editConfirmPassword;
-    @ViewById EditText editDOB;
-    @ViewById LinearLayout layoutPhase1;
-    @ViewById LinearLayout layoutPhase2;
-    @ViewById ImageView imageUser;
-    @ViewById ImageView imageUser2;
-
-
-    @Click(R.id.editDOB)
-    void clickDOB(){
-        new Utils(SignUpActivity.this).selectDate(editDOB);
-    }
-
-    @Click(R.id.btnNext)
-    void click(){
-        MyApplication.toggleSoftKeyBoard(SignUpActivity.this,true);
-        for(int i=0;i<editTextArrayList1.size();i++) {
-            EditText editText = editTextArrayList1.get(i);
-            if(editText.getText().toString().equals("")){
-                editText.setError("Field can not be empty");
-                editText.requestFocus();
-                return;
-            }
-            else{
-                editText.clearFocus();
-                editText.setError(null);
-            }
-        }
-
-        EditText editTextEmail=editTextArrayList1.get(0);
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()) {
-            editTextEmail.setError("Please enter a valid email address");
-            editTextEmail.requestFocus();
-            return;
-        }
-
-        if(imagePath.equals("")){
-            Snackbar.make(findViewById(android.R.id.content),"Please select an profile picture first",Snackbar.LENGTH_LONG).show();
-            return;
-        }
-
-        inflateSignUpPhase();
-        isFirstPhase=false;
-    }
-
-    @Click(R.id.btnSubmit)
-    void submitClick(){
-        validationAndRegister();
-    }
-
-
-    @Click(R.id.editCountry)
-    void countryClick(){
-        dialogCountry.show();
-    }
-
-    @Click(R.id.imageUser)
-    void imageClick(){
-        ImagePicker.picker=this;
-        startActivity(new Intent(SignUpActivity.this,ImagePicker.class).putExtra("avatar","avatar"));
-    }
+    EditText editCountry,editEmail,editFirstName,editLastName,editUserName,editPassword,editConfirmPassword,editDOB;
+    LinearLayout layoutPhase1,layoutPhase2;
+    ImageView imageUser,imageUser2;
+    Button btnNext, btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_signup);
         Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
+
+        editCountry = (EditText) findViewById(R.id.editCountry);
+        editEmail = (EditText) findViewById(R.id.editEmail);
+        editFirstName = (EditText) findViewById(R.id.editFirstName);
+        editLastName = (EditText) findViewById(R.id.editLastName);
+        editUserName = (EditText) findViewById(R.id.editUserName);
+        editPassword = (EditText) findViewById(R.id.editPassword);
+        editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
+        editDOB = (EditText) findViewById(R.id.editDOB);
+
+        layoutPhase1 = (LinearLayout) findViewById(R.id.layoutPhase1);
+        layoutPhase2 = (LinearLayout) findViewById(R.id.layoutPhase2);
+
+        imageUser = (ImageView) findViewById(R.id.imageUser);
+        imageUser = (ImageView) findViewById(R.id.imageUser);
+
+        btnNext = (Button) findViewById(R.id.btnNext);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+
+        init();
+
+        editDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Utils(SignUpActivity.this).selectDate(editDOB);
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyApplication.toggleSoftKeyBoard(SignUpActivity.this,true);
+                for(int i=0;i<editTextArrayList1.size();i++) {
+                    EditText editText = editTextArrayList1.get(i);
+                    if(editText.getText().toString().equals("")){
+                        editText.setError("Field can not be empty");
+                        editText.requestFocus();
+                        return;
+                    }
+                    else{
+                        editText.clearFocus();
+                        editText.setError(null);
+                    }
+                }
+
+                EditText editTextEmail=editTextArrayList1.get(0);
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()) {
+                    editTextEmail.setError("Please enter a valid email address");
+                    editTextEmail.requestFocus();
+                    return;
+                }
+
+                if(imagePath.equals("")){
+                    Snackbar.make(findViewById(android.R.id.content),"Please select an profile picture first",Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                inflateSignUpPhase();
+                isFirstPhase=false;
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validationAndRegister();
+            }
+        });
+
+        editCountry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogCountry.show();
+            }
+        });
+
+        imageUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.picker=SignUpActivity.this;
+                startActivity(new Intent(SignUpActivity.this,ImagePicker.class).putExtra("avatar","avatar"));
+            }
+        });
     }
 
-    @AfterViews
+
     protected void init(){
         editTextArrayList1.add(editEmail);
         editTextArrayList1.add(editFirstName);

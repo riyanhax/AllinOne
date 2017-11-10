@@ -27,8 +27,8 @@ import android.widget.TextView;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.activity.LoginActivity_;
-import com.parasme.swopinfo.activity.MainActivity_;
+import com.parasme.swopinfo.activity.LoginActivity;
+import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.activity.TouchImageView;
 import com.parasme.swopinfo.adapter.FolderAdapter;
 import com.parasme.swopinfo.adapter.FollowerAdapter;
@@ -613,7 +613,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                             jsonUserObject = new JSONObject(response).optJSONObject("returnvalue");
                             userDetails = new Follow();
                             if (jsonUserObject == null) {
-                                activity.startActivity(new Intent(activity, LoginActivity_.class));
+                                activity.startActivity(new Intent(activity, LoginActivity.class));
                                 activity.finish();
                             }
 
@@ -646,7 +646,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                                 AppConstants.UPLOAD_VIEWS = jsonUserObject.optString("TotalFileViews");
                                 AppConstants.UPLOAD_DOWNLOADS = jsonUserObject.optString("TotalFileDownloads");
                                 AppConstants.PROFILE_VIEWS = jsonUserObject.optString("ProfileViews");
-                                Intent i = new Intent(activity, MainActivity_.class);
+                                Intent i = new Intent(activity, MainActivity.class);
                                 i.putExtra("startUserWrapper", false);
                                 activity.startActivity(i);
                                 activity.finish();

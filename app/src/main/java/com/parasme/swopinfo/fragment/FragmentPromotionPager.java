@@ -25,7 +25,6 @@ import com.parasme.swopinfo.model.Store;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 
-import org.androidannotations.annotations.App;
 
 import java.io.IOException;
 import java.util.ArrayList;
