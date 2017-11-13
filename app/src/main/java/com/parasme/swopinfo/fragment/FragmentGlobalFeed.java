@@ -1,17 +1,10 @@
 package com.parasme.swopinfo.fragment;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.location.Location;
-import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -20,29 +13,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.apradanas.simplelinkabletext.Link;
-import com.apradanas.simplelinkabletext.LinkableEditText;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.application.AppConstants;
-import com.parasme.swopinfo.application.MyApplication;
-import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -51,9 +35,6 @@ import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.model.Retailer;
 import com.parasme.swopinfo.model.Store;
 import com.parasme.swopinfo.model.Upload;
-import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
-import com.parasme.swopinfo.urlpreview.SourceContent;
-import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.MemoryPolicy;
@@ -70,15 +51,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
 
-import static com.parasme.swopinfo.fragment.FragmentAdd.broadcastArray;
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.widget.Toast;
-
-import okhttp3.FormBody;
 
 
 /**
@@ -89,23 +63,20 @@ import okhttp3.FormBody;
  * Mobile +917737556190
  */
 
-public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener {
+public class FragmentGlobalFeed extends BaseFragment {
 
     private View childView;
     public static ListView listFeeds;
+    private ArrayList<Feed> globalFeed = new ArrayList<>();
     private LinearLayout layoutOwnProfile;
     private ImageView imageUser;
-    public static ArrayList<Feed> feedArrayList = new ArrayList<>();
-    public static ArrayList<Feed> personalFeedList = new ArrayList<>();
     private LinearLayout layout;
     public static Dialog dialogSwop;
     public ArrayList<File> fileArrayList=new ArrayList<>();
-    public static SwipeRefreshLayout swipeRefreshLayout;
     private String TAG = getClass().getName();
     public static TextView textFilesCount;
     public static FeedAdapter adapter;
     private ImageView imgChecking;
-    public static int storeId = 0;
     public static ArrayList<Retailer> retailerList;
 
 
@@ -160,34 +131,14 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             @Override
             public void onClick(View view) {
 //                if(dialogSwop==null)
-                    loadDialog();
+                loadDialog();
 //                dialogSwop.show();
             }
         });
 
-        swipeRefreshLayout = (SwipeRefreshLayout) childView.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimaryDark));
-        swipeRefreshLayout.setOnRefreshListener(this);
 
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                feedArrayList.clear();
-                personalFeedList.clear();
-                Log.e(TAG, "check2: "+feedArrayList.size() );
-                if(feedArrayList.size()==0){
-                    swipeRefreshLayout.setRefreshing(true);
-                    getFeeds(mActivity, listFeeds,swipeRefreshLayout);
-                }
-                else
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, personalFeedList, listFeeds));
-                        }
-                    });
-            }
-        });
+        getGlobalFeeds();
+
 
         imgChecking = (ImageView) childView.findViewById(R.id.img_checkin);
 
@@ -220,6 +171,16 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 */
             }
         });
+    }
+
+    private void getGlobalFeeds() {
+        for (int i = 0; i < FragmentHome.feedArrayList.size(); i++) {
+            if (FragmentHome.feedArrayList.get(i).getType().equals("user")
+                    || FragmentHome.feedArrayList.get(i).getCompanyId()==54)
+                globalFeed.add(FragmentHome.feedArrayList.get(i));
+
+        }
+        listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, globalFeed, listFeeds));
     }
 
 
@@ -310,186 +271,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     }
 
 
-    public void getFeeds(final Activity activity, final ListView listView, final SwipeRefreshLayout swipeRefreshLayout) {
-        feedArrayList.clear();
-        personalFeedList.clear();
-        WebServiceHandler webServiceHandler = new WebServiceHandler(activity);
-        webServiceHandler.serviceListener = new WebServiceListener() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("FEEDS RESP"+feedArrayList.size(), response);
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject feedJsonObject = jsonArray.getJSONObject(i);
-                        Feed feed = new Feed();
-                        feed.setUserId(feedJsonObject.optInt("UserID"));
-                        feed.setType(feedJsonObject.optString("Type"));
-                        feed.setItemDate(feedJsonObject.optString("ItemDate"));
-                        feed.setFileId(feedJsonObject.optInt("FileID"));
-                        feed.setFileUserId(feedJsonObject.optInt("FileUserID"));
-                        feed.setComment(feedJsonObject.optString("Comment"));
-                        feed.setUserFullName(feedJsonObject.optString("UserFullName"));
-                        feed.setFileName(feedJsonObject.optString("Filename"));
-                        feed.setThumbFileName(feedJsonObject.optString("Thumbnailfilename"));
-                        feed.setThumbURL(createThumbURL(feedJsonObject.optInt("FileUserID") + "", feedJsonObject.optString("FolderName"), feedJsonObject.optString("Thumbnailfilename"), feedJsonObject.optString("FileType"), feedJsonObject.optInt("companyid")));
-                        feed.setMenuExpanded(false);
-                        feed.setFileTitle(feedJsonObject.optString("FileTitle"));
-                        feed.setFolderName(feedJsonObject.optString("FolderName"));
-                        feed.setFileType(feedJsonObject.optString("FileType"));
-                        feed.setVideoUrl(feedJsonObject.optString("videourl"));
-                        feed.setCompanyId(feedJsonObject.optInt("companyid"));
-                        feed.setCompanyThumbFileName(feedJsonObject.optString("CompanyThumbnailfilename"));
-                        feed.setViewsCount(feedJsonObject.optInt("viewscount"));
-                        feed.setDownloadsCount(feedJsonObject.optInt("downloadscount"));
-                        feed.setStatusInfoId(feedJsonObject.optInt("StatusInformationID"));
-                        feed.setUserThumb(feedJsonObject.optString("UserThumbnail"));
-                        feed.setVoteStatus(feedJsonObject.optInt("CurrentUserVote"));
-                        feed.setErrorSet(false);
-                        feed.setCommentEditText(null);
-                        feed.setCompanyName(feedJsonObject.optString("CompanyName"));
-                        feed.setPreviewLoaded(false);
-                        feed.setUserPicLoaded(false);
-
-                        // Calculate time ago
-                        feed.setItemTimeAgo(feedJsonObject.optString("DisplayDate"));
-                        feed.setFileTime(calculateTimeAgo(feedJsonObject.optString("FileDate")));
-
-                        // Getting Comments
-                        ArrayList<Comment> commentArrayList = new ArrayList<>();
-                        JSONArray commentArray = feedJsonObject.optJSONArray("comments");
-                        for (int j = 0; j < commentArray.length(); j++) {
-                            Comment comment = new Comment();
-                            JSONObject commentObject = commentArray.optJSONObject(j);
-                            comment.setCommentId(commentObject.optInt("commentid"));
-                            comment.setFileId(commentObject.optInt("fileid"));
-                            comment.setUserId(commentObject.optInt("userid"));
-                            comment.setCommentText(commentObject.optString("commenttext"));
-                            comment.setTimeDate(commentObject.optString("timedate"));
-                            comment.setDate(commentObject.optString("DisplayDate"));
-
-                            JSONObject userObject = commentObject.optJSONObject("User");
-                            comment.setUserId(userObject.optInt("userid"));
-                            comment.setUserName(userObject.optString("username"));
-                            comment.setUserFullName(userObject.optString("UserFullName"));
-                            comment.setCompanyId(userObject.optInt("companyid"));
-                            String imageURL=AppConstants.URL_DOMAIN+"upload/user"+ userObject.optInt("userid")+"/profilepic.jpg";
-                            comment.setUserImageURL(imageURL);
-                            commentArrayList.add(comment);
-
-                            /***********************************/
-//                            if(j==0 && !commentObject.optString("commenttext").contains("Sexy.."))
-//                                feed.setUserId(commentObject.optInt("userid"));
-                            /***********************************/
-                        }
-
-                        feed.setCommentArrayList(commentArrayList);
 
 
-                        if(!feedJsonObject.isNull("filelist")){
-                            ArrayList<Upload> uploadArrayList = new ArrayList<>();
-                            JSONArray jsonArray1 = feedJsonObject.getJSONArray("filelist");
-                            for (int j = 0; j < jsonArray1.length(); j++) {
-                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
-                                Upload upload = new Upload();
-                                upload.setBroadcast(jsonObject.getBoolean("broadcast"));
-                                upload.setComments(jsonObject.getBoolean("comments"));
-                                upload.setDownloads(jsonObject.getBoolean("downloads"));
-                                upload.setCompanyId(jsonObject.getInt("companyid"));
-                                upload.setDownloadsCount(jsonObject.getInt("downloadscount"));
-                                upload.setFileId(jsonObject.getInt("fileid"));
-                                upload.setFileName(jsonObject.getString("filename"));
-                                upload.setFileType(jsonObject.getString("filetype"));
-                                upload.setFolderName(jsonObject.getString("foldername"));
-                                upload.setScore(jsonObject.getInt("Score"));
-                                upload.setViewsCount(jsonObject.getInt("viewscount"));
-                                upload.setThumbURL("https://swopinfo.com"+jsonObject.getString("Thumbnailfilename").replace("~",""));
-                                upload.setFileURL(Utils.createFileURL(jsonObject));
-                                upload.setFileType(jsonObject.optString("filetype"));
-                                upload.setUserVote(jsonObject.optInt("Vote"));
-                                upload.setVideoURL(jsonObject.optString("videourl"));
-                                if(j==0) {
-                                    feed.setFileId(jsonObject.getInt("fileid"));
-                                    upload.setCommentText(feedJsonObject.optString("Comment"));
-                                    upload.setDescription(jsonObject.getString("description"));
-                                    upload.setUserFullName(feedJsonObject.optString("UserFullName"));
-                                    upload.setUserThumbURL(feedJsonObject.optString("UserThumbnail"));
-                                }
-                                uploadArrayList.add(upload);
-                            }
-
-                            feed.setUploadArrayList(uploadArrayList);
-                        }
-
-                        feedArrayList.add(feed);
-
-                        if (!feed.getType().contains("user"))
-                            personalFeedList.add(feed);
-                    }
-
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // When feeds api is called from its own screen
-                            adapter = new FeedAdapter(activity, R.layout.row_feed, personalFeedList, listView);
-                            listView.setAdapter(adapter);
-                            swipeRefreshLayout.setRefreshing(false);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (JSONException e) {
-                } catch (NullPointerException e) {
-                }
-            }
-        };
-
-        try {
-            webServiceHandler.get(AppConstants.URL_FEED);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private String calculateTimeAgo(String itemDate) {
-        long feedTimeMillis = getDateInMillis(itemDate);
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(feedTimeMillis, System.currentTimeMillis(),0);
-
-//        Log.e("CHECK22", "calculateTimeAgo: "+feedTimeMillis +  System.currentTimeMillis());
-
-/*
-        Moment moment = null;
-        try {
-            if (!itemDate.contains("Z"))
-                itemDate = itemDate+"Z";
-            moment = Iso8601Format.EXTENDED_DATE_TIME_OFFSET.parse("2017-03-01T12:18:36.213Z");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String ago = PrettyTime.of(Locale.getDefault()).printRelativeInStdTimezone(moment);
-*/
-        return timeAgo+"";
-    }
-
-    public static long getDateInMillis(String srcDate) {
-        // To remove last three digit after .
-//        if(srcDate.contains("."))
-//            srcDate = srcDate.substring(0,srcDate.lastIndexOf("."));
-        SimpleDateFormat desiredFormat = new SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss.SSS");
-        //desiredFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long dateInMillis = 0;
-        try {
-            Date date = desiredFormat.parse(srcDate);
-            dateInMillis = date.getTime();
-            return dateInMillis;
-        } catch (ParseException e) {
-            Log.e("ERROR", "getDateInMillis: "+e.toString() );
-            e.printStackTrace();
-        }
-
-        return 0;
-    }
     @Override
     public void onDetach() {
         super.onDetach();
@@ -504,9 +287,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         dialogSwop.setCanceledOnTouchOutside(true);
 
 
-        final LinkableEditText editSwop = (LinkableEditText) dialogSwop.findViewById(R.id.editSwop);
-        setTagMentionPattern(editSwop);
-
+        final EditText editSwop = (EditText) dialogSwop.findViewById(R.id.editSwop);
         final Button btnPost = (Button) dialogSwop.findViewById(R.id.btnPost);
         textSelection = (TextView) dialogSwop.findViewById(R.id.text_selection);
         layoutSelection = (RelativeLayout) dialogSwop.findViewById(R.id.layout_selection);
@@ -605,53 +386,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         dialogSwop.show();
     }
 
-    private void setTagMentionPattern(LinkableEditText editSwop) {
-        Link linkHashtag = new Link(Pattern.compile("(#\\w+)"))
-                .setUnderlined(true)
-                .setTextStyle(Link.TextStyle.BOLD)
-                .setClickListener(new Link.OnClickListener() {
-                    @Override
-                    public void onClick(String text) {
-                    }
-                });
 
-        Link linkUsername = new Link(Pattern.compile("(@\\w+)"))
-                .setUnderlined(false)
-                .setTextColor(Color.parseColor("#D00000"))
-                .setTextStyle(Link.TextStyle.BOLD)
-                .setClickListener(new Link.OnClickListener() {
-                    @Override
-                    public void onClick(String text) {
-                    }
-                });
-
-        List<Link> links = new ArrayList<>();
-        links.add(linkHashtag);
-        links.add(linkUsername);
-
-        editSwop.addLinks(links);
-    }
-
-
-    @Override
-    public void onFilesSelected(ArrayList<File> resultFileList) {
-        fileArrayList = resultFileList;
-        int size = fileArrayList.size();
-        textFilesCount.setVisibility(View.VISIBLE);
-        textFilesCount.setText((size==1) ? "1 File Selected" : (size+" Files Selected"));
-
-        Log.e("asfdsaf",resultFileList.get(0).getPath());
-
-    }
-
-    @Override
-    public void onRefresh() {
-        // showing refresh animation before making http call
-        swipeRefreshLayout.setRefreshing(true);
-        feedArrayList.clear();
-        personalFeedList.clear();
-        getFeeds(mActivity, listFeeds, swipeRefreshLayout);
-    }
 
     @Override
     public void onPause() {

@@ -24,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -409,10 +408,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
         final EditText editSwopText = (EditText) view.findViewById(R.id.editSwop);
         final EditText editFolderName = (EditText) view.findViewById(R.id.editFolderName);
         final EditText editTitle = (EditText) view.findViewById(R.id.editTitle);
-        final SocialAutoCompleteTextView editDescription = (SocialAutoCompleteTextView) view.findViewById(R.id.editDescription);
-        editDescription.setHashtagColor(getResources().getColor(R.color.colorPrimary));
-        editDescription.setMentionColor(getResources().getColor(R.color.colorPrimary));
-        editDescription.setThreshold(1);
+        final EditText editDescription = (EditText) view.findViewById(R.id.editDescription);
 
 
         final EditText editYoutubeLink = (EditText) view.findViewById(R.id.editYoutubeLink);

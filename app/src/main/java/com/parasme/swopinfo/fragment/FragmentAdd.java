@@ -21,7 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -63,7 +62,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
     private View childView;
     private EditText editFolderName,editSwopText;
     private EditText editTitle;
-    private SocialAutoCompleteTextView editDescription;
+    private EditText editDescription;
     private EditText editYoutubeLink;
     private EditText editTag;
     private Spinner  spinnerBroadcast;
@@ -96,10 +95,7 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
         editSwopText = (EditText) childView.findViewById(R.id.editSwop);
         editFolderName = (EditText) childView.findViewById(R.id.editFolderName);
         editTitle = (EditText) childView.findViewById(R.id.editTitle);
-        editDescription = (SocialAutoCompleteTextView) childView.findViewById(R.id.editDescription);
-        editDescription.setHashtagColor(getResources().getColor(R.color.colorPrimary));
-        editDescription.setMentionColor(getResources().getColor(R.color.colorPrimary));
-        editDescription.setThreshold(1);
+        editDescription = (EditText) childView.findViewById(R.id.editDescription);
 
         editYoutubeLink = (EditText) childView.findViewById(R.id.editYoutubeLink);
         editTag = (EditText) childView.findViewById(R.id.editTag);
