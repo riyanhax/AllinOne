@@ -35,5 +35,6 @@
 
     <!--  -->
     <color name="pressed_example">#CC33B5E5</color>
+    <color name="colorRouteLine">#FF0C4F38</color>
 
 </resources>

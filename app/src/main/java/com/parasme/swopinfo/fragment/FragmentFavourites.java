@@ -100,12 +100,12 @@ public class FragmentFavourites extends Fragment {
 /*
     private void getFavoriteCategories(String userId) {
         String url = "http://dev.swopinfo.com/Userfav.aspx?user_id="+userId;
-        WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
+        WebServiceHandler webServiceHandler = new WebServiceHandler(appCompatActivity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
             public void onResponse(final String response) {
                 Log.e("Favs",response);
-                mActivity.runOnUiThread(new Runnable() {
+                appCompatActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try{
@@ -120,10 +120,10 @@ public class FragmentFavourites extends Fragment {
                                     favArrayList.add(category);
                                     favCatIds.add(jsonObject1.optInt("categoryid")+"");
                                 }
-                                listCategories.setAdapter(new FavouriteAdapter(mActivity, R.layout.row_favourites, favArrayList));
+                                listCategories.setAdapter(new FavouriteAdapter(appCompatActivity, R.layout.row_favourites, favArrayList));
                             }
                             else
-                                MyApplication.alertDialog(mActivity,"You have not added any favorites","Favorites");
+                                MyApplication.alertDialog(appCompatActivity,"You have not added any favorites","Favorites");
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });
@@ -188,7 +188,7 @@ public class FragmentFavourites extends Fragment {
                 else
                     checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
 
-//                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
+//                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), appCompatActivity, R.id.content_frame);
 
 
                 return false;
@@ -233,6 +233,10 @@ public class FragmentFavourites extends Fragment {
                                     JSONObject retailerObject = jsonArray.getJSONObject(i);
                                     Retailer retailer = new Retailer();
                                     retailer.setRetailerLogo(retailerObject.optString("storelogo"));
+                                    retailer.setStoreId(retailerObject.optString("storeID"));
+                                    retailer.setRetailerMessage(retailerObject.optString("msg"));
+                                    retailer.setRetailerId(retailerObject.optString("retailerid"));
+                                    retailer.setRetailerName(retailerObject.optString("storename"));
 
                                     ArrayList<Store.Promotion> promotionList = new ArrayList<>();
 
@@ -249,12 +253,20 @@ public class FragmentFavourites extends Fragment {
                                         FragmentHome.retailerList.add(retailer);
                                 }
 
+                                Retailer retailer = new Retailer();
+                                retailer.setStoreId("0");
+                                retailer.setRetailerLogo("https://www.ecigssa.co.za/data/attachments/99/99598-ff08bbcb3dbbe9846619354ee13b48d2.jpg");
+                                FragmentHome.retailerList.add(retailer);
+
+                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+
+
                                 ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
 
                             }
                             else
                                 MyApplication.alertDialog(mActivity,"Thanks for Checking in. We unfortunately do not have stores listed in this Geolocated area but will have soon. Please ask your Local Retailers to join so that you can benefit.", "Check In");
-//                                MyApplication.alertDialog(mActivity,"Thank you for checking in. There arnt any stores using the platform in your area yet. Please ask your local retailers to contact us to allow you the opportunity to shop and save.", "Check In");
+//                                MyApplication.alertDialog(appCompatActivity,"Thank you for checking in. There arnt any stores using the platform in your area yet. Please ask your local retailers to contact us to allow you the opportunity to shop and save.", "Check In");
                         }catch (JSONException e){e.printStackTrace();}
                     }
                 });

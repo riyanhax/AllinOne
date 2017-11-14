@@ -42,6 +42,7 @@ public class AppConstants {
     public static final String PREF_ENABLE_CHAT_NOTIFICATION = "chat_notification";
     public static final String PREF_CHECK_IN_INTRO = "check_in_intro";
     public static final String PREF_FAV_IDS = "fav_ids";
+    public static final String PREF_RETAILER_MSGS = "retailer_msgs";
 
     public static final String KEY_IS_GROUP_UPLOADS ="keyIsGroupUploads";
     public static final String KEY_USER_ID ="keyUserId";

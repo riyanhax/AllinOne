@@ -4,12 +4,12 @@
         "source": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/src/main/res/drawable/open_graph_foreground.xml"
     },
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_cab_background_internal_bg.xml",
-        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable/abc_cab_background_internal_bg.xml"
-    },
-    {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_switch_thumb_material.xml",
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable/abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_cab_background_internal_bg.xml",
+        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable/abc_cab_background_internal_bg.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_ic_voice_search_api_material.xml",
@@ -120,12 +120,12 @@
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable/abc_btn_check_material.xml"
     },
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/tooltip_frame_dark.xml",
-        "source": "/home/mukesh/.android/build-cache/72856df76e4c4afe6665d8d3ed33cdcf357cd531/output/res/drawable/tooltip_frame_dark.xml"
-    },
-    {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_list_selector_background_transition_holo_dark.xml",
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable/abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/tooltip_frame_dark.xml",
+        "source": "/home/mukesh/.android/build-cache/72856df76e4c4afe6665d8d3ed33cdcf357cd531/output/res/drawable/tooltip_frame_dark.xml"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable/abc_btn_borderless_material.xml",

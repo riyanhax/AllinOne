@@ -199,7 +199,7 @@ public class FragmentUploadsWrapper extends BaseFragment implements FileSelectio
         btnAddFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog folderDialog = Utils.loadFolderDialog(mActivity);
+                final Dialog folderDialog = Utils.loadFolderDialog(appCompatActivity);
                 EditText editFolderName = (EditText) folderDialog.findViewById(R.id.editFolderName);
                 Button btnCreateFolder = (Button) folderDialog.findViewById(R.id.btnCreateFolder);
                 Button btnCancel = (Button) folderDialog.findViewById(R.id.btnCancel);
@@ -285,7 +285,7 @@ public class FragmentUploadsWrapper extends BaseFragment implements FileSelectio
                 isFileSelectionClicked = true;
                 new Utils(mActivity).selectDialog(new String[]{"Camera","Gallery","Files"},FragmentUploadsWrapper.this, FragmentUploadsWrapper.this);
 //                FileSelectionActivity.setOnFilePickListener(FragmentUploadsWrapper.this);
-//                startActivity(new Intent(mActivity,FileSelectionActivity.class));
+//                startActivity(new Intent(appCompatActivity,FileSelectionActivity.class));
             }
         });
 

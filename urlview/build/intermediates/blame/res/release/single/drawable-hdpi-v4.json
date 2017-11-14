@@ -44,12 +44,12 @@
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
     },
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
-        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
-    },
-    {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_ic_star_black_36dp.png",
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_ic_star_black_36dp.png"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
@@ -68,12 +68,12 @@
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
-        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_ic_star_half_black_16dp.png",
-        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_ic_star_half_black_16dp.png"
-    },
-    {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",
         "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_textfield_activated_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_ic_star_half_black_16dp.png",
+        "source": "/home/mukesh/.android/build-cache/69149a96d148e1dea9009ea4ee43008f5e09a366/output/res/drawable-hdpi-v4/abc_ic_star_half_black_16dp.png"
     },
     {
         "merged": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/res/merged/release/drawable-hdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",

@@ -126,8 +126,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
         if(getIntent().getAction().equals(Intent.ACTION_SEND) || getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)){
-            initAndLoadDialog();
+            // If user is not logged in then finishing else showing dialog to share
+            if (SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN, false))
+                initAndLoadDialog();
+            else
+                finish();
         }
+
         else if(getIntent().getAction().equals(Intent.ACTION_VIEW)){
             Intent intent = new Intent(SplashActivity.this,MainActivity.class);
             intent.putExtra("actionView",getIntent().getData().toString());

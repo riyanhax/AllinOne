@@ -47,7 +47,7 @@ public class PromotionPagerAdapter extends PagerAdapter {
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_single_promotion);
         Picasso.with(mContext).load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(imageView);
-        imageView.setImageResource(mResources.get(position).image);
+        //imageView.setImageResource(mResources.get(position).image);
 
         container.addView(itemView);
 

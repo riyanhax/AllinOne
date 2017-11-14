@@ -131,7 +131,7 @@ public class FragmentSearch extends Fragment{
                 bundle.putString(AppConstants.KEY_USER_NAME,userArrayList.get(position).getFullName());
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).addToBackStack(null).commit();
-//                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(),mActivity ,R.id.content_frame);
+//                MainActivity.replaceFragment(fragment, appCompatActivity.getFragmentManager(),appCompatActivity ,R.id.content_frame);
             }
         });
         return view;

@@ -14,8 +14,7 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_height="match_parent">
 
-
-            <com.apradanas.simplelinkabletext.LinkableEditText
+            <com.parasme.swopinfo.socialedittext.LinkableEditText
                 android:id="@+id/editSwop"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"

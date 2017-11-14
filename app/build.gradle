@@ -4,11 +4,20 @@ apply plugin: 'com.android.application'
 /*
 repositories {
     maven {
-        url "https://jitpack.io"
+        url "https://maven.google.com"
     }
 }
-
 */
+
+
+repositories {
+    mavenCentral()
+}
+
+repositories {
+    jcenter()
+    maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+}
 
 android {
     compileSdkVersion 26
@@ -63,11 +72,9 @@ android {
         exclude 'META-INF/ECLIPSE_.RSA'
     }
 
-/*
     dexOptions {
         jumboMode true
     }
-*/
 
     lintOptions {
         disable 'MissingTranslation'
@@ -109,7 +116,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:10.2.0'
     compile 'com.google.android.gms:play-services-location:10.2.0'
     //compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.apradanas.simplelinkabletext:library:1.0.3@aar'
 }
 apply plugin: 'com.google.gms.google-services'

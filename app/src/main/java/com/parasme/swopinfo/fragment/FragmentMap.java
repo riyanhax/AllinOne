@@ -3,6 +3,7 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,9 +18,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.LocationActivity;
+import com.parasme.swopinfo.helper.routemap.DrawMarker;
+import com.parasme.swopinfo.helper.routemap.DrawRouteMaps;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 
@@ -34,7 +38,7 @@ import java.io.IOException;
 
 public class FragmentMap extends Fragment {
 
-    private AppCompatActivity mActivity;
+    public static AppCompatActivity appCompatActivity;
     private MapView mapView;
     private GoogleMap map;
     private String address;
@@ -55,7 +59,7 @@ public class FragmentMap extends Fragment {
         super.onAttach(context);
 
         if (context instanceof AppCompatActivity){
-            mActivity=(AppCompatActivity) context;
+            appCompatActivity =(AppCompatActivity) context;
         }
     }
 
@@ -64,7 +68,7 @@ public class FragmentMap extends Fragment {
         super.onAttach(activity);
 
         if (activity instanceof AppCompatActivity){
-            mActivity=(AppCompatActivity) activity;
+            appCompatActivity =(AppCompatActivity) activity;
         }
     }
 
@@ -97,7 +101,7 @@ public class FragmentMap extends Fragment {
         address = address.replaceAll(" ","%20");
         Log.e("Geocodeadd",address);
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyABGigUX5fvihfR8Bc8WnCScS3XXWK2B78";
-        WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
+        WebServiceHandler webServiceHandler = new WebServiceHandler(appCompatActivity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
             public void onResponse(String response) {
@@ -111,10 +115,12 @@ public class FragmentMap extends Fragment {
                         final double lat = locationObject.optDouble("lat");
                         final double lng = locationObject.optDouble("lng");
 
-                        mActivity.runOnUiThread(new Runnable() {
+                        appCompatActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setMarker(lat, lng);
+                                //setMarker(lat, lng);
+
+                                drawRoute(lat, lng);
                             }
                         });
                     }
@@ -126,6 +132,26 @@ public class FragmentMap extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void drawRoute(double lat, double lng) {
+        LatLng origin = new LatLng(-26.195246, 28.034088);
+//        LatLng origin = new LatLng(LocationActivity.mCurrentLocation.getLatitude(), LocationActivity.mCurrentLocation.getLongitude());
+        LatLng destination = new LatLng(lat, lng);
+        DrawRouteMaps.getInstance(appCompatActivity)
+                .draw(origin, destination, map);
+        DrawMarker.getInstance(appCompatActivity).draw(map, origin, R.drawable.map, "Your Location");
+        DrawMarker.getInstance(appCompatActivity).draw(map, destination, R.drawable.map, FragmentMap.this.getArguments().getString("company","SwopInfo"));
+
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                .include(origin)
+                .include(destination).build();
+        Point displaySize = new Point();
+        appCompatActivity.getWindowManager().getDefaultDisplay().getSize(displaySize);
+        //map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
+        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 6);
+        map.animateCamera(center);
+
     }
 
 

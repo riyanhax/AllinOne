@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 
 public class Retailer {
-    private String retailerName, retailerLogo;
-    private int retailerId;
+    private String retailerName="", retailerLogo, retailerMessage;
+    private String retailerId;
     private ArrayList<Store.Promotion> promotions;
     private String storeId;
 
@@ -36,11 +36,11 @@ public class Retailer {
         this.promotions = promotions;
     }
 
-    public int getRetailerId() {
+    public String getRetailerId() {
         return retailerId;
     }
 
-    public void setRetailerId(int retailerId) {
+    public void setRetailerId(String retailerId) {
         this.retailerId = retailerId;
     }
 
@@ -50,5 +50,13 @@ public class Retailer {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getRetailerMessage() {
+        return retailerMessage;
+    }
+
+    public void setRetailerMessage(String retailerMessage) {
+        this.retailerMessage = retailerMessage;
     }
 }

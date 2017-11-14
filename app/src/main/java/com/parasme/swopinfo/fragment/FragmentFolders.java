@@ -53,7 +53,7 @@ public class FragmentFolders extends FragmentUploadsWrapper {
 
         if(getParentFragment().getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentUploadWrapper_){
             getFragmentManager().beginTransaction().replace(R.id.frame_uploads,fragment).addToBackStack(null).commit();
-            // MainActivity.replaceFragment(fragment,getFragmentManager(),mActivity,R.id.frame_uploads);
+            // MainActivity.replaceFragment(fragment,getFragmentManager(),appCompatActivity,R.id.frame_uploads);
         }
         else if(getParentFragment().getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentInnerUploadsWrapper_){
             Log.e("AAAA", "folderClick: ");
@@ -64,7 +64,7 @@ public class FragmentFolders extends FragmentUploadsWrapper {
         else
             Log.e("else", "nl ");
 
-            // MainActivity.replaceFragment(fragment,getChildFragmentManager(),mActivity,R.id.frame_inner_uploads);
+            // MainActivity.replaceFragment(fragment,getChildFragmentManager(),appCompatActivity,R.id.frame_inner_uploads);
 
     }
 */

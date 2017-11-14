@@ -1,17 +1,10 @@
 package com.parasme.swopinfo.fragment;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.location.Location;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -20,29 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.apradanas.simplelinkabletext.Link;
-import com.apradanas.simplelinkabletext.LinkableEditText;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.application.AppConstants;
-import com.parasme.swopinfo.application.MyApplication;
-import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -51,9 +36,9 @@ import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.model.Retailer;
 import com.parasme.swopinfo.model.Store;
 import com.parasme.swopinfo.model.Upload;
-import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
-import com.parasme.swopinfo.urlpreview.SourceContent;
-import com.parasme.swopinfo.urlpreview.TextCrawler;
+import com.parasme.swopinfo.socialedittext.Link;
+import com.parasme.swopinfo.socialedittext.LinkableEditText;
+import com.parasme.swopinfo.socialedittext.SpaceTokenizer;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.MemoryPolicy;
@@ -71,14 +56,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.parasme.swopinfo.fragment.FragmentAdd.broadcastArray;
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.widget.Toast;
-
-import okhttp3.FormBody;
 
 
 /**
@@ -115,6 +97,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     private LinearLayout layoutPick;
 
     public static RippleBackground rippleBackground;
+    String[] language ={"C","C++","Java",".NET","iPhone","Android","ASP.NET","PHP"};
+
 
     @Override
     public void onResume() {
@@ -160,7 +144,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             @Override
             public void onClick(View view) {
 //                if(dialogSwop==null)
-                    loadDialog();
+                loadDialog();
 //                dialogSwop.show();
             }
         });
@@ -214,7 +198,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
 /*
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                    ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+                    ((MainActivity)appCompatActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),appCompatActivity,R.id.content_frame);
                 else
                     showIntroDialog();
 */
@@ -246,6 +230,9 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                     Retailer retailer = new Retailer();
                                     retailer.setRetailerLogo(retailerObject.optString("storelogo"));
                                     retailer.setStoreId(retailerObject.optString("storeID"));
+                                    retailer.setRetailerMessage(retailerObject.optString("msg"));
+                                    retailer.setRetailerId(retailerObject.optString("retailerid"));
+                                    retailer.setRetailerName(retailerObject.optString("storename"));
 
                                     ArrayList<Store.Promotion> promotionList = new ArrayList<>();
 
@@ -507,6 +494,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         final LinkableEditText editSwop = (LinkableEditText) dialogSwop.findViewById(R.id.editSwop);
         setTagMentionPattern(editSwop);
 
+
+
         final Button btnPost = (Button) dialogSwop.findViewById(R.id.btnPost);
         textSelection = (TextView) dialogSwop.findViewById(R.id.text_selection);
         layoutSelection = (RelativeLayout) dialogSwop.findViewById(R.id.layout_selection);
@@ -597,7 +586,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                 dialogSwop.dismiss();
                 new FragmentAdd().uploadFile(AppConstants.USER_ID, "0", "0", "", " ", " ", " ", "true", "true", "true",
                         "true", "true", "", fileArrayList, mActivity, null, swopText, false);
-//                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, mActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
+//                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, appCompatActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
 
             }
         });
@@ -605,7 +594,9 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         dialogSwop.show();
     }
 
-    private void setTagMentionPattern(LinkableEditText editSwop) {
+    private void setTagMentionPattern(final LinkableEditText editSwop) {
+
+
         Link linkHashtag = new Link(Pattern.compile("(#\\w+)"))
                 .setUnderlined(true)
                 .setTextStyle(Link.TextStyle.BOLD)
@@ -617,7 +608,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
         Link linkUsername = new Link(Pattern.compile("(@\\w+)"))
                 .setUnderlined(false)
-                .setTextColor(Color.parseColor("#D00000"))
+                .setTextColor(Color.parseColor("#147956"))
                 .setTextStyle(Link.TextStyle.BOLD)
                 .setClickListener(new Link.OnClickListener() {
                     @Override
@@ -629,7 +620,16 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         links.add(linkHashtag);
         links.add(linkUsername);
 
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,
+                android.R.layout.simple_dropdown_item_1line, language);
+
+
+        editSwop.setTokenizer(new SpaceTokenizer());
+        //editSwop.setAdapter(adapter);
+
         editSwop.addLinks(links);
+
     }
 
 

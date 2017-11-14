@@ -157,12 +157,12 @@ public class FragmentSelectCategories extends Fragment {
 /*
     private void addToFav(final String ids, String userId) {
         String url = "http://dev.swopinfo.com/AddremoveFav.aspx?user_id="+userId+"&category_ids="+ids+"&action=add";
-        WebServiceHandler webServiceHandle = new WebServiceHandler(mActivity);
+        WebServiceHandler webServiceHandle = new WebServiceHandler(appCompatActivity);
         webServiceHandle.serviceListener = new WebServiceListener() {
             @Override
             public void onResponse(final String response) {
                 Log.e("Add",response);
-                mActivity.runOnUiThread(new Runnable() {
+                appCompatActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try{

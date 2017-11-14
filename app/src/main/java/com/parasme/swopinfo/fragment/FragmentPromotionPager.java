@@ -61,7 +61,8 @@ public class FragmentPromotionPager extends Fragment {
         promotionArrayList = new ArrayList<>();
         setArrayList();
 
-        //pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, promotionArrayList));
+        Log.e("PromotionSize",FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().size()+"");
+        //pagerPromotions.setAdapter(new PromotionPagerAdapter(appCompatActivity, promotionArrayList));
         pagerPromotions.setAdapter(new PromotionPagerAdapter(mActivity, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions()));
 
         final RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.rippleBackground);

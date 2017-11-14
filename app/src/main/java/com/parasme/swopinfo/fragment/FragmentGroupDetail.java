@@ -199,7 +199,7 @@ public class FragmentGroupDetail extends FragmentGroupWrapper implements FileSel
                             if(jsonObject.optString("status").equalsIgnoreCase("success"))
                                 getFragmentManager().popBackStack();
                             else
-                                MyApplication.alertDialog(mActivity, "Could not delete group", "Delete Group");
+                                MyApplication.alertDialog(appCompatActivity, "Could not delete group", "Delete Group");
 */
 
                         }catch (JSONException e){e.printStackTrace();}
@@ -399,7 +399,7 @@ public class FragmentGroupDetail extends FragmentGroupWrapper implements FileSel
             public void onClick(View view) {
                 new Utils(mActivity).selectDialog(new String[]{"Camera","Gallery","Files"},FragmentGroupDetail.this, FragmentGroupDetail.this);
 //                FileSelectionActivity.setOnFilePickListener(FragmentGroupDetail.this);
-//                startActivity(new Intent(mActivity,FileSelectionActivity.class));
+//                startActivity(new Intent(appCompatActivity,FileSelectionActivity.class));
             }
         });
 

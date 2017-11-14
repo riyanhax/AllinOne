@@ -165,7 +165,7 @@ public class FragmentGlobalFeed extends BaseFragment {
 
 /*
                 if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                    ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+                    ((MainActivity)appCompatActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),appCompatActivity,R.id.content_frame);
                 else
                     showIntroDialog();
 */
@@ -378,7 +378,7 @@ public class FragmentGlobalFeed extends BaseFragment {
                 dialogSwop.dismiss();
                 new FragmentAdd().uploadFile(AppConstants.USER_ID, "0", "0", "", " ", " ", " ", "true", "true", "true",
                         "true", "true", "", fileArrayList, mActivity, null, swopText, false);
-//                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, mActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
+//                new FragmentAdd().uploadClick(editSwop, editFolderName, editTitle, editDescription, editYoutubeLink, editTag, spinnerBroadcast, checkBoxComments, checkBoxRatings, checkBoxEmbedded, checkBoxDownloads, appCompatActivity, AppConstants.USER_ID, "0", "0", fileArrayList);
 
             }
         });
