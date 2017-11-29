@@ -187,7 +187,7 @@ public class FragmentGlobalFeed extends BaseFragment {
     private void checkIn(String latitude, String longitude, String userId) {
         String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
         Log.e("catids", catIds);
-        String url = "http://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+        String url = "https://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
                 "&retailer_long="+longitude;
 
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);

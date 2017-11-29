@@ -3,6 +3,7 @@ package com.parasme.swopinfo.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -72,7 +74,8 @@ public class LocationActivity extends AppCompatActivity implements
      * than this value.
      */
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+//            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+            5000;
 
     // Keys for storing activity state in the Bundle.
     protected final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
@@ -443,6 +446,8 @@ public class LocationActivity extends AppCompatActivity implements
         if (mCurrentLocation == null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             Log.e("location",mCurrentLocation+"");
+            if (mCurrentLocation!=null)
+                locationUpdater.onReceiveLocation(mCurrentLocation);
         }
     }
 
@@ -457,7 +462,7 @@ public class LocationActivity extends AppCompatActivity implements
                 mCurrentLocation = location;
                 locationUpdater.onReceiveLocation(location);
                 progressDialog.dismiss();
-                //finish();
+                finish();
             }
 
         }

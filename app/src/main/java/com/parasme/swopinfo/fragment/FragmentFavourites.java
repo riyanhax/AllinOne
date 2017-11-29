@@ -187,6 +187,7 @@ public class FragmentFavourites extends Fragment {
                     MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
                 else
                     checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
+//                    checkIn("-32.9573774","27.9355181", AppConstants.USER_ID);
 
 //                MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), appCompatActivity, R.id.content_frame);
 
@@ -214,7 +215,7 @@ public class FragmentFavourites extends Fragment {
     private void checkIn(String latitude, String longitude, String userId) {
         String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
         Log.e("catids", catIds);
-        String url = "http://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+        String url = "https://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
                 "&retailer_long="+longitude;
 
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
@@ -244,7 +245,11 @@ public class FragmentFavourites extends Fragment {
                                     for (int j = 0; j < promotionArray.length(); j++) {
                                         JSONObject promotionObject = promotionArray.optJSONObject(j);
                                         Store.Promotion promotion = new Store.Promotion();
-                                        promotion.setImageURL(promotionObject.optString("promotionimg"));
+                                        String url = promotionObject.optString("promotionimg");
+                                        url = url.replace("http://swopinfo","https://swopinfo");
+                                        promotion.setImageURL(url);
+                                        promotion.setUseId(promotionObject.optString("userid"));
+                                        promotion.setCompanyId(promotionObject.optString("companyid"));
                                         promotionList.add(promotion);
                                     }
 
@@ -258,7 +263,7 @@ public class FragmentFavourites extends Fragment {
                                 retailer.setRetailerLogo("https://www.ecigssa.co.za/data/attachments/99/99598-ff08bbcb3dbbe9846619354ee13b48d2.jpg");
                                 FragmentHome.retailerList.add(retailer);
 
-                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+//                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
 
 
                                 ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);

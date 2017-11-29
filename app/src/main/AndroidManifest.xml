@@ -94,6 +94,11 @@
             android:windowSoftInputMode="adjustPan">
 
         </activity>
+
+        <activity
+            android:name=".activity.LocationActivity"
+            android:theme="@style/Theme.Transparent" />
+
         <activity android:name=".activity.MainActivity2"
 
             android:theme="@style/MyMaterialTheme"
@@ -112,6 +117,8 @@
         <activity android:name=".activity.FlowActivity"
             android:theme="@style/AppTheme.FullScreen"
             />
+
+        <service android:name=".webservice.MyService" />
 
         <activity android:name=".activity.SubscriptionPaymentActivity"
             android:theme="@style/AppTheme"

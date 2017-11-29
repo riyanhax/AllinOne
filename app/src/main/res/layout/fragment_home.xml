@@ -111,7 +111,7 @@
             android:layout_centerInParent="true"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/ic_checkin111"
+            android:src="@drawable/ic_checkin222"
             app:civ_border_color="@color/colorPrimary"
             app:civ_border_width="1px"
             />

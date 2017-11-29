@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.fragment.FragmentFavourites;
+import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Category;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
@@ -79,6 +80,7 @@ public class FavouriteAdapter extends ArrayAdapter<Category> {
             @Override
             public void onClick(View v) {
                 if(categoryArrayList.size()!=1){
+                    FragmentHome.retailerList.clear();
                     removeFav(categoryArrayList.get(position).getCategoryId()+"", position);
                 }
             }

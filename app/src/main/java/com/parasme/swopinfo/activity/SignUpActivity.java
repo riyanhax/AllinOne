@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         layoutPhase2 = (LinearLayout) findViewById(R.id.layoutPhase2);
 
         imageUser = (ImageView) findViewById(R.id.imageUser);
-        imageUser = (ImageView) findViewById(R.id.imageUser);
+        imageUser2 = (ImageView) findViewById(R.id.imageUser2);
 
         btnNext = (Button) findViewById(R.id.btnNext);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);

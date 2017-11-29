@@ -72,7 +72,7 @@ import static com.parasme.swopinfo.helper.Utils.openEmailClients;
 public class FragmentCompany extends FragmentCompanyWrapper implements View.OnClickListener,FileSelectionActivity.FilePicker,Utils.MoveFileHelper, ImagePicker.Picker {
 
     private View childView;
-    protected boolean isOwnCompany=false, isFirstRun = true;
+    public static boolean isOwnCompany=false, isFirstRun = true;
     public static int companyId=0;
     public static JSONObject jsonObject;
     private TextView textCompanyAddress;
@@ -99,14 +99,12 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
         BaseFragment.isFollowingLoaded = false;
 
         if(isFirstRun || baseLayout.getChildCount()==0) {
-            isOwnCompany = this.getArguments().getBoolean("isOwnCompany", false);
             businessEmail = this.getArguments().getString("bussEmail");
             if (isOwnCompany) {
-                companyId = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_OWN_COMPANY_ID, 0);
                 textCompanyName.setOnClickListener(this);
-            } else
-                companyId = this.getArguments().getInt(AppConstants.KEY_COMPANY_ID);
+            }
 
+            Log.e("COMPANYID",companyId+"");
             try {
                 checkCompanyFollow(companyId + "");
             } catch (IOException e) {
@@ -379,6 +377,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
         gridFolders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                isCompanyFilesLoaded = false;
                 prepareUploadsView(AppConstants.URL_COMAPNY + companyId + "/files/" + folderArrayList.get(i).getFolderName());
             }
         });
@@ -675,7 +674,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
 
         if(!isCompanyFilesLoaded){
             new FragmentUploads().getUploads(url, AppConstants.USER_UPLOADS, gridUploadsMultipleSelection, emptyGridText, mActivity);
-            if(!url.contains("Files/"))
+            if(!url.contains("files/"))
                 isCompanyFilesLoaded = true;
         }
         else

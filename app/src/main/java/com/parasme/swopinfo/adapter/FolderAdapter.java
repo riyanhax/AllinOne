@@ -59,6 +59,7 @@ public class FolderAdapter extends ArrayAdapter<Upload> {
         vi = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.isCompanyFolders = isCompanyFolders;
+        companyId = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_COMPANY_ID,0);
     }
 
     @Override

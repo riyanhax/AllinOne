@@ -71,12 +71,18 @@ public class FragmentPromotionPager extends Fragment {
         imgBusinessLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new FragmentCompany();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isOwnCompany", false);
-                bundle.putInt(AppConstants.KEY_COMPANY_ID,54);
-                fragment.setArguments(bundle);
-                replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+                int pos = pagerPromotions.getCurrentItem();
+                Log.e("BHAI",FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL());
+                String companyId = FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getCompanyId();
+                if (!companyId.equals("")) {
+                    FragmentCompany.companyId = Integer.parseInt(companyId);
+                    Fragment fragment = new FragmentCompany();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isOwnCompany", false);
+                    bundle.putInt(AppConstants.KEY_COMPANY_ID, Integer.parseInt(companyId));
+                    fragment.setArguments(bundle);
+                    replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                }
             }
         });
 
@@ -96,7 +102,7 @@ public class FragmentPromotionPager extends Fragment {
             }
         };
         try {
-            webServiceHandler.get("http://www.swopinfo.com/checkincounts.aspx?user_id="+userId + "&retailerid_id="+retailerId+ "&storeid_id="+storeId);
+            webServiceHandler.get("https://swopinfo.com/checkincounts.aspx?user_id="+userId + "&retailerid_id="+retailerId+ "&storeid_id="+storeId);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,10 +188,13 @@ public class FragmentPromotionPager extends Fragment {
         itemHome.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+
+                int pos = pagerPromotions.getCurrentItem();
+                Log.e("BHAI",FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL());
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_SUBJECT, "Sharing Promo");
-                i.putExtra(Intent.EXTRA_TEXT, "https://www.smart.com.kh/sites/default/files/oview/en.png");
+                i.putExtra(Intent.EXTRA_TEXT, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL());
                 startActivity(Intent.createChooser(i, "Share Promo"));
                 return false;
             }

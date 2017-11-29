@@ -1,11 +1,13 @@
 package com.parasme.swopinfo.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.model.Retailer;
@@ -62,7 +64,21 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-       Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+//       Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+
+        Picasso.Builder builder = new Picasso.Builder(context);
+        builder.listener(new Picasso.Listener()
+        {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+            {
+                //Toast.makeText(context, exception.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        String url = retailerArrayList.get(position).getRetailerLogo();
+        url = url.replaceAll(" ","%20");
+        builder.build().load(url).placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(viewHolder.imageRetailerLogo);
 
 /*
         switch (position){

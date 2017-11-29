@@ -145,7 +145,7 @@ public class Store {
 
     public static class Promotion{
         public int image;
-        public String imageURL;
+        public String imageURL, useId, companyId;
 
         public Promotion(int image){
             this.image = image;
@@ -159,6 +159,22 @@ public class Store {
 
         public void setImageURL(String imageURL) {
             this.imageURL = imageURL;
+        }
+
+        public String getUseId() {
+            return useId;
+        }
+
+        public void setUseId(String useId) {
+            this.useId = useId;
+        }
+
+        public String getCompanyId() {
+            return companyId;
+        }
+
+        public void setCompanyId(String companyId) {
+            this.companyId = companyId;
         }
     }
 

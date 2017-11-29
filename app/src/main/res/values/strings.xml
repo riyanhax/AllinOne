@@ -62,12 +62,12 @@
         <item>@drawable/ic_furniture</item>
         <item>@drawable/ic_jewellery</item>
         <item>@drawable/ic_medical</item>
+        <item>@drawable/ic_vehicle</item>
         <item>@drawable/ic_movies</item>
         <item>@drawable/ic_pets</item>
         <item>@drawable/ic_sports</item>
         <item>@drawable/ic_toys</item>
         <item>@drawable/ic_travel</item>
-        <item>@drawable/ic_vehicle</item>
     </integer-array>
 
 
@@ -118,12 +118,12 @@
         <item>Home, Decor, Interior &amp; Furniture</item>
         <item>Jewelry &amp; Accessories</item>
         <item>Medical Services</item>
+        <item>Motor Vehicles &amp; Spares</item>
         <item>Movies, Music &amp; Entertainment</item>
         <item>Pet shops</item>
         <item>Sport, Outdoor &amp; Gear</item>
         <item>Toys, Education &amp; Hobbies</item>
         <item>Travel &amp; Estate Agencies</item>
-        <item>Motor Vehicles &amp; Spares</item>
     </string-array>
 
 

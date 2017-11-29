@@ -228,6 +228,9 @@ public class FragmentGroupDetail extends FragmentGroupWrapper implements FileSel
                             JSONObject jsonObject=new JSONObject(response);
                             groupOwnerId = jsonObject.optInt("OwnerUserID")+"";
                             groupName = jsonObject.optString("groupname");
+                            if (jsonObject.isNull("groupname"))
+                                groupName = FragmentGroupDetail.this.getArguments().getString(AppConstants.KEY_GROUP_NAME);
+
                             requireAccessCode = jsonObject.optBoolean("requiresaccesscode");
                             readOnlyGroup = jsonObject.optBoolean("readonlygroup");
                             groupAccessCode = jsonObject.optString("groupaccesscode");

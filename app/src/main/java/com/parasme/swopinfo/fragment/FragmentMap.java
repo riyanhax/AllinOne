@@ -114,7 +114,7 @@ public class FragmentMap extends Fragment {
 
                         final double lat = locationObject.optDouble("lat");
                         final double lng = locationObject.optDouble("lng");
-
+                        Log.e("latlong",lat+"_"+lng);
                         appCompatActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -135,8 +135,8 @@ public class FragmentMap extends Fragment {
     }
 
     private void drawRoute(double lat, double lng) {
-        LatLng origin = new LatLng(-26.195246, 28.034088);
-//        LatLng origin = new LatLng(LocationActivity.mCurrentLocation.getLatitude(), LocationActivity.mCurrentLocation.getLongitude());
+        //LatLng origin = new LatLng(-26.195246, 28.034088);
+        LatLng origin = new LatLng(LocationActivity.mCurrentLocation.getLatitude(), LocationActivity.mCurrentLocation.getLongitude());
         LatLng destination = new LatLng(lat, lng);
         DrawRouteMaps.getInstance(appCompatActivity)
                 .draw(origin, destination, map);
@@ -149,7 +149,7 @@ public class FragmentMap extends Fragment {
         Point displaySize = new Point();
         appCompatActivity.getWindowManager().getDefaultDisplay().getSize(displaySize);
         //map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
-        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 6);
+        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15);
         map.animateCamera(center);
 
     }

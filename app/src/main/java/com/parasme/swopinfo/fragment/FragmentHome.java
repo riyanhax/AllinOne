@@ -2,10 +2,15 @@ package com.parasme.swopinfo.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -56,11 +61,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.widget.Toast;
 
 
 /**
@@ -71,7 +78,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
  * Mobile +917737556190
  */
 
-public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener {
+public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener, LinkableEditText.OnTextCountListener, LocationActivity.LocationUpdater {
 
     private View childView;
     public static ListView listFeeds;
@@ -89,7 +96,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     private ImageView imgChecking;
     public static int storeId = 0;
     public static ArrayList<Retailer> retailerList;
-
+    public TextView textCount;
 
     TextView textSelection;
     private final int PICK_PHOTO=22, PICK_VIDEO=33, PICK_DOC=44, PICK_VOICE=55;
@@ -98,80 +105,91 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
     public static RippleBackground rippleBackground;
     String[] language ={"C","C++","Java",".NET","iPhone","Android","ASP.NET","PHP"};
-
+    public String fullAddress="";
+    public boolean isLoading = false;
 
     @Override
     public void onResume() {
         super.onResume();
 
-        retailerList = new ArrayList<>();
-
-        imageActionFeed.setImageResource(R.drawable.ic_newsfeed_active);
-
-        ((TextView) mActivity.findViewById(R.id.text_title)).setText("Home");
-
-        childView = getActivity().getLayoutInflater().inflate(R.layout.fragment_home, null);
-
-        listFeeds = (ListView) childView.findViewById(R.id.listFeeds);
-
-        ViewGroup header = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.home_header_layout,listFeeds,false);
-        listFeeds.addHeaderView(header);
-
-        layoutOwnProfile = (LinearLayout) childView.findViewById(R.id.layoutOwnProfile);
-        imageUser = (ImageView) listFeeds.findViewById(R.id.imageUser);
-
-        Picasso.with(mActivity).load(AppConstants.USER_IMAGE_URL)
-                .error(R.drawable.avtar)
-                .placeholder(R.drawable.avtar)
-                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
-                .into(imageUser);
+        if (!isLoading) {
 
 
-        layout = (LinearLayout) baseView.findViewById(R.id.layout);
-        layout.removeAllViews();
-        layout.addView(childView);
+            LocationActivity.locationUpdater = FragmentHome.this;
 
-        imageUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.replaceFragment(new FragmentProfile(), getFragmentManager(), mActivity, R.id.content_frame);
-            }
-        });
+            retailerList = new ArrayList<>();
 
-        ((LinearLayout) childView.findViewById(R.id.layoutShareSomething)).setVisibility(View.VISIBLE);
-        ((EditText) childView.findViewById(R.id.editSwopText)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                if(dialogSwop==null)
-                loadDialog();
-//                dialogSwop.show();
-            }
-        });
+            imageActionFeed.setImageResource(R.drawable.ic_newsfeed_active);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) childView.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimaryDark));
-        swipeRefreshLayout.setOnRefreshListener(this);
+            ((TextView) mActivity.findViewById(R.id.text_title)).setText("Home");
 
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                feedArrayList.clear();
-                personalFeedList.clear();
-                Log.e(TAG, "check2: "+feedArrayList.size() );
-                if(feedArrayList.size()==0){
-                    swipeRefreshLayout.setRefreshing(true);
-                    getFeeds(mActivity, listFeeds,swipeRefreshLayout);
+            childView = getActivity().getLayoutInflater().inflate(R.layout.fragment_home, null);
+
+            listFeeds = (ListView) childView.findViewById(R.id.listFeeds);
+
+            ViewGroup header = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.home_header_layout, listFeeds, false);
+            listFeeds.addHeaderView(header);
+
+            layoutOwnProfile = (LinearLayout) childView.findViewById(R.id.layoutOwnProfile);
+            imageUser = (ImageView) listFeeds.findViewById(R.id.imageUser);
+
+            Picasso.with(mActivity).load(AppConstants.USER_IMAGE_URL)
+                    .error(R.drawable.avtar)
+                    .placeholder(R.drawable.avtar)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+                    .into(imageUser);
+
+
+            layout = (LinearLayout) baseView.findViewById(R.id.layout);
+            layout.removeAllViews();
+            layout.addView(childView);
+
+            imageUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.replaceFragment(new FragmentProfile(), getFragmentManager(), mActivity, R.id.content_frame);
                 }
-                else
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, personalFeedList, listFeeds));
-                        }
-                    });
-            }
-        });
+            });
+
+            ((LinearLayout) childView.findViewById(R.id.layoutShareSomething)).setVisibility(View.VISIBLE);
+            ((EditText) childView.findViewById(R.id.editSwopText)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                if(dialogSwop==null)
+                    loadDialog();
+//                dialogSwop.show();
+                }
+            });
+
+            swipeRefreshLayout = (SwipeRefreshLayout) childView.findViewById(R.id.swipe_refresh_layout);
+            swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimaryDark));
+
+
+            swipeRefreshLayout.setOnRefreshListener(this);
+
+
+            Log.e("ONRESUMEON", "onresume");
+
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    feedArrayList.clear();
+                    personalFeedList.clear();
+                    if (feedArrayList.size() == 0) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        getFeeds(mActivity, listFeeds, swipeRefreshLayout);
+                    } else
+                        mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listFeeds.setAdapter(new FeedAdapter(mActivity, R.layout.row_feed, personalFeedList, listFeeds));
+                            }
+                        });
+                }
+            });
+
+        }
 
         imgChecking = (ImageView) childView.findViewById(R.id.img_checkin);
 
@@ -179,40 +197,47 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         rippleBackground = (RippleBackground)childView.findViewById(R.id.rippleBackground);
         rippleBackground.startRippleAnimation();
 
-
-        // If user is of south africa then only show check in button
-        //if (MainActivity.fullAddress.contains("South Africa")) {
-        if (1==1) {
-            Log.e("VISI","VISIBLE");
+        TelephonyManager tm = (TelephonyManager)mActivity.getSystemService(Context.TELEPHONY_SERVICE);
+        String country = tm.getSimCountryIso();
+        Log.e("COUNTRY",country);
+        if (country.equalsIgnoreCase("za"))
             rippleBackground.setVisibility(View.VISIBLE);
-        }
+
+
 
         imgChecking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("LOCATION",LocationActivity.mCurrentLocation.getLatitude()+"");
-                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                    checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
+                Log.e("LOCATION", LocationActivity.mCurrentLocation.getLatitude()+"");
+                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false)) {
+                    if (LocationActivity.mCurrentLocation != null)
+                        checkIn(LocationActivity.mCurrentLocation.getLatitude() + "", LocationActivity.mCurrentLocation.getLongitude() + "", AppConstants.USER_ID);
+                    else {
+                        Toast.makeText(mActivity, "Getting Location", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(mActivity, LocationActivity.class));
+                    }
+                }
                 else
                     showIntroDialog();
 
-/*
-                if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_CHECK_IN_INTRO,false))
-                    ((MainActivity)appCompatActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),appCompatActivity,R.id.content_frame);
-                else
-                    showIntroDialog();
-*/
             }
         });
+
+//        if (fullAddress.contains("South Africa") && rippleBackground!=null)
+//            rippleBackground.setVisibility(View.VISIBLE);
+
     }
+
 
 
     private void checkIn(String latitude, String longitude, String userId) {
         String catIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS);
         Log.e("catids", catIds);
-        String url = "http://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
+        String url = "https://swopinfo.com/retailerswithpromo.aspx?cat_id="+catIds+"&retailer_lat="+latitude+
                 "&retailer_long="+longitude;
-
+//        String url = "https://swopinfo.com/retailerswithpromo.aspx?cat_id=1,2,3,4,5,6,7,8,9,1,0,11,12,1,3,14,15,16,17,18" +
+//                "&retailer_long=27.991750799999977&retailer_lat=-32.93408169999999";
+//        String url = "https://swopinfo.com/retailerswithpromo.aspx?cat_id=1,2,3,4,5,6,7,8,9,1,0,11,12,1,3,14,15,16,17,18&retailer_lat=26.962659&retailer_long=75.726692";
         WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
@@ -240,7 +265,11 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                     for (int j = 0; j < promotionArray.length(); j++) {
                                         JSONObject promotionObject = promotionArray.optJSONObject(j);
                                         Store.Promotion promotion = new Store.Promotion();
-                                        promotion.setImageURL(promotionObject.optString("promotionimg"));
+                                        String url = promotionObject.optString("promotionimg");
+                                        url = url.replace("http://swopinfo","https://swopinfo");
+                                        promotion.setImageURL(url);
+                                        promotion.setUseId(promotionObject.optString("userid"));
+                                        promotion.setCompanyId(promotionObject.optString("companyid"));
                                         promotionList.add(promotion);
                                     }
 
@@ -298,14 +327,21 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
 
     public void getFeeds(final Activity activity, final ListView listView, final SwipeRefreshLayout swipeRefreshLayout) {
+        if (activity.getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentHome)
+            isLoading = true;
+
         feedArrayList.clear();
         personalFeedList.clear();
+
         WebServiceHandler webServiceHandler = new WebServiceHandler(activity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
             public void onResponse(String response) {
+                if (activity.getFragmentManager().findFragmentById(R.id.content_frame) instanceof FragmentHome)
+                    isLoading = false;
                 Log.e("FEEDS RESP"+feedArrayList.size(), response);
                 try {
+
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject feedJsonObject = jsonArray.getJSONObject(i);
@@ -314,6 +350,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                         feed.setType(feedJsonObject.optString("Type"));
                         feed.setItemDate(feedJsonObject.optString("ItemDate"));
                         feed.setFileId(feedJsonObject.optInt("FileID"));
+                        Log.e("FILEID",""+feedJsonObject.optInt("FileID"));
                         feed.setFileUserId(feedJsonObject.optInt("FileUserID"));
                         feed.setComment(feedJsonObject.optString("Comment"));
                         feed.setUserFullName(feedJsonObject.optString("UserFullName"));
@@ -362,6 +399,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                             comment.setCompanyId(userObject.optInt("companyid"));
                             String imageURL=AppConstants.URL_DOMAIN+"upload/user"+ userObject.optInt("userid")+"/profilepic.jpg";
                             comment.setUserImageURL(imageURL);
+                            comment.setUserImageURL(imageURL);
                             commentArrayList.add(comment);
 
                             /***********************************/
@@ -396,7 +434,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                 upload.setUserVote(jsonObject.optInt("Vote"));
                                 upload.setVideoURL(jsonObject.optString("videourl"));
                                 if(j==0) {
-                                    feed.setFileId(jsonObject.getInt("fileid"));
+                                    upload.setFileId(jsonObject.getInt("fileid"));
+//                                    feed.setFileId(jsonObject.getInt("fileid"));
                                     upload.setCommentText(feedJsonObject.optString("Comment"));
                                     upload.setDescription(jsonObject.getString("description"));
                                     upload.setUserFullName(feedJsonObject.optString("UserFullName"));
@@ -410,8 +449,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
                         feedArrayList.add(feed);
 
-                        if (!feed.getType().contains("user"))
-                            personalFeedList.add(feed);
+                        //if (!feed.getType().contains("user"))
+                        personalFeedList.add(feed);
                     }
 
                     activity.runOnUiThread(new Runnable() {
@@ -492,6 +531,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
 
 
         final LinkableEditText editSwop = (LinkableEditText) dialogSwop.findViewById(R.id.editSwop);
+        editSwop.setOnTextCountListener(FragmentHome.this);
+        textCount = (TextView) dialogSwop.findViewById(R.id.textCount);
         setTagMentionPattern(editSwop);
 
 
@@ -732,6 +773,107 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     }
 
 
+    @Override
+    public void onTextCount(String count) {
+        textCount.setText(count);
+    }
 
 
+    @Override
+    public void onReceiveLocation(Location location) {
+
+        if (location!=null && fullAddress.equals(""))
+            getAddress(location.getLatitude(),location.getLongitude());
+        else if (!fullAddress.equals("") && getFragmentManager().getBackStackEntryCount()==0 && FragmentHome.swipeRefreshLayout!=null
+                && !FragmentHome.swipeRefreshLayout.isRefreshing()) {
+            Log.e("ELSE OK","part");
+            //replaceFragment(new FragmentHome(), getFragmentManager(), MainActivity.this, R.id.content_frame);
+        }
+    }
+
+    @Override
+    public void onRejectLocationRequest() {
+        Log.e("REJECT","LOCATION");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocationActivity.locationUpdater = FragmentHome.this;
+        Log.e("REQULOC","REQUESTING LOCATIONACTIVITY");
+        startActivity(new Intent(mActivity, LocationActivity.class));
+    }
+
+    private void getAddress(String latitude, String longitude) {
+
+
+
+        Log.e("Getting","Addrwess");
+        fullAddress = " ";  // TO avoid multiple hit of api on received location as it triggered repeatedly.
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latitude+","+longitude+"&key=AIzaSyABGigUX5fvihfR8Bc8WnCScS3XXWK2B78&sensor=true";
+
+        WebServiceHandler webServiceHandler = new WebServiceHandler(mActivity);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(final String response) {
+                Log.e("Address Response",response);
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.optString("status").equalsIgnoreCase("ok")){
+                                JSONObject jsonObject1 = jsonObject.getJSONArray("results").getJSONObject(0);
+                                fullAddress = jsonObject1.optString("formatted_address");
+                                Log.e("Address",fullAddress);
+
+
+                                if (fullAddress.contains("South Africa") && FragmentHome.rippleBackground!=null) {
+//                                if (fullAddress.contains("India") && rippleBackground!=null){
+                                    rippleBackground.setVisibility(View.VISIBLE);
+                                    Log.e("CHECKINVISIBLE","condition here");
+                                }
+
+                            }
+                            else
+                                Log.e("Address Err","Could not get address");
+
+                        }catch (JSONException e){e.printStackTrace();}
+                    }
+                });
+            }
+        };
+        try {
+            webServiceHandler.get(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(mActivity, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            String add = obj.getAddressLine(0);
+            fullAddress = add;
+            add = add + "\n" + obj.getCountryName();
+            add = add + "\n" + obj.getCountryCode();
+            add = add + "\n" + obj.getAdminArea();
+            add = add + "\n" + obj.getPostalCode();
+            add = add + "\n" + obj.getSubAdminArea();
+            add = add + "\n" + obj.getLocality();
+            add = add + "\n" + obj.getSubThoroughfare();
+
+            Log.e("IGA", "Address" + add);
+            if (fullAddress.contains("South Africa"))
+                rippleBackground.setVisibility(View.VISIBLE);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 }

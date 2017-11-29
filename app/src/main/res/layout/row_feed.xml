@@ -24,7 +24,6 @@
             android:layout_height="match_parent"
             android:layout_weight="0.15"
             android:scaleType="fitXY"
-            android:src="@drawable/app_icon"
             />
 
         <RelativeLayout
@@ -43,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:singleLine="true"
-                android:text="Lorem Ipsum murty satyanarayan mutry satyanarayan"
+                android:text="Lorem Ipsum "
                 />
 
             <TextView
@@ -96,7 +95,6 @@
                 android:layout_weight="0.15"
                 android:scaleType="fitXY"
                 android:background="@color/bgColorHome"
-                android:src="@drawable/ic_file"
                 />
 
             <RelativeLayout

@@ -35,6 +35,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by :- Mukesh Kumawat on 12-Jan-17.
@@ -52,6 +54,7 @@ public class FragmentSelectCategories extends Fragment {
     private ArrayList<Category> categoryArrayList;
     private MenuItem itemSearch, itemDone;
     private SelectCategoryAdapter adapter;
+    Menu menuLoaded=null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,8 +73,8 @@ public class FragmentSelectCategories extends Fragment {
 
     private void setListAdapter() {
         String ids = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
+        List<String> list = Arrays.asList(ids.split("\\s*,\\s*"));
         TypedArray categoryIcons = getResources().obtainTypedArray(R.array.category_icons);
-
         for (int i = 0; i < categories.length; i++) {
             String id = String.valueOf(i+1);
             Category category = new Category();
@@ -80,8 +83,9 @@ public class FragmentSelectCategories extends Fragment {
             category.setCategoryName(categories[i]);
             category.setCategoryChecked(false);
 
-            if(!ids.contains(id))
+            if(!list.contains(id)) {
                 categoryArrayList.add(category);
+            }
         }
         adapter = new SelectCategoryAdapter(mActivity, R.layout.row_select_category, categoryArrayList);
         listCategories.setAdapter(adapter);
@@ -114,10 +118,13 @@ public class FragmentSelectCategories extends Fragment {
     public void onResume() {
         super.onResume();
         ((TextView) mActivity.findViewById(R.id.text_title)).setText("Categories");
+        if (menuLoaded!=null)
+            onPrepareOptionsMenu(menuLoaded);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        menuLoaded = menu;
         itemSearch= menu.findItem(R.id.menu_search);
         MenuItem itemLive= menu.findItem(R.id.menu_live);
         itemLive.setVisible(false);
@@ -142,6 +149,7 @@ public class FragmentSelectCategories extends Fragment {
     }
 
     private void addToFav(String ids, String userId){
+        FragmentHome.retailerList.clear();
         adapter.removeCategories(ids);
         String savedIds = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_FAV_IDS,"");
         if(savedIds.equals("")){

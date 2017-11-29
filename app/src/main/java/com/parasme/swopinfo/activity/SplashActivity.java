@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -23,14 +25,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
+import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
+import com.applozic.mobicomkit.api.account.user.User;
+import com.applozic.mobicomkit.api.account.user.UserLoginTask;
+import com.applozic.mobicomkit.api.conversation.Message;
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
+import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
+import com.applozic.mobicommons.json.GsonUtils;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,6 +51,7 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentAdd;
+import com.parasme.swopinfo.fragment.FragmentGroups;
 import com.parasme.swopinfo.fragment.FragmentUser;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -56,6 +70,8 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -63,6 +79,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -96,19 +113,21 @@ public class SplashActivity extends AppCompatActivity {
     private TextView textPreviewDescription;
     private TextView textPreviewURL;
     private ImageView imagePreviewThumb;
-    DisplayImageOptions optionsFile = new DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.drawable.document_gray)
-            .showImageOnFail(R.drawable.document_gray)
-            .cacheInMemory(false)
-            .cacheOnDisk(false)
-            .considerExifParams(true)
-            .bitmapConfig(Bitmap.Config.RGB_565)
-            .build();
+    DisplayImageOptions optionsFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        optionsFile = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.document_gray)
+                .showImageOnFail(R.drawable.document_gray)
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
 
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);
@@ -184,6 +203,39 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }
+
+
+        // FOr AppLozic PeopleActivity
+        if (requestCode == ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION
+                && resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION && resultCode == RESULT_OK) {
+                String userId = data.getStringExtra(ConversationUIService.USER_ID);
+                Integer groupId = data.getIntExtra(ConversationUIService.GROUP_ID, -1);
+
+                String oldMessage = data.getStringExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE);
+                Message message = (Message)GsonUtils.getObjectFromJson(oldMessage, Message.class);
+
+                Intent conversationIntent = new Intent(this, ConversationActivity.class);
+                if (!TextUtils.isEmpty(userId)) {
+                    conversationIntent.putExtra(ConversationUIService.USER_ID, userId);
+                    message.setTo(userId);
+                    message.setContactIds(userId);
+                }
+
+                if (groupId != null  && groupId != -1) {
+                    conversationIntent.putExtra(ConversationUIService.GROUP_ID, groupId);
+                    message.setGroupId(groupId);
+                }
+
+                Log.e("CHECK",message.getFilePaths().get(0));
+                conversationIntent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
+                conversationIntent.putExtra(ConversationUIService.TAKE_ORDER, true);
+                startActivity(conversationIntent);
+            }
+
+        }
+
     }
     private void startNextActivity() {
         if(getSharedPreferences("swopinfo", Context.MODE_PRIVATE).getBoolean(AppConstants.PREF_LOGIN, false)){
@@ -245,7 +297,9 @@ public class SplashActivity extends AppCompatActivity {
 
         Button btnNewsfeed = (Button) dialog.findViewById(R.id.btnNewsfeed);
         Button btnFolder = (Button) dialog.findViewById(R.id.btnFolder);
+        Button btnGroup = (Button) dialog.findViewById(R.id.btnGroup);
         Button btnCompany = (Button) dialog.findViewById(R.id.btnCompany);
+        Button btnChat = (Button) dialog.findViewById(R.id.btnChat);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
         TextView textShare = (TextView) dialog.findViewById(R.id.textShare);
         openGraphView = (OpenGraphView) dialog.findViewById(R.id.og_view);
@@ -304,8 +358,12 @@ public class SplashActivity extends AppCompatActivity {
 */
                             Log.e("HELLO", "itsok");
                             String temp = Utils.getRealPathFromURI(SplashActivity.this, Uri.parse(arr[i]));
-                            if (!StringUtil.isBlank(temp))
-                                path = Utils.fixExif(Utils.getRealPathFromURI(SplashActivity.this, Uri.parse(arr[i])));
+                            if (!StringUtil.isBlank(temp)) {
+                                if (temp.endsWith("JPG") || temp.endsWith("jpg") || temp.endsWith("JPEG") || temp.endsWith("jpeg"))
+                                    path = Utils.fixExif(temp);
+                                else
+                                    path = temp;
+                            }
                             else {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                                 path = Utils.saveFileFromBitmap(bitmap, filef, false);
@@ -361,6 +419,9 @@ public class SplashActivity extends AppCompatActivity {
 
 
         final EditText editDescription = (EditText) dialog.findViewById(R.id.editDescription);
+        if (fileArrayList.size()==1)
+            btnChat.setVisibility(View.VISIBLE);
+
 
         btnNewsfeed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -399,6 +460,35 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+
+        btnGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isFilesFetched){
+                    showGroups(editDescription);
+//                    Message message = buildMessages(fileArrayList, editDescription.getText().toString());
+//                    startMessageForward(message);
+                }
+                else
+                    Snackbar.make(findViewById(android.R.id.content),"Please Wait, Getting Files",Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isFilesFetched){
+                    Message message = buildMessages(fileArrayList, editDescription.getText().toString());
+                    startMessageForward(message);
+                }
+                else
+                    Snackbar.make(findViewById(android.R.id.content),"Please Wait, Getting Files",Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -413,6 +503,36 @@ public class SplashActivity extends AppCompatActivity {
         }
         else
             dialog.show();
+    }
+
+    private void showGroups(final EditText editDescription) {
+        AppConstants.AUTH_TOKEN = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_AUTH_TOKEN)+"";
+        String userId=SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"";
+        AppConstants.USER_ID = userId;
+        //dialog.dismiss();
+        //new FragmentAdd().uploadFile(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"",SharedPreferenceUtility.getInstance().get(AppConstants.PREF_COMPANY_ID)+"","0","","FILE","",editDescription.getText().toString(),"true","true","true","true","true","",fileArrayList,SplashActivity.this,null,swopText,true);
+        Dialog dialogGroupShare = Utils.loadGroupShareDialog(SplashActivity.this);
+        GridView gridView = (GridView) dialogGroupShare.findViewById(R.id.gridGroups);
+        TextView emptyTextView = (TextView) dialogGroupShare.findViewById(R.id.emptyGridText);
+        gridView.setBackgroundColor(getResources().getColor(R.color.white));
+        emptyTextView.setBackgroundColor(getResources().getColor(R.color.white));
+        FloatingActionButton floatingAddGroup = (FloatingActionButton) dialogGroupShare.findViewById(R.id.floatingAddGroup);
+        gridView.setBackgroundColor(getResources().getColor(R.color.white));
+        floatingAddGroup.setVisibility(View.GONE);
+
+        new FragmentGroups().getGroups(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"",
+                gridView, SplashActivity.this, emptyTextView);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                new FragmentAdd().uploadFile(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID) + "", "0",
+                        FragmentGroups.groupArrayList.get(i).getGroupId()+"", "", "FILE", "", editDescription.getText().toString(), "true", "true", "true", "true", "true", "", fileArrayList, SplashActivity.this, null, swopText, true);
+
+            }
+        });
+        dialogGroupShare.show();
+
     }
 
 
@@ -520,7 +640,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void checkStoreVersion() {
-        String url = "http://swopinfo.com/version.aspx?type=android";
+        String url = "https://swopinfo.com/version.aspx?type=android";
         WebServiceHandler webServiceHandler = new WebServiceHandler(SplashActivity.this);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override
@@ -540,4 +660,37 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+
+    public Message buildMessages(ArrayList<File> fileArrayList, String text )
+    {
+        Message message = new Message();
+        MobiComUserPreference userPreferences = MobiComUserPreference.getInstance(SplashActivity.this);
+        message.setRead(Boolean.TRUE);
+        message.setStoreOnDevice(Boolean.TRUE);
+        message.setCreatedAtTime(System.currentTimeMillis() + userPreferences.getDeviceTimeOffset());
+        message.setSendToDevice(Boolean.FALSE);
+        message.setType(Message.MessageType.MT_OUTBOX.getValue());
+        message.setSource(Message.Source.MT_MOBILE_APP.getValue());
+        message.setMessage(text);
+
+        List<String> fileList = new ArrayList<String>();
+        for (int i = 0; i < fileArrayList.size(); i++) {
+            fileList.add(fileArrayList.get(i).getPath());
+        }
+
+        message.setFilePaths(fileList);
+
+        return message;
+    }
+
+
+    public void startMessageForward(Message message)
+    {
+        Intent intent = new Intent(this, MobiComKitPeopleActivity.class);
+        if (message != null) {
+            intent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
+        }
+        startActivity(intent);
+
+    }
 }

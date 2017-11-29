@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose Your Favorites"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#047e07"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -30,7 +30,7 @@
             android:layout_height="@dimen/_50sdp"
             android:src="@drawable/ic_checkin"
             android:layout_gravity="center"
-            android:tint="@color/colorPrimary"
+            android:tint="#047e07"
             android:layout_marginTop="@dimen/_10sdp"
             />
 

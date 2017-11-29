@@ -78,7 +78,7 @@ import static com.parasme.swopinfo.activity.MainActivity.replaceFragment;
 public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListener {
 
     DisplayImageOptions optionsUserImage = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.avtar)
+//            .showImageOnLoading(R.drawable.avtar)
             .showImageForEmptyUri(R.drawable.avtar)
             .showImageOnFail(R.drawable.avtar)
             .cacheInMemory(false)
@@ -96,7 +96,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             .bitmapConfig(Bitmap.Config.RGB_565)
             .build();
 
-    private String randomNumber = randomNumber();
+//    private String randomNumber = randomNumber();
     private Map<String, Bitmap> mBitmapCache = new HashMap<String, Bitmap>();
     private int resourceId;
     private static ArrayList<Feed> feedArrayList;
@@ -225,8 +225,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
         String type=feedArrayList.get(position).getType();
 
+        Log.e("BCUPAR",feedArrayList.get(position).getUserThumb()+"__"+position);
         // method to load company or user thumb
-        if(!type.equals("file") || !type.equals("comment"))
+        if(!type.equals("file") && !type.equals("comment"))
             loadUserOrCompanyThumb(feedArrayList.get(position).getUserThumb(),viewHolder.imageUser, position);
 
         switch (type){
@@ -244,7 +245,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 break;
             case "newsfeed":
                 viewHolder.layoutAction.setVisibility(View.GONE);
-                attachShareLayout(viewHolder,position);
+                    attachShareLayout(viewHolder,position);
                 break;
             default:
                 viewHolder.layoutAction.setVisibility(View.GONE);
@@ -282,19 +283,21 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         return view;
     }
 
-    private void loadUserOrCompanyThumb(String userThumbUrl, final ImageView imageView, final int position) {
+    private synchronized void loadUserOrCompanyThumb(String userThumbUrl, final ImageView imageView, final int position) {
         userThumbUrl=userThumbUrl.substring(1);
         userThumbUrl=AppConstants.URL_DOMAIN+userThumbUrl;
 
-        Bitmap imageBitmap = mBitmapCache.get(userThumbUrl + "?"+randomNumber);
+        Bitmap imageBitmap = mBitmapCache.get(userThumbUrl);
 
         if(imageBitmap!=null) {
             imageView.setImageBitmap(imageBitmap);
         }
 
         else {
+            imageView.setImageBitmap(null);
+
             ImageLoader.getInstance()
-                    .displayImage(userThumbUrl + "?" + randomNumber, imageView, optionsUserImage, new ImageLoadingListener() {
+                    .displayImage(userThumbUrl, imageView, optionsUserImage, new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
 
@@ -358,39 +361,38 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             public void onClick(View view) {
                 ArrayList<Comment> arrayList = feedArrayList.get(position).getCommentArrayList();
                 if(feedArrayList.get(position).getCompanyId()==0) {
-                    if(arrayList.size()!=0 && !arrayList.get(0).getCommentText().contains("Sexy.."))
+                    if(feedArrayList.get(position).getType().equalsIgnoreCase("comment") && !arrayList.get(0).getCommentText().contains("Sexy.."))
                         replaceCommentingUserFragment(position);
                     else
                         replaceUserFragment(position);
                 }
-                else if(arrayList.size()>0){
-                    if(arrayList.get(0).getCompanyId()==0)
-                        replaceUserFragment(position);
+
+                else{
+                    if(feedArrayList.get(position).getType().equalsIgnoreCase("comment") && !arrayList.get(0).getCommentText().contains("Sexy.."))
+                        replaceCommentingUserFragment(position);
                     else
                         replaceCompanyFragment(position);
                 }
-                else
-                    replaceCompanyFragment(position);
             }
         });
+
         viewHolder.textUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<Comment> arrayList = feedArrayList.get(position).getCommentArrayList();
                 if(feedArrayList.get(position).getCompanyId()==0) {
-                    if(arrayList.size()!=0 && !arrayList.get(0).getCommentText().contains("Sexy.."))
+                    if(feedArrayList.get(position).getType().equalsIgnoreCase("comment") && !arrayList.get(0).getCommentText().contains("Sexy.."))
                         replaceCommentingUserFragment(position);
                     else
                         replaceUserFragment(position);
                 }
-                else if(arrayList.size()>0){
-                    if(arrayList.get(0).getCompanyId()==0)
-                        replaceUserFragment(position);
+
+                else{
+                    if(feedArrayList.get(position).getType().equalsIgnoreCase("comment") && !arrayList.get(0).getCommentText().contains("Sexy.."))
+                        replaceCommentingUserFragment(position);
                     else
                         replaceCompanyFragment(position);
                 }
-                else
-                    replaceCompanyFragment(position);
             }
         });
 
@@ -419,7 +421,12 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             public void onClick(View view) {
                 Upload upload = getUploadObject(feedArrayList.get(position));
                 Bundle bundle=new Bundle();
-                bundle.putInt("fildeId",upload.getFileId());
+                int fileId;
+                if (feedArrayList.get(position).getUploadArrayList().size()==0)
+                    fileId = feedArrayList.get(position).getFileId();
+                else
+                    fileId = feedArrayList.get(position).getUploadArrayList().get(0).getFileId();
+                bundle.putInt("fildeId",fileId);
                 Fragment fragment=new FragmentFile();
                 fragment.setArguments(bundle);
                 MainActivity.replaceFragment(fragment,((Activity) context).getFragmentManager(),((Activity) context),R.id.content_frame);
@@ -431,7 +438,12 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             public void onClick(View view) {
                 Upload upload = getUploadObject(feedArrayList.get(position));
                 Bundle bundle=new Bundle();
-                bundle.putInt("fildeId",upload.getFileId());
+                int fileId;
+                if (feedArrayList.get(position).getUploadArrayList().size()==0)
+                    fileId = feedArrayList.get(position).getFileId();
+                else
+                    fileId = feedArrayList.get(position).getUploadArrayList().get(0).getFileId();
+                bundle.putInt("fildeId",fileId);
                 Fragment fragment=new FragmentFile();
                 fragment.setArguments(bundle);
                 MainActivity.replaceFragment(fragment,((Activity) context).getFragmentManager(),((Activity) context),R.id.content_frame);
@@ -488,6 +500,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     }
 
     private void replaceCompanyFragment(int position) {
+        FragmentCompany.companyId = feedArrayList.get(position).getCompanyId();
         Fragment fragment=new FragmentCompany();
         Bundle bundle = new Bundle();
         bundle.putBoolean("isOwnCompany", false);
@@ -534,6 +547,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.layoutUser.setVisibility(View.GONE);
             viewHolder.layoutFileComment.setVisibility(View.GONE);
             viewHolder.layoutShare.setVisibility(View.GONE);
+            viewHolder.layoutAction.setVisibility(View.VISIBLE);
             viewHolder.textMultipleFiles.setText(uploadArrayList.get(0).getDescription());
             viewHolder.layoutMultipleFiles.setVisibility(View.VISIBLE);
             viewHolder.textView.setText("shared some info");
@@ -631,7 +645,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         if (url.contains("youtu.be"))
             url = url.replace("http:","https:");
 
-        if(!url.contains("24.com")){
+        if(!url.contains("24.com") && !url.contains("24.co")){
             viewHolder.progressBar.setVisibility(View.GONE);
             if (!feedArrayList.get(position).isPreviewLoaded()) {
                 Log.e("AAAAA",url);
@@ -677,18 +691,22 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                             feedArrayList.get(position).setPreviewTitle(sourceContent.getTitle());
                             feedArrayList.get(position).setPreviewDescription(sourceContent.getDescription());
                             feedArrayList.get(position).setPreviewPageURL(sourceContent.getUrl());
-                            feedArrayList.get(position).setPreviewThumbURL(sourceContent.getImages().get(0));
+
+                            notifyDataSetChanged();
+
+                            if (sourceContent.getImages().size()>0)
+                                feedArrayList.get(position).setPreviewThumbURL(sourceContent.getImages().get(0));
 
                             viewHolder.textPreviewTitle.setText(sourceContent.getTitle());
                             viewHolder.textPreviewDescription.setText(sourceContent.getDescription());
                             viewHolder.textPreviewURL.setText(sourceContent.getUrl());
 
-                            Bitmap imageBitmap = mBitmapCache.get(sourceContent.getImages().get(0));
-                            if (imageBitmap != null)
-                                viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
-                            else
-                                ImageLoader.getInstance()
-                                        .displayImage(sourceContent.getImages().get(0), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
+                                Bitmap imageBitmap = mBitmapCache.get(sourceContent.getImages().get(0));
+                                if (imageBitmap != null)
+                                    viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
+                                else
+                                    ImageLoader.getInstance()
+                                            .displayImage(sourceContent.getImages().get(0), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
 
                         }
                     }
@@ -841,7 +859,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 String fileThumbUrl=feedArrayList.get(position).getThumbFileName();
                 fileThumbUrl=fileThumbUrl.substring(1);
                 fileThumbUrl=AppConstants.URL_DOMAIN+fileThumbUrl;
-                Log.e("UUUUUUUUUU",fileThumbUrl);
                 //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
                 Bitmap imageBitmap = mBitmapCache.get(fileThumbUrl);
                 if(imageBitmap!=null)
@@ -886,7 +903,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.layoutAdditionalInfo.setVisibility(View.VISIBLE);
             viewHolder.textUserName.setText(arrayList.get(0).getUserFullName());
 
-            Bitmap imageBitmap = mBitmapCache.get(arrayList.get(0).getUserImageURL() + "?"+randomNumber);
+            Bitmap imageBitmap = mBitmapCache.get(arrayList.get(0).getUserImageURL());
             if(imageBitmap!=null) {
                 Log.e("BmpCache","comment_"+arrayList.get(0).getUserImageURL());
                 viewHolder.imageUser.setImageBitmap(imageBitmap);
@@ -895,7 +912,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             else {
 
                 ImageLoader.getInstance()
-                        .displayImage(arrayList.get(0).getUserImageURL() + "?"+randomNumber, viewHolder.imageUser, optionsUserImage, new ImageLoadingListener() {
+                        .displayImage(arrayList.get(0).getUserImageURL(), viewHolder.imageUser, optionsUserImage, new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {
 
@@ -952,9 +969,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             // if file is uploaded via company then set company else username
             if(feedArrayList.get(position).getCompanyId()!=0){
                 viewHolder.textUserNameFile.setText(feedArrayList.get(position).getCompanyName());
+                Log.e("BHENCHODU",feedArrayList.get(position).getCompanyThumbFileName());
                 loadUserOrCompanyThumb(feedArrayList.get(position).getCompanyThumbFileName(),viewHolder.imageUserFile,position);
             }
             else {
+                Log.e("BHENCHODC",feedArrayList.get(position).getUserThumb());
                 loadUserOrCompanyThumb(feedArrayList.get(position).getUserThumb(),viewHolder.imageUserFile,position);
                 viewHolder.textUserNameFile.setText(feedArrayList.get(position).getUserFullName());
             }
@@ -1169,5 +1188,10 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
         }
     };
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }

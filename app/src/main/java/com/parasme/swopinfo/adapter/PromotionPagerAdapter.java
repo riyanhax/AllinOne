@@ -1,12 +1,15 @@
 package com.parasme.swopinfo.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.model.Category;
@@ -46,7 +49,20 @@ public class PromotionPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.promotion_pager_item, container, false);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_single_promotion);
-        Picasso.with(mContext).load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(imageView);
+        Picasso.with(mContext).load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(imageView);
+/*
+        Picasso.Builder builder = new Picasso.Builder(mContext);
+        builder.listener(new Picasso.Listener()
+        {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+            {
+                Toast.makeText(mContext, exception.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.build().load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(imageView);
+*/
+
         //imageView.setImageResource(mResources.get(position).image);
 
         container.addView(itemView);

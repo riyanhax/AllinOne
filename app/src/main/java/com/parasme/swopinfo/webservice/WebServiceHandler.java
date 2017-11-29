@@ -49,7 +49,7 @@ public class WebServiceHandler {
     private RequestBody requestBody;
     private Request request;
     private static Context context;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog=null;
     public WebServiceListener serviceListener;
     public static Call call;
 
@@ -157,7 +157,7 @@ public class WebServiceHandler {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
-                if (progressDialog.isShowing())
+                if (progressDialog!=null && progressDialog.isShowing())
                     progressDialog.dismiss();
                 serviceListener.onResponse(data);
                 //EventBus.getDefault().postSticky(data);
@@ -165,7 +165,7 @@ public class WebServiceHandler {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                if (progressDialog.isShowing())
+                if (progressDialog!=null && progressDialog.isShowing())
                     progressDialog.dismiss();
             }
         });

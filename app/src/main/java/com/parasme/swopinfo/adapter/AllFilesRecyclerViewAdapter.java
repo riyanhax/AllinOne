@@ -1,6 +1,7 @@
 package com.parasme.swopinfo.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -11,12 +12,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.fragment.FragmentFile;
+import com.parasme.swopinfo.helper.Utils;
+import com.parasme.swopinfo.model.Comment;
 import com.parasme.swopinfo.model.Upload;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
@@ -96,6 +103,30 @@ public class AllFilesRecyclerViewAdapter extends RecyclerView.Adapter<AllFilesVi
                 holder.imageDisLike.setImageResource(R.drawable.ic_dislike);
                 holder.imageLike.setImageResource(R.drawable.ic_like_normal);
                 disLikePost(itemList.get(position).getFileId()+"", AppConstants.USER_ID, (Activity) context, position, holder);
+            }
+        });
+
+        holder.btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+/*
+                Dialog dialog = Utils.loadCommentDialog((Activity) context);
+                TextView emptyText = (TextView) dialog.findViewById(R.id.emptyGridText);
+
+                ListView listComments = (ListView) dialog.findViewById(R.id.listComments);
+                ArrayList<Comment> commentArrayList = itemList.get(position).getCommentArrayList();
+                FragmentFile.fileOwnerId = feedArrayList.get(position).getUserId()+"";
+                commentAdapter = new CommentAdapter(context,R.layout.row_comment, commentArrayList);
+                listComments.setAdapter(commentAdapter);
+                listComments.setEmptyView(emptyText);
+                editComment = (EditText) dialog.findViewById(R.id.editComment);
+                btnAddComment = (Button) dialog.findViewById(R.id.btnAddComment);
+                btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+                dialog.show();
+
+                setAddCommentListener(position);
+*/
+
             }
         });
     }

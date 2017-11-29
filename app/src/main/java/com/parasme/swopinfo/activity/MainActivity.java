@@ -48,6 +48,7 @@ import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.applozic.mobicommons.json.GsonUtils;
+import com.google.gson.Gson;
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.adapter.SearchAdapter;
@@ -71,6 +72,7 @@ import com.parasme.swopinfo.fragment.FragmentUser;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
+import com.parasme.swopinfo.webservice.MyService;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
@@ -108,7 +110,7 @@ import static com.parasme.swopinfo.fragment.FragmentUploadsWrapper.textFilesCoun
  * Mobile +917737556190
  */
 
-public class MainActivity extends LocationActivity implements LocationActivity.LocationUpdater {
+public class MainActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getName();
 
@@ -119,12 +121,13 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     private Dialog dialogSearch;
     public static Activity activityContext;
     public String gcmToken;
-    public static String fullAddress="";
 
     DrawerLayout drawerLayout;
     ListView listLeftDrawer;
     Toolbar toolbar;
     TextView text_title;
+
+    boolean isActive = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,6 +154,8 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
 
         if(!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_APPLOZIC_LOGIN,false))
             appLozicLogin(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"", SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" "+SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME), SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_EMAIL)+"");
+
+        replaceFragmentAccordingly();
     }
 
 
@@ -222,9 +227,11 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
             @Override
             public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                 //If any failure in registration the callback  will come here
-                Log.e(TAG,"App Lozic Login failed");
+                Log.e("REGISTRATION", new Gson().toJson(registrationResponse));
+                Log.e("FAILURE",exception.toString());
             }};
 
+        Log.e("AAA",User.AuthenticationType.APPLOZIC.getValue()+"");
         User user = new User();
         user.setUserId(userId); //userId it can be any unique user identifier
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
@@ -284,6 +291,7 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
             ft.replace(id, fragment, fragmentTag);
             ft.addToBackStack(backStateName);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
             ft.commit();
         }
     }
@@ -334,7 +342,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
                         OneSignal.removeNotificationReceivedHandler();
 
                         SharedPreferenceUtility.getInstance().save(AppConstants.PREF_INTRO,true);
-                        // replaceFragment(new FragmentHome_(),getFragmentManager());
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
                         finish();
@@ -435,6 +442,8 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
                     fragment = new FragmentCompany();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("isOwnCompany",true);
+                    FragmentCompany.isOwnCompany = true;
+                    FragmentCompany.companyId = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_COMPANY_ID,0);
                     fragment.setArguments(bundle);
                 }
                 break;
@@ -463,17 +472,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
         drawerLayout.closeDrawer(listLeftDrawer,true);
     }
 
-    @Override
-    public void onReceiveLocation(Location location) {
-        if (location!=null && fullAddress.equals(""))
-            getAddress(location.getLatitude()+"",location.getLongitude()+"");
-            //getAddress("-26.195246","28.034088");
-    }
-
-    @Override
-    public void onRejectLocationRequest() {
-        Log.e("REJECT","LOCATION");
-    }
 
 
     class MenuAdapter extends BaseAdapter {
@@ -621,7 +619,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
-        LocationActivity.locationUpdater = MainActivity.this;
     }
 
 
@@ -725,44 +722,6 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
     }
 
 
-    private void getAddress(String latitude, String longitude) {
-        fullAddress = " ";  // TO avoid multiple hit of api on received location as it triggered repeatedly.
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+latitude+","+longitude+"&key=AIzaSyABGigUX5fvihfR8Bc8WnCScS3XXWK2B78&sensor=true";
-
-        WebServiceHandler webServiceHandler = new WebServiceHandler(MainActivity.this);
-        webServiceHandler.serviceListener = new WebServiceListener() {
-            @Override
-            public void onResponse(final String response) {
-                Log.e("Address Response",response);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject.optString("status").equalsIgnoreCase("ok")){
-                                JSONObject jsonObject1 = jsonObject.getJSONArray("results").getJSONObject(0);
-                                fullAddress = jsonObject1.optString("formatted_address");
-                                Log.e("Address",fullAddress);
-                                //if (fullAddress.contains("South Africa") && FragmentHome.rippleBackground!=null)
-                                if (FragmentHome.rippleBackground!=null)
-                                    FragmentHome.rippleBackground.setVisibility(View.VISIBLE);
-
-                                replaceFragmentAccordingly();
-                            }
-                            else
-                                Log.e("Address Err","Could not get address");
-
-                        }catch (JSONException e){e.printStackTrace();}
-                    }
-                });
-            }
-        };
-        try {
-            webServiceHandler.get(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void replaceFragmentAccordingly() {
         Log.e("Replaceing","PRELACING");
@@ -823,9 +782,23 @@ public class MainActivity extends LocationActivity implements LocationActivity.L
                 e.printStackTrace();
             }
         }
-        else
-            replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
 
+        else {
+                replaceFragment(new FragmentHome(), getFragmentManager(), MainActivity.this, R.id.content_frame);
+        }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isActive = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isActive = true;
+    }
+
 
 }

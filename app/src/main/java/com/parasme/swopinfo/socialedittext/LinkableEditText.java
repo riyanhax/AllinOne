@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class LinkableEditText extends MultiAutoCompleteTextView implements TextWatcher {
 
     private List<Link> mLinks = new ArrayList<>();
-
+    OnTextCountListener onTextCount;
     private LinkModifier mLinkModifier;
     private OnTextChangedListener mOnTextChangedListener;
 
@@ -98,6 +98,8 @@ public class LinkableEditText extends MultiAutoCompleteTextView implements TextW
         if(mOnTextChangedListener != null) {
             mOnTextChangedListener.afterTextChanged(s);
         }
+
+        onTextCount.onTextCount(1000 - s.toString().length() + "/1000");
     }
 
     public interface OnTextChangedListener {
@@ -124,5 +126,13 @@ public class LinkableEditText extends MultiAutoCompleteTextView implements TextW
             mentions.add(matcher.group());
         }
         return mentions;
+    }
+
+    public void setOnTextCountListener(OnTextCountListener onTextCount){
+        this.onTextCount = onTextCount;
+    }
+
+    public interface OnTextCountListener{
+        void onTextCount(String count);
     }
 }

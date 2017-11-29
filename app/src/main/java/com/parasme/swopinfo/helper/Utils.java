@@ -358,6 +358,13 @@ public class Utils {
     }
 
 
+    public static Dialog loadGroupShareDialog(Activity activity){
+        Dialog dialog= new Dialog(activity,android.R.style.Theme_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.fragment_groups);
+        dialog.setCancelable(true);
+        return dialog;
+    }
 
 
 

@@ -375,7 +375,14 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 Fragment fragment = new FragmentCompany();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isOwnCompany", false);
-                bundle.putInt(AppConstants.KEY_COMPANY_ID,userDetails.getCompanyId());
+                bundle.putInt(AppConstants.KEY_COMPANY_ID, userDetails.getCompanyId());
+
+                if (userDetails.getCompanyId() == SharedPreferenceUtility.getInstance().get(AppConstants.PREF_COMPANY_ID,0))
+                    FragmentCompany.isOwnCompany = true;
+                else
+                    FragmentCompany.isOwnCompany = false;
+                FragmentCompany.companyId = userDetails.getCompanyId();
+
                 fragment.setArguments(bundle);
                 replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
                 break;
@@ -387,6 +394,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 replaceFragment(fragment1,getFragmentManager(),mActivity,R.id.content_frame);
                 break;
             case R.id.textTitle:
+                FragmentCompany.companyId = userDetails.getCompanyId();
                 Fragment fragment2 = new FragmentCompany();
                 Bundle bundle2 = new Bundle();
                 bundle2.putBoolean("isOwnCompany", false);

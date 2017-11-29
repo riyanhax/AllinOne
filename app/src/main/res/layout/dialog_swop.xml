@@ -14,20 +14,36 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_height="match_parent">
 
-            <com.parasme.swopinfo.socialedittext.LinkableEditText
-                android:id="@+id/editSwop"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_80sdp"
-                android:hint="Share some thoughts"
-                android:maxLines="3"
-                android:inputType="textCapSentences"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:paddingLeft="@dimen/_5sdp"
-                android:background="@drawable/border_edit"
-                android:textColor="@color/textGrey"
-                android:textSize="@dimen/_14sdp"
-                android:textColorHint="@color/textGrey"
-                />
+                >
+                <com.parasme.swopinfo.socialedittext.LinkableEditText
+                    android:id="@+id/editSwop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:hint="Share some thoughts"
+                    android:maxLength="1000"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:background="@drawable/border_edit"
+                    android:textColor="@color/textGrey"
+                    android:textSize="@dimen/_14sdp"
+                    android:textColorHint="@color/textGrey"
+                    />
+
+                <TextView
+                    android:id="@+id/textCount"
+                    android:text="0/1000"
+                    android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    />
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/layout_pick"

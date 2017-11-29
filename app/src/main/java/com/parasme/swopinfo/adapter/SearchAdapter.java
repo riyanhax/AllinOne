@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.fragment.FragmentCompany;
 import com.parasme.swopinfo.fragment.FragmentGroupDetail;
+import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Follow;
 import com.parasme.swopinfo.model.Group;
 import com.parasme.swopinfo.model.Upload;
@@ -73,7 +75,7 @@ public class SearchAdapter extends BaseAdapter {
                 break;
         }
         return count;
-   }
+    }
 
     @Override
     public Object getItem(int i) {
@@ -155,12 +157,12 @@ public class SearchAdapter extends BaseAdapter {
             viewHolder.layoutCompanyDetails.setVisibility(View.GONE);
             groupThumbURL = AppConstants.URL_DOMAIN+"upload/group" + groupArrayList.get(position).getGroupId() + "/logo.jpg";
         }
-            Picasso.with(context).load(groupThumbURL)
-                    .error(R.drawable.companylogo)
-                    .placeholder(R.drawable.avtar)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
-                    .into(viewHolder.imageGroup);
+        Picasso.with(context).load(groupThumbURL)
+                .error(R.drawable.companylogo)
+                .placeholder(R.drawable.avtar)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+                .into(viewHolder.imageGroup);
 
 
         viewHolder.layoutGroup.setOnClickListener(new View.OnClickListener() {
@@ -168,9 +170,19 @@ public class SearchAdapter extends BaseAdapter {
             public void onClick(View view) {
                 final String type = groupArrayList.get(position).getType();
                 if(type.equals("company")){
+
                     Fragment fragment = new FragmentCompany();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("isOwnCompany", false);
+
+                    int companyId = groupArrayList.get(position).getGroupId();
+                    FragmentCompany.companyId = companyId;
+                    if (companyId == SharedPreferenceUtility.getInstance().get(AppConstants.PREF_COMPANY_ID,0))
+                        FragmentCompany.isOwnCompany = true;
+                    else
+                        FragmentCompany.isOwnCompany = false;
+
+
                     bundle.putInt(AppConstants.KEY_COMPANY_ID, groupArrayList.get(position).getGroupId());
                     fragment.setArguments(bundle);
                     replaceFragment(fragment,((AppCompatActivity)context).getFragmentManager(),((AppCompatActivity)context),R.id.content_frame);
