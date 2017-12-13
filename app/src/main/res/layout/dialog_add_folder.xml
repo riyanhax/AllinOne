@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Folder"
+                android:inputType="textCapSentences"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_13sdp"
                 android:layout_marginTop="@dimen/_20sdp"

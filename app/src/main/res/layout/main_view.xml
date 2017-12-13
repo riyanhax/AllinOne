@@ -5,4 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+
+    <ImageView
+        android:id="@+id/imgLoginBackground"
+        android:src="@drawable/app_logo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop" />
 </LinearLayout>

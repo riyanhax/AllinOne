@@ -30,6 +30,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -94,6 +95,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             .cacheOnDisk(false)
             .considerExifParams(true)
             .bitmapConfig(Bitmap.Config.RGB_565)
+            .imageScaleType(ImageScaleType.EXACTLY)
             .build();
 
 //    private String randomNumber = randomNumber();
@@ -226,6 +228,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         String type=feedArrayList.get(position).getType();
 
         Log.e("BCUPAR",feedArrayList.get(position).getUserThumb()+"__"+position);
+
+
+
         // method to load company or user thumb
         if(!type.equals("file") && !type.equals("comment"))
             loadUserOrCompanyThumb(feedArrayList.get(position).getUserThumb(),viewHolder.imageUser, position);
@@ -286,11 +291,14 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     private synchronized void loadUserOrCompanyThumb(String userThumbUrl, final ImageView imageView, final int position) {
         userThumbUrl=userThumbUrl.substring(1);
         userThumbUrl=AppConstants.URL_DOMAIN+userThumbUrl;
-
         Bitmap imageBitmap = mBitmapCache.get(userThumbUrl);
 
         if(imageBitmap!=null) {
             imageView.setImageBitmap(imageBitmap);
+
+            // TO escape long horizontal stretch image issue of company logo
+            if (imageBitmap.getWidth() > imageBitmap.getHeight()*2)
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
 
         else {
@@ -310,6 +318,10 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            // TO escape long horizontal stretch image issue of company logo
+                            if (loadedImage.getWidth()>loadedImage.getHeight()*2)
+                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
                             mBitmapCache.put(imageUri, loadedImage);
                             //notifyDataSetChanged();
                         }
@@ -581,14 +593,22 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                         ImageLoader.getInstance().displayImage(url, viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
 
                 } else {
-                    Bitmap imageBitmap = mBitmapCache.get(uploadArrayList.get(0).getThumbURL());
-                    if(imageBitmap!=null)
-                        viewHolder.imageShareThumb.setImageBitmap(imageBitmap);
-                    else
-                        ImageLoader.getInstance()
-                                .displayImage(uploadArrayList.get(0).getThumbURL(), viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
+                    String fileType = feedArrayList.get(position).getFileType();
+                    if (feedArrayList.get(position).getUploadArrayList().size() > 0)
+                        fileType = feedArrayList.get(position).getUploadArrayList().get(0).getFileType();
 
-                    //Picasso.with(getContext()).load(uploadArrayList.get(0).getThumbURL()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageShareThumb);
+                    // If condition for self audio thumb
+                    if (!fileType.contains("audio")) {
+
+                        Bitmap imageBitmap = mBitmapCache.get(uploadArrayList.get(0).getThumbURL());
+                        if (imageBitmap != null)
+                            viewHolder.imageShareThumb.setImageBitmap(imageBitmap);
+                        else
+                            ImageLoader.getInstance()
+                                    .displayImage(uploadArrayList.get(0).getThumbURL(), viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
+                    }
+                    else
+                        viewHolder.imageShareThumb.setImageResource(R.drawable.audio_thumb);
                 }
             }
 
@@ -847,25 +867,35 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             // Condition to load file thumb image on basis of file type whether video url or image
             if(feedArrayList.get(position).getFileType().equals("videourl")) {
                 //Picasso.with(getContext()).load(feedArrayList.get(position).getThumbFileName()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
+
                 Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getThumbFileName());
                 if(imageBitmap!=null)
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
                 else
                     ImageLoader.getInstance()
                             .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
-
             }
+
             else {
-                String fileThumbUrl=feedArrayList.get(position).getThumbFileName();
-                fileThumbUrl=fileThumbUrl.substring(1);
-                fileThumbUrl=AppConstants.URL_DOMAIN+fileThumbUrl;
-                //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
-                Bitmap imageBitmap = mBitmapCache.get(fileThumbUrl);
-                if(imageBitmap!=null)
-                    viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
+                String fileType = feedArrayList.get(position).getFileType();
+                if (feedArrayList.get(position).getUploadArrayList().size() > 0)
+                    fileType = feedArrayList.get(position).getUploadArrayList().get(0).getFileType();
+
+                // If condition for self audio thumb
+                if (!fileType.contains("audio")) {
+                    String fileThumbUrl = feedArrayList.get(position).getThumbFileName();
+                    fileThumbUrl = fileThumbUrl.substring(1);
+                    fileThumbUrl = AppConstants.URL_DOMAIN + fileThumbUrl;
+                    //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
+                    Bitmap imageBitmap = mBitmapCache.get(fileThumbUrl);
+                    if (imageBitmap != null)
+                        viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
+                    else
+                        ImageLoader.getInstance()
+                                .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                }
                 else
-                    ImageLoader.getInstance()
-                            .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                    viewHolder.imageFileThumb.setImageResource(R.drawable.audio_thumb);
             }
 
             viewHolder.textView.setText("uploaded a new file");
@@ -953,17 +983,25 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 //Picasso.with(getContext()).load(feedArrayList.get(position).getThumbFileName()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
             }
             else {
-                String fileThumbUrl=feedArrayList.get(position).getThumbFileName();
-                fileThumbUrl=fileThumbUrl.substring(1);
-                fileThumbUrl=AppConstants.URL_DOMAIN+fileThumbUrl;
-                Bitmap imageBitmap1 = mBitmapCache.get(fileThumbUrl);
-                if(imageBitmap1!=null)
-                    viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
-                else
-                    ImageLoader.getInstance()
-                            .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                String fileType = feedArrayList.get(position).getFileType();
+                if (feedArrayList.get(position).getUploadArrayList().size() > 0)
+                    fileType = feedArrayList.get(position).getUploadArrayList().get(0).getFileType();
 
-                //Picasso.with(getContext()).load(fileThumbUrl).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
+                // If condition for self audio thumb
+                if (!fileType.contains("audio")) {
+
+                    String fileThumbUrl = feedArrayList.get(position).getThumbFileName();
+                    fileThumbUrl = fileThumbUrl.substring(1);
+                    fileThumbUrl = AppConstants.URL_DOMAIN + fileThumbUrl;
+                    Bitmap imageBitmap1 = mBitmapCache.get(fileThumbUrl);
+                    if (imageBitmap1 != null)
+                        viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
+                    else
+                        ImageLoader.getInstance()
+                                .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                }
+                else
+                    viewHolder.imageFileThumb.setImageResource(R.drawable.audio_thumb);
             }
 
             // if file is uploaded via company then set company else username

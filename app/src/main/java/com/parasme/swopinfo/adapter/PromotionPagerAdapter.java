@@ -49,7 +49,12 @@ public class PromotionPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.promotion_pager_item, container, false);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_single_promotion);
+        imageView.setTag(position+"");
+
         Picasso.with(mContext).load(mResources.get(position).getImageURL()).placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(imageView);
+//        Picasso.with(mContext).load("https://swopinfo.com/upload/company100313/KwiksparRiverbend%20Specials%204th%20-17th%20Dec%2017/294f4f28-0b35-4a04-b257-e2a987067629.jpeg").placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(imageView);
+
+
 /*
         Picasso.Builder builder = new Picasso.Builder(mContext);
         builder.listener(new Picasso.Listener()

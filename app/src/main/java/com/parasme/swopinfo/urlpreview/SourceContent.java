@@ -172,19 +172,5 @@ public class SourceContent {
 		this.images = images;
 	}
 
-	/**
-	 * @return the urlData
-	 */
-	public String[] getUrlData() {
-		return urlData;
-	}
-
-	/**
-	 * @param urlData
-	 *            the urlData to set
-	 */
-	public void setUrlData(String[] urlData) {
-		this.urlData = urlData;
-	}
 
 }

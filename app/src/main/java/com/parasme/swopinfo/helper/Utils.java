@@ -275,6 +275,23 @@ public class Utils {
         return fileURL;
     }
 
+    public static String createAudioFileURL(JSONObject fileObject) {
+        String folderName="";
+        int companyId = fileObject.optInt("companyid");
+
+        // Extracting folder name
+        if(!fileObject.optString("foldername").equals("/"))
+            folderName = fileObject.optString("foldername").replace(" ","%20")+"/";
+
+        String fileURL;
+        if(companyId==0)
+            fileURL = AppConstants.URL_DOMAIN+"upload/user"+fileObject.optInt("userid")+"/"+folderName+fileObject.optString("realfilename");
+        else
+            fileURL = AppConstants.URL_DOMAIN+"upload/company"+companyId+"/"+folderName+fileObject.optString("realfilename");
+
+        return fileURL;
+    }
+
 
     public static ArrayList<Object> loadDownloadDialog(Activity activity, String title){
         ArrayList<Object> objectArrayList = new ArrayList<>();

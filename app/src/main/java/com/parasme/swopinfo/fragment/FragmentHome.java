@@ -1,14 +1,24 @@
 package com.parasme.swopinfo.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.MediaRecorder;
+import android.os.Build;
+import android.os.Environment;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
@@ -20,6 +30,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,12 +38,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -78,7 +92,7 @@ import android.widget.Toast;
  * Mobile +917737556190
  */
 
-public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener, LinkableEditText.OnTextCountListener, LocationActivity.LocationUpdater {
+public class FragmentHome extends BaseFragment implements FileSelectionActivity.FilePicker,SwipeRefreshLayout.OnRefreshListener, LinkableEditText.OnTextCountListener, LocationActivity.LocationUpdater, ImagePicker.Picker {
 
     private View childView;
     public static ListView listFeeds;
@@ -107,6 +121,12 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     String[] language ={"C","C++","Java",".NET","iPhone","Android","ASP.NET","PHP"};
     public String fullAddress="";
     public boolean isLoading = false;
+
+    // TO record audio
+    private boolean isRecording = false;
+    MediaRecorder mediaRecorder;
+    String recordedPath;
+    private final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO=1;
 
     @Override
     public void onResume() {
@@ -267,6 +287,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                         Store.Promotion promotion = new Store.Promotion();
                                         String url = promotionObject.optString("promotionimg");
                                         url = url.replace("http://swopinfo","https://swopinfo");
+                                        url = url.replaceAll(" ","%20");
                                         promotion.setImageURL(url);
                                         promotion.setUseId(promotionObject.optString("userid"));
                                         promotion.setCompanyId(promotionObject.optString("companyid"));
@@ -543,9 +564,15 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         layoutPick = (LinearLayout) dialogSwop.findViewById(R.id.layout_pick);
         final LinearLayout layoutPhoto = (LinearLayout) dialogSwop.findViewById(R.id.layout_photo);
         final LinearLayout layoutVideo = (LinearLayout) dialogSwop.findViewById(R.id.layout_video);
+        final LinearLayout layoutCamera = (LinearLayout) dialogSwop.findViewById(R.id.layout_camera);
         final LinearLayout layoutDoc = (LinearLayout) dialogSwop.findViewById(R.id.layout_doc);
+        final LinearLayout layoutAudio = (LinearLayout) dialogSwop.findViewById(R.id.layout_audio);
         final LinearLayout layoutVoice = (LinearLayout) dialogSwop.findViewById(R.id.layout_voice_note);
+        final RelativeLayout layoutRecord = (RelativeLayout) dialogSwop.findViewById(R.id.layoutRecord);
         final ImageView imgDeselect = (ImageView) dialogSwop.findViewById(R.id.img_deselect);
+        final ImageView imgBack = (ImageView) dialogSwop.findViewById(R.id.img_back);
+        final ImageView imgRecord = (ImageView) dialogSwop.findViewById(R.id.img_record);
+        final Chronometer chronometer = (Chronometer) dialogSwop.findViewById(R.id.chronometer);
 
         layoutPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -558,6 +585,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             }
         });
 
+
         layoutVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -569,7 +597,17 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             }
         });
 
-        layoutVoice.setOnClickListener(new View.OnClickListener() {
+        layoutCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.picker=FragmentHome.this;
+                Intent intent = new Intent(mActivity, ImagePicker.class);
+                intent.putExtra("selectType",0);
+                mActivity.startActivity(intent);
+            }
+        });
+
+        layoutAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -577,6 +615,14 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,"Select Audio"),PICK_VOICE);
 
+            }
+        });
+
+        layoutVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutPick.setVisibility(View.GONE);
+                layoutRecord.setVisibility(View.VISIBLE);
             }
         });
 
@@ -615,10 +661,56 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             }
         });
 
+
+        imgRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isRecording) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ActivityCompat.checkSelfPermission(mActivity,
+                                Manifest.permission.RECORD_AUDIO)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // No explanation needed, we can request the permission.
+                            requestPermissions(
+                                    new String[]{Manifest.permission.RECORD_AUDIO},
+                                    MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+
+                            // MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION is an
+                            // app-defined int constant. The callback method gets the
+                            // result of the request.
+                        }
+                        else{
+                            imgRecord.setImageResource(R.drawable.ic_stop);
+                            startRecording(chronometer);}
+
+                    }
+                    else{
+                        imgRecord.setImageResource(R.drawable.ic_stop);
+                        startRecording(chronometer);}
+
+                }
+                else{
+                    imgRecord.setImageResource(R.drawable.ic_record);
+                    stopRecording(layoutRecord, chronometer);
+                }
+            }
+        });
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopRecorder(chronometer);
+                layoutRecord.setVisibility(View.GONE);
+                layoutPick.setVisibility(View.VISIBLE);
+                imgRecord.setImageResource(R.drawable.ic_record);
+            }
+        });
+
+
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String swopText = editSwop.getText().toString();
+                String swopText = editSwop.getText().toString().trim();
                 if (swopText.equals("") && fileArrayList.size()==0){
                     editSwop.setError("Please enter some text share or select a file");
                     editSwop.requestFocus();
@@ -632,7 +724,75 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             }
         });
 
+        dialogSwop.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                stopRecorder(chronometer);
+            }
+        });
         dialogSwop.show();
+    }
+
+
+    private void startRecording(Chronometer chronometer) {
+        recordedPath = setFilePath();
+        Log.e("Filepath",recordedPath);
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(recordedPath);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mediaRecorder.setAudioChannels(1);
+
+        try {
+            isRecording = true;
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    private void stopRecording(RelativeLayout layoutRecord, Chronometer chronometer) {
+        if (mediaRecorder!=null) {
+            stopRecorder(chronometer);
+            layoutSelection.setVisibility(View.VISIBLE);
+            layoutRecord.setVisibility(View.GONE);
+            layoutPick.setVisibility(View.GONE);
+            textSelection.setText("Voice Recorded");
+            Log.e("Selected Path", recordedPath);
+            fileArrayList.add(new File(recordedPath));
+
+        }
+    }
+
+
+
+    private void stopRecorder(Chronometer chronometer){
+        if (isRecording) {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            isRecording = false;
+            fileArrayList.clear();
+            if (chronometer != null) {
+                chronometer.stop();
+                chronometer.setBase(SystemClock.elapsedRealtime());
+            }
+        }
+    }
+
+    private String setFilePath() {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File dirSwopInfo = new File(root + "/SwopInfo/");
+        if (!dirSwopInfo.exists())
+            dirSwopInfo.mkdirs();
+        File dirRecording = new File(dirSwopInfo.getPath() + "/Recordings/");
+        if (!dirRecording.exists())
+            dirRecording.mkdir();
+
+        File file = new File(dirRecording, System.currentTimeMillis()+".m4a");
+
+        return file.getPath();
     }
 
     private void setTagMentionPattern(final LinkableEditText editSwop) {
@@ -691,6 +851,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         swipeRefreshLayout.setRefreshing(true);
         feedArrayList.clear();
         personalFeedList.clear();
+        if (adapter!=null)
+            adapter.notifyDataSetChanged();
         getFeeds(mActivity, listFeeds, swipeRefreshLayout);
     }
 
@@ -698,7 +860,11 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause: " );
-        WebServiceHandler.call.cancel();
+        isLoading = false;
+        if (WebServiceHandler.call!=null)
+            WebServiceHandler.call.cancel();
+
+        stopRecorder(null);
     }
 
 
@@ -875,5 +1041,35 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
             e.printStackTrace();
             Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_RECORD_AUDIO) {
+            if (permissions[0].equals(Manifest.permission.RECORD_AUDIO)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+        }
+    }
+
+    @Override
+    public void onImagePicked(Bitmap bitmap, String imagePath) {
+        fileArrayList.clear();
+        layoutSelection.setVisibility(View.VISIBLE);
+        layoutPick.setVisibility(View.GONE);
+        textSelection.setText("Photo Selected");
+        Log.e("Selected Path", imagePath);
+        fileArrayList.add(new File(imagePath));
+
+    }
+
+    @Override
+    public void onVideoPicked(String videoPath) {
+        fileArrayList.clear();
+        layoutSelection.setVisibility(View.VISIBLE);
+        layoutPick.setVisibility(View.GONE);
+        textSelection.setText("Video Selected");
+        Log.e("Selected Path", videoPath);
+        fileArrayList.add(new File(videoPath));
     }
 }

@@ -83,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:weightSum="1"
+            android:paddingLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:orientation="horizontal"
@@ -411,6 +412,18 @@
                         fab:fab_size="normal"/>
                     />
 
+
+<!--
+                    <com.getbase.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnInstagram"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        fab:fab_icon="@drawable/instagram"
+                        fab:fab_colorNormal="#ce3753"
+                        fab:fab_colorPressed="#ce3753"
+                        fab:fab_size="normal"/>
+                    />
+-->
 
                     <com.getbase.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnTwitter"

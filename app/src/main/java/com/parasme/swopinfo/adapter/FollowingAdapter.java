@@ -171,9 +171,9 @@ public class FollowingAdapter extends ArrayAdapter<Follow> {
                     @Override
                     public void run() {
                         if(isChecked)
-                            MyApplication.alertDialog((Activity)context,"You will now receive notfication for selected user","Receive Notification");
+                            MyApplication.alertDialog((Activity)context,"You will now receive notification for selected user","Receive Notification");
                         else
-                            MyApplication.alertDialog((Activity)context,"You will not receive any notfication for selected user","Receive Notification");
+                            MyApplication.alertDialog((Activity)context,"You will not receive any notification for selected user","Receive Notification");
 
                     }
                 });

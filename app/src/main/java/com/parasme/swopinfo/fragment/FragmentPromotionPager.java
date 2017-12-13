@@ -5,7 +5,16 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parasme.swopinfo.R;
@@ -21,11 +31,14 @@ import com.parasme.swopinfo.adapter.PromotionPagerAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
+import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Store;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -188,23 +201,88 @@ public class FragmentPromotionPager extends Fragment {
         itemHome.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
                 int pos = pagerPromotions.getCurrentItem();
-                Log.e("BHAI",FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL());
+/*
+                String url = FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL();
+                String username = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" " +
+                        SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_SUBJECT, "Sharing Promo");
-                i.putExtra(Intent.EXTRA_TEXT, FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL());
+                i.putExtra(Intent.EXTRA_TEXT, username +" shared below promotion with you\n"+url+"\n\nClick below link if you want see more\nhttp://onelink.to/3f7rh3");
                 startActivity(Intent.createChooser(i, "Share Promo"));
+*/
+
+
+
+                String url = FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().get(pos).getImageURL();
+                String username = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" " +
+                        SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
+                ImageView imageView = (ImageView) pagerPromotions.findViewWithTag(pos+"");
+                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, username +" shared below promotion with you\n"+url+"\n\nClick below link if you want see more\nhttp://onelink.to/3f7rh3");
+                String path = MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), bitmap, "", null);
+                Uri screenshotUri = Uri.parse(path);
+
+                intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                intent.setType("image/*");
+                startActivity(Intent.createChooser(intent, "Share Promotion..."));
                 return false;
             }
         });
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
         itemSearch.setVisible(true);
         itemHome.setVisible(false);
+    }
+
+
+    public void shareBitmapToApps(ImageView imageView) {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+
+        i.setType("image/*");
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        i.putExtra(Intent.EXTRA_STREAM, getImageUri(mActivity, getBitmapFromView(imageView)));
+        i.putExtra(android.content.Intent.EXTRA_TEXT, "If you would like to see more promotions like these. Click here.\n www.swopinfo.com\nor download the app\nhttp://play.google.com/store/apps/details?id=com.parasme.swopinfo");
+        try {
+            startActivity(Intent.createChooser(i, "Share Promotion"));
+        } catch (android.content.ActivityNotFoundException ex) {
+
+            ex.printStackTrace();
+        }
+    }
+
+    public static Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Promotion", null);
+        return Uri.parse(path);
     }
 }

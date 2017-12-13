@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.applozic.mobicomkit.api.account.register.RegisterUserClientService;
 import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
@@ -44,6 +45,7 @@ import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserClientService;
 import com.applozic.mobicomkit.api.account.user.UserDetail;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
+import com.applozic.mobicomkit.api.account.user.UserLogoutTask;
 import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
@@ -60,10 +62,12 @@ import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.fragment.FragmentGroupDetail;
 import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.fragment.FragmentProfile;
+import com.parasme.swopinfo.fragment.FragmentPromotionPager;
 import com.parasme.swopinfo.fragment.FragmentRadio;
 import com.parasme.swopinfo.fragment.FragmentRateUs;
 import com.parasme.swopinfo.fragment.FragmentSearch;
 import com.parasme.swopinfo.fragment.FragmentSettings;
+import com.parasme.swopinfo.fragment.FragmentSharedPromotion;
 import com.parasme.swopinfo.fragment.FragmentSubscription;
 import com.parasme.swopinfo.fragment.FragmentSubscriptionPayment;
 import com.parasme.swopinfo.fragment.FragmentUploads;
@@ -72,7 +76,6 @@ import com.parasme.swopinfo.fragment.FragmentUser;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
-import com.parasme.swopinfo.webservice.MyService;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
+        //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
         activityContext = MainActivity.this;
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -333,24 +336,45 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        // Clearing all sharedPreferences
-                        SharedPreferenceUtility.getInstance().clearSharedPreferences();
+                        logout();
 
-                        // Clearing Notifications and handlers
-                        OneSignal.clearOneSignalNotifications();
-                        OneSignal.removeNotificationOpenedHandler();
-                        OneSignal.removeNotificationReceivedHandler();
-
-                        SharedPreferenceUtility.getInstance().save(AppConstants.PREF_INTRO,true);
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
-                        finish();
 
                     }
                     //dialog.dismiss();
 
                 }).setNegativeButton("No", null).show();
+    }
 
+    private void logout() {
+        UserLogoutTask.TaskListener userLogoutTaskListener = new UserLogoutTask.TaskListener() {
+            @Override
+            public void onSuccess(Context context) {
+                //Logout success
+                Log.e("lOGOUT Success", "Ok");
+                // Clearing all sharedPreferences
+                SharedPreferenceUtility.getInstance().clearSharedPreferences();
+
+                // Clearing Notifications and handlers
+                OneSignal.clearOneSignalNotifications();
+                OneSignal.removeNotificationOpenedHandler();
+                OneSignal.removeNotificationReceivedHandler();
+
+                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_INTRO,true);
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                finish();
+
+            }
+            @Override
+            public void onFailure(Exception exception) {
+                //Logout failure
+                Log.e("lOGOUT Failed", exception.toString());
+                Toast.makeText(MainActivity.this, "Can not logout the user", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        UserLogoutTask userLogoutTask = new UserLogoutTask(userLogoutTaskListener, MainActivity.this);
+        userLogoutTask.execute((Void) null);
     }
 
     @Override
@@ -758,6 +782,15 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = new FragmentGroupDetail();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.KEY_GROUP_ID,groupId);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+
+            }
+            else if (action.contains("Prmotions")){
+                String url = action;
+                Fragment fragment = new FragmentSharedPromotion();
+                Bundle bundle = new Bundle();
+                bundle.putString("promotion",url);
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
 

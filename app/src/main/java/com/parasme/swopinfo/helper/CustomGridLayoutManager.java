@@ -9,16 +9,11 @@ import android.util.AttributeSet;
  */
 
 public class CustomGridLayoutManager extends StaggeredGridLayoutManager {
-    private boolean isScrollEnabled = true;
 
     public CustomGridLayoutManager(int spanCount, int orientation) {
         super(spanCount, orientation);
     }
 
-
-    public void setScrollEnabled(boolean flag) {
-        this.isScrollEnabled = flag;
-    }
 
     @Override
     public boolean canScrollVertically() {

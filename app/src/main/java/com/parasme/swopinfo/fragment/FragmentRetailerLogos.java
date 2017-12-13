@@ -22,7 +22,6 @@ import com.google.gson.reflect.TypeToken;
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.adapter.PromotionsAdapter;
 import com.parasme.swopinfo.adapter.RetailerLogoAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;

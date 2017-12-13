@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,8 +10,8 @@
 
         <LinearLayout
             android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_6sdp"
             android:layout_height="match_parent">
 
             <RelativeLayout
@@ -51,25 +51,36 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+
                 <LinearLayout
-                    android:id="@+id/layout_photo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
                     >
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/ic_pic"
-                        />
-                    <TextView
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/layout_photo"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Photo"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        />
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/ic_pic"
+                            />
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Select Photo"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -87,7 +98,28 @@
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Video"
+                        android:text="Select Video"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_camera"
+                        />
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Click Photo / Record Video "
                         android:textStyle="bold"
                         android:layout_marginLeft="@dimen/_8sdp"
                         />
@@ -109,6 +141,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Document"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_audio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_audio"
+                        />
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Audio"
                         android:textStyle="bold"
                         android:layout_marginLeft="@dimen/_8sdp"
                         />
@@ -137,6 +190,73 @@
 
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_20sdp"
+                >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circle"
+                    android:layout_width="@dimen/_82sdp"
+                    android:layout_height="@dimen/_82sdp"
+                    app:civ_border_color="@color/colorPrimary"
+                    android:src="@android:drawable/screen_background_light_transparent"
+                    app:civ_border_width="@dimen/_2sdp"
+                    />
+
+                <Chronometer
+                    android:id="@+id/chronometer"
+                    android:layout_width="@dimen/_80sdp"
+                    android:gravity="center"
+                    android:layout_height="@dimen/_80sdp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    app:civ_fill_color="@color/colorPrimary"
+                    android:src="@drawable/ic_arrow_left"
+                    app:civ_border_width="@dimen/_9sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    app:civ_border_color="@color/colorPrimary"
+                    android:layout_toRightOf="@id/circle"
+                    android:padding="0dp"
+                    />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_record"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    app:civ_fill_color="@color/colorPrimary"
+                    android:src="@drawable/ic_record"
+                    app:civ_border_width="@dimen/_8sdp"
+                    app:civ_border_color="@color/colorPrimary"
+                    android:padding="0dp"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_toRightOf="@id/circle"
+                    android:layout_below="@+id/img_back"
+                    />
+
+<!--
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@android:drawable/ic_media_rew"
+                    android:layout_toRightOf="@id/circle"
+                    android:layout_below="@+id/img_record"
+                    />
+-->
+
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:id="@+id/layout_selection"
@@ -173,7 +293,6 @@
                 android:text="Post"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:textColor="@color/colorEdit"
-                android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@drawable/btn_bg_active"
                 />
 

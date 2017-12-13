@@ -100,7 +100,7 @@ public class FragmentMap extends Fragment {
         String address = this.getArguments().getString("address");
         address = address.replaceAll(" ","%20");
         Log.e("Geocodeadd",address);
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyABGigUX5fvihfR8Bc8WnCScS3XXWK2B78";
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyAW50fc18EAuLVT_qpXNwdQe_h6EvcFwTc";
         WebServiceHandler webServiceHandler = new WebServiceHandler(appCompatActivity);
         webServiceHandler.serviceListener = new WebServiceListener() {
             @Override

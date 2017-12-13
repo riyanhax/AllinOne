@@ -250,7 +250,10 @@ public class WebServiceHandler {
             if(paramsValue[i].contains("/storage") || paramsValue[i].contains("data/")) {
                 String fileData[] = new Utils(((Activity)context)).getFileNameAndType(paramsValue[i]);
                 Log.e("type",""+fileData[1]);
-                builder.setType(MultipartBody.FORM).addFormDataPart(paramsName[i], fileData[0]+"", RequestBody.create(MediaType.parse(fileData[1]+""), new File(paramsValue[i])));
+                String mimeType = fileData[1];
+//                if (mimeType.equals("audio/mpeg"))
+//                    mimeType = "audio/mp3";
+                builder.setType(MultipartBody.FORM).addFormDataPart(paramsName[i], fileData[0]+"", RequestBody.create(MediaType.parse(mimeType), new File(paramsValue[i])));
             }
 
             else

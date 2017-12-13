@@ -21,13 +21,14 @@
         android:stepSize="1"
         />
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120sdp"
-        android:text="Your Feedback"
+        android:hint="Your Feedback"
         android:layout_marginLeft="@dimen/_30sdp"
         android:layout_marginRight="@dimen/_30sdp"
         android:padding="@dimen/_5sdp"
+        android:inputType="textCapSentences"
         android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/border_preview"
         />

@@ -156,10 +156,11 @@ public class AllFilesRecyclerViewAdapter extends RecyclerView.Adapter<AllFilesVi
 
     private void loadFileThumb(final int position, final AllFilesViewHolders holder) {
 
+        String url = itemList.get(position).getFileType().contains("image") ? itemList.get(position).getFileURL() : itemList.get(position).getThumbURL();
         Picasso.with(context)
-                .load(itemList.get(position).getFileType().contains("image") ? itemList.get(position).getFileURL() : itemList.get(position).getThumbURL())
+                .load(url)
                 .placeholder(R.drawable.app_logo)
-                .resize(holder.countryPhoto.getWidth(),300)
+//                .resize(holder.countryPhoto.getWidth(),300)
                 .error(android.R.drawable.stat_notify_error)
                 .into(holder.countryPhoto);
 

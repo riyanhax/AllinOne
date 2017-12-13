@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -60,6 +63,7 @@ import okhttp3.FormBody;
 import okio.BufferedSink;
 import okio.Okio;
 
+import static com.parasme.swopinfo.helper.Utils.createAudioFileURL;
 import static com.parasme.swopinfo.helper.Utils.createFileURL;
 import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 
@@ -81,19 +85,21 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     private String fileURLtoShare;
     private boolean isLiked = false;
 
-    private  ImageView imageFile;
     public static TextView textComments;
     private  TextView textViewCount,textDownloadCount,textDownload,textUserFullName,textViewScore;
     private  EditText editComment;
     private  Button btnAddComment;
     private  ListView listComments;
     private  ImageView imageLike;
-    private  ImageView imageDisLike;
+    private  ImageView imageDisLike, imageMediaPlayPause;
     private CustomWebView webView;
     private  ScrollView scrollView;
     private String finalWebViewURL ="",downloadURL;
     private AppCompatActivity mActivity;
     private FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
+    private RelativeLayout layoutMP3View;
+    MediaPlayer mediaplayer;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,7 +124,6 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     }
 
     private void findViews(View view) {
-        imageFile = (ImageView) view.findViewById(R.id.imageFile);
         textComments = (TextView) view.findViewById(R.id.textComments);
         textViewCount = (TextView) view.findViewById(R.id.textViewCount);
         textViewScore = (TextView) view.findViewById(R.id.textScore);
@@ -139,6 +144,8 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         btnGPlus = (FloatingActionButton) view.findViewById(R.id.btnGPlus);
         btnPinterest = (FloatingActionButton) view.findViewById(R.id.btnPinterest);
         btnWhatsapp = (FloatingActionButton) view.findViewById(R.id.btnWhatsapp);
+        layoutMP3View = (RelativeLayout) view.findViewById(R.id.mp3View);
+        imageMediaPlayPause = (ImageView) view.findViewById(R.id.img_media_play);
 
         btnGPlus.setOnClickListener(this);
         btnLinkedIn.setOnClickListener(this);
@@ -154,12 +161,15 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     }
 
     private void loadWebView() {
+        webView.setVisibility(View.VISIBLE);
+        layoutMP3View.setVisibility(View.GONE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.setInitialScale(1);
         webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
+
         webView.loadUrl(finalWebViewURL);
         textDownloadCount.setText(downloadCount);
         textViewCount.setText(viewCount);
@@ -233,7 +243,11 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         else
             uploadData.setThumbURL(createThumbURL(jsonObject.optInt("userid")+"",folderName, thumbName, jsonObject.optString("filetype"), jsonObject.optInt("companyid")));
 
-        uploadData.setFileURL(createFileURL(jsonObject));
+        // Extra check for audio
+        if (jsonObject.optString("filetype").contains("audio"))
+            uploadData.setFileURL(createAudioFileURL(jsonObject));
+        else
+            uploadData.setFileURL(createFileURL(jsonObject));
 
         setFileData();
     }
@@ -274,7 +288,66 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         Log.e("FINAL WURL", finalWebViewURL);
 
         // Method call for load file in a  webview
-        loadWebView();
+        if (fileType.contains("audio"))
+            loadMediaPlayer();
+        else
+            loadWebView();
+
+    }
+
+    private void loadMediaPlayer() {
+        textDownloadCount.setText(downloadCount);
+        textViewCount.setText(viewCount);
+
+        webView.setVisibility(View.GONE);
+        layoutMP3View.setVisibility(View.VISIBLE);
+        mediaplayer = new MediaPlayer();
+        mediaplayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                imageMediaPlayPause.setImageResource(android.R.drawable.ic_media_play);
+
+                try {
+                    mp.reset();
+                    mp.setDataSource(finalWebViewURL);
+                    mp.prepare();
+                }catch (Exception e){e.printStackTrace();}
+                }
+        });
+
+        try{
+            mediaplayer.setDataSource(finalWebViewURL);
+            mediaplayer.prepare();
+        }
+        catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        imageMediaPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mediaplayer.isPlaying()) {
+                    imageMediaPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                    mediaplayer.start();
+                }
+                else {
+                    imageMediaPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                    mediaplayer.pause();
+                }
+            }
+        });
     }
 
     public void validateAndAddComment(EditText editComment, String fileId, String userId, boolean isOnFileScreen){
@@ -441,29 +514,29 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
                             if(jsonObject.optString("Code").equals("200")) {
                                 editComment.setText("");
 
-                                    String userFullName = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME) + " " + SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
-                                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd MMM yyyy");
-                                    Date date = new Date();
-                                    String strDate = formatter1.format(date);
+                                String userFullName = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME) + " " + SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
+                                SimpleDateFormat formatter1 = new SimpleDateFormat("dd MMM yyyy");
+                                Date date = new Date();
+                                String strDate = formatter1.format(date);
 
-                                    Comment comment = new Comment();
-                                    comment.setUserId(Integer.parseInt(AppConstants.USER_ID));
-                                    comment.setUserImageURL(AppConstants.USER_IMAGE_URL);
-                                    comment.setUserFullName(userFullName);
-                                    comment.setDate(strDate);
-                                    comment.setCommentText(commentText);
+                                Comment comment = new Comment();
+                                comment.setUserId(Integer.parseInt(AppConstants.USER_ID));
+                                comment.setUserImageURL(AppConstants.USER_IMAGE_URL);
+                                comment.setUserFullName(userFullName);
+                                comment.setDate(strDate);
+                                comment.setCommentText(commentText);
 
-                                    commentArrayList.add(comment);
-                                    adapter.notifyDataSetChanged();
-                                    scrollView.postDelayed(new Runnable() {
+                                commentArrayList.add(comment);
+                                adapter.notifyDataSetChanged();
+                                scrollView.postDelayed(new Runnable() {
 
-                                        @Override
-                                        public void run() {
-                                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                                        }
-                                    }, 100);
+                                    @Override
+                                    public void run() {
+                                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                    }
+                                }, 100);
 
-                                    textComments.setText("Comments (" + commentArrayList.size() + ")");
+                                textComments.setText("Comments (" + commentArrayList.size() + ")");
                             }
                         }catch (JSONException e){e.printStackTrace();}
                     }
@@ -529,7 +602,17 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         super.onPause();
         Log.e("abcd", "onPause: " );
         webView.onPause();
+        if (mediaplayer!=null) {
+            imageMediaPlayPause.setImageResource(android.R.drawable.ic_media_play);
+            try {
+                mediaplayer.reset();
+                mediaplayer.setDataSource(finalWebViewURL);
+                mediaplayer.prepare();
+            }catch (Exception e){e.printStackTrace();}
+        }
+
     }
+
 
     @Override
     public void onAttach(Context context) {

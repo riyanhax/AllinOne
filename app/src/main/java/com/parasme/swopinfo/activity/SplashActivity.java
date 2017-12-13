@@ -153,10 +153,17 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         else if(getIntent().getAction().equals(Intent.ACTION_VIEW)){
-            Intent intent = new Intent(SplashActivity.this,MainActivity.class);
-            intent.putExtra("actionView",getIntent().getData().toString());
-            startActivity(intent);
-            finish();
+            if (SharedPreferenceUtility.getInstance().get(AppConstants.PREF_LOGIN, false)) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.putExtra("actionView", getIntent().getData().toString());
+                startActivity(intent);
+                finish();
+            }
+            else{
+                Toast.makeText(SplashActivity.this, "Please Login First",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
         }
         else{
             if (!((LocationManager) getSystemService(Context.LOCATION_SERVICE))
@@ -187,7 +194,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("ok","ok");
+        Log.e("ok",requestCode+"");
         if (requestCode == 1001) {
             Log.e("ok","ok11");
             if (((LocationManager) getSystemService(Context.LOCATION_SERVICE))
@@ -232,6 +239,7 @@ public class SplashActivity extends AppCompatActivity {
                 conversationIntent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
                 conversationIntent.putExtra(ConversationUIService.TAKE_ORDER, true);
                 startActivity(conversationIntent);
+                finish();
             }
 
         }
@@ -367,14 +375,13 @@ public class SplashActivity extends AppCompatActivity {
                             else {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                                 path = Utils.saveFileFromBitmap(bitmap, filef, false);
-
                             }
 
                         } else {
                             String uri = arr[i];
                             String extension = uri.substring(uri.lastIndexOf(".") + 1, uri.length());
                             Log.e("EXTENSION", extension+"__"+fileMimeType.split("/")[1]);
-                            if (extension.equals(fileMimeType.split("/")[1]) || extension.equals("mp3")) {
+                            if (extension.equals(fileMimeType.split("/")[1]) || extension.contains("mp3") || extension.contains("audio")) {
                                 Log.e("CHECK", "Ending with extension");
                                 path = Utils.getRealPathFromURI(SplashActivity.this, Uri.parse(arr[i]));
                             } else {
@@ -690,7 +697,7 @@ public class SplashActivity extends AppCompatActivity {
         if (message != null) {
             intent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
         }
-        startActivity(intent);
+        startActivityForResult(intent,ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION);
 
     }
 }

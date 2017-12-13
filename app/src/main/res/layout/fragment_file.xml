@@ -31,15 +31,40 @@
                     />
 
                 <!--<android.support.v4.view.ViewPager-->
-                    <!--android:id="@+id/pager"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_215sdp"-->
-                    <!--/>-->
+                <!--android:id="@+id/pager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/_215sdp"-->
+                <!--/>-->
 
                 <com.parasme.swopinfo.helper.CustomWebView
                     android:id="@+id/webView"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_300sdp"></com.parasme.swopinfo.helper.CustomWebView>
+
+                <!--For Mp3 Play-->
+                <RelativeLayout
+                    android:id="@+id/mp3View"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_300sdp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:background="@drawable/app_icon"
+                    >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_300sdp"
+                        android:gravity="center"
+                        android:background="#ae000000"
+                        >
+                        <ImageView
+                            android:id="@+id/img_media_play"
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@android:drawable/ic_media_play"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -242,6 +267,18 @@
             fab:fab_colorPressed="#537cbe"
             fab:fab_size="mini"/>
         />
+
+<!--
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnInstagram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/instagram"
+            fab:fab_colorNormal="#ce3753"
+            fab:fab_colorPressed="#ce3753"
+            fab:fab_size="mini"/>
+        />
+-->
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnTwitter"

@@ -91,6 +91,7 @@
 
         <activity android:name=".activity.MainActivity"
             android:theme="@style/MyMaterialTheme"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
@@ -117,8 +118,6 @@
         <activity android:name=".activity.FlowActivity"
             android:theme="@style/AppTheme.FullScreen"
             />
-
-        <service android:name=".webservice.MyService" />
 
         <activity android:name=".activity.SubscriptionPaymentActivity"
             android:theme="@style/AppTheme"
