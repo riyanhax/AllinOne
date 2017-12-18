@@ -18,8 +18,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 
 import com.parasme.swopinfo.R;
-import com.parasme.swopinfo.activity.SignUpActivity;
-import com.parasme.swopinfo.activity.SubscriptionPaymentActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.helper.Utils;

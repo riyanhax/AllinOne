@@ -47,7 +47,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
@@ -101,15 +100,9 @@ public class Utils {
 
     private String TAG = getClass().getName();
     private Activity activity;
-    private String date;
     public static MoveFileHelper moveFileHelper;
     public static FolderCreateHelper folderCreateHelper;
-    public static URLPreview urlPreview;
-    private String title, description, pageurl, thumburl;
-    public static boolean isPreviewLoading = false;
     private static final String URL_REGEX = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-    private static final Pattern PATTERN_URL = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
-    private static final int DETAILS_MAX_LENGTH = 100;
 
     public Utils(Activity activity){
         this.activity=activity;
@@ -183,21 +176,6 @@ public class Utils {
     }
 
 
-    public void sharePostWithImage(String packageName, String name, Bitmap bitmap){
-        try{
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setPackage(packageName);
-            intent.putExtra(Intent.EXTRA_TEXT, "Hey, View/Download This");
-            String path = MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap, "", null);
-            Uri screenshotUri = Uri.parse(path);
-            intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-            intent.setType("image/*");
-            activity.startActivity(intent);
-        }
-        catch (ActivityNotFoundException e){
-            MyApplication.alertDialog(activity,"No compatible Application found for "+name,"App Not Found");
-        }
-    }
 
     public void sharePost(String packageName, String name, String url){
         try{
@@ -341,13 +319,6 @@ public class Utils {
         return dialog;
     }
 
-    public static Dialog loadFolderDialog(Activity activity){
-        Dialog dialog= new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_folder);
-        dialog.setCancelable(false);
-        return dialog;
-    }
 
     public static Object[] loadMoveDialog(Activity activity, ArrayList<String> fileIds){
         Dialog dialog= new Dialog(activity);
@@ -902,30 +873,6 @@ public class Utils {
         return file.getPath();
     }
 
-    public static Bitmap fixExifRotationFlip(Bitmap bitmap, String path) throws IOException {
-        ExifInterface ei = new ExifInterface(path);
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotate(bitmap, 90);
-
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotate(bitmap, 180);
-
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotate(bitmap, 270);
-
-            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                return flip(bitmap, true, false);
-
-            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                return flip(bitmap, false, true);
-
-            default:
-                return bitmap;
-        }
-    }
 
     public static Bitmap rotate(Bitmap bitmap, float degrees) {
         Matrix matrix = new Matrix();
@@ -937,13 +884,5 @@ public class Utils {
         Matrix matrix = new Matrix();
         matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
-
-    public static int generateRandomNumber(){
-        Random r = new Random();
-        int Low = 10;
-        int High = 10000;
-        int Result = r.nextInt(High-Low) + Low;
-        return Result;
     }
 }

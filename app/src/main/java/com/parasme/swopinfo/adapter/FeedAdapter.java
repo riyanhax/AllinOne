@@ -614,7 +614,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
             else{
                 // When shared text is not url only without any upload file
-                if(!feedArrayList.get(position).getComment().contains("http") && !feedArrayList.get(position).getComment().contains("www."))
+                if(!feedArrayList.get(position).getComment().startsWith("http") && !feedArrayList.get(position).getComment().startsWith("www."))
                     viewHolder.imageShareThumb.setVisibility(View.GONE);
                 else{
                     Log.e("check",feedArrayList.get(position).getComment());

@@ -511,11 +511,4 @@ public class FragmentProfile extends Fragment implements ImagePicker.Picker, Vie
         }
     }
 
-/*
-    // This method will be called when a HelloWorldEvent is posted
-    @Subscribe(sticky = true)
-    public void onEvent(String string){
-        Log.e(TAG, "onEvent: "+string);
-    }
-*/
 }

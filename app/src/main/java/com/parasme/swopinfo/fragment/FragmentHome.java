@@ -456,7 +456,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                 upload.setVideoURL(jsonObject.optString("videourl"));
                                 if(j==0) {
                                     upload.setFileId(jsonObject.getInt("fileid"));
-//                                    feed.setFileId(jsonObject.getInt("fileid"));
+                                    //feed.setCompanyId(jsonObject.getInt("companyid")); // When multiple image shared from company then main array returns company id zero so replace it here
                                     upload.setCommentText(feedJsonObject.optString("Comment"));
                                     upload.setDescription(jsonObject.getString("description"));
                                     upload.setUserFullName(feedJsonObject.optString("UserFullName"));

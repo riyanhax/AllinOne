@@ -19,7 +19,7 @@
         android:textColor="@color/colorPrimary"
         android:layout_height="wrap_content" />
 
-    <com.daimajia.numberprogressbar.NumberProgressBar
+    <com.parasme.swopinfo.helper.NumberProgressBar
         android:id="@+id/numberProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

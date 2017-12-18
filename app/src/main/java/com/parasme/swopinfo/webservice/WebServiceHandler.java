@@ -6,9 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.NumberProgressBar;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 

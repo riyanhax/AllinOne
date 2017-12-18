@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -293,5 +292,4 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
         super.onDetach();
         layoutUploadWrapper.removeAllViews();
     }
-
 }

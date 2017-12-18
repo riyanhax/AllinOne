@@ -5,10 +5,14 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +36,6 @@ import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
-import com.vistrav.ask.Ask;
-import com.vistrav.ask.annotations.AskDenied;
-import com.vistrav.ask.annotations.AskGranted;
 
 import net.alhazmy13.catcho.library.Catcho;
 
@@ -74,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editUserName, editPassword;
     TextView textForgot, textCreateAccount;
     Button btnLogin;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA_WRITE_LOCATION=111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,14 +130,37 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isWriteAllowed && isCameraAllowed && isLocationAllowed)
-                    validateAndLogin();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if ((ActivityCompat.checkSelfPermission(LoginActivity.this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED)
+
+                            || (ActivityCompat.checkSelfPermission(LoginActivity.this,
+                            Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED)
+
+                            || (ActivityCompat.checkSelfPermission(LoginActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED)) {
+
+                        // No explanation needed, we can request the permission.
+                        ActivityCompat.requestPermissions(LoginActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_CAMERA_WRITE_LOCATION);
+
+                        // MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    } else {
+                        validateAndLogin();
+                    }
+                }
                 else
-                    askPermissions();
+                    validateAndLogin();
+
             }
         });
 
-        askPermissions();
         //new VersionChecker().execute();
     }
 
@@ -245,48 +270,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void askPermissions() {
-        Ask.on(this)
-                .forPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
-                .withRationales("Write Permission is need to be allowed", "Camera Permission is need to be allowed", "Location permission is needed") //optional
-                .go();
-    }
-
-    //optional
-    @AskGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void accessFineLocationGranted() {
-        isWriteAllowed = true;
-    }
-
-    //optional
-    @AskDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void accessFineLocationDenied() {
-        Log.e("Login", "Write  DENiED");
-    }
-
-    //optional
-    @AskGranted(Manifest.permission.CAMERA)
-    public void accessCameraGranted() {
-        isCameraAllowed = true;
-    }
-
-    //optional
-    @AskDenied(Manifest.permission.CAMERA)
-    public void accessCameraDenied() {
-        Log.e("Login", "Camera  DENiED");
-    }
-
-    //optional
-    @AskGranted(Manifest.permission.ACCESS_FINE_LOCATION)
-    public void accessLocationGranted() {
-        isLocationAllowed = true;
-    }
-
-    //optional
-    @AskDenied(Manifest.permission.ACCESS_FINE_LOCATION)
-    public void accessLocationDenied() {
-        Log.e("Login", "Location  DENiED");
-    }
 
     private void copyAssets() {
         String folderName = "avatars";
@@ -365,7 +348,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogPayment.dismiss();
-                Intent i = new Intent(LoginActivity.this, SubscriptionPaymentActivity.class);
+                Intent i = new Intent(LoginActivity.this, SubscriptionPayPalActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
@@ -403,4 +386,21 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("CCCCCVER",s);
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean isAnyPermissionDenied = false;
+        if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA_WRITE_LOCATION) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                    isAnyPermissionDenied = true;
+                    break;
+                }
+            }
+            if (!isAnyPermissionDenied) {
+                validateAndLogin();
+            }
+        }
+    }
+
 }

@@ -24,9 +24,6 @@ import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
-import com.vistrav.ask.Ask;
-import com.vistrav.ask.annotations.AskDenied;
-import com.vistrav.ask.annotations.AskGranted;
 
 import net.alhazmy13.catcho.library.Catcho;
 
