@@ -27,6 +27,7 @@ import com.parasme.swopinfo.activity.LoginActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -195,16 +196,8 @@ public class FragmentProfile extends Fragment implements ImagePicker.Picker, Vie
         String userId=AppConstants.USER_ID;
 
         String stringProfileEmail = editProfileEmail.getText().toString();
-        String stringProfileFName = editProfileFName.getText().toString();
-        String stringProfileLName = editProfileLName.getText().toString();
-        try {
-            stringProfileLName = URLEncoder.encode(stringProfileLName, "UTF-8");
-            stringProfileLName = new String(stringProfileLName.getBytes(), "UTF-8");
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
+        String stringProfileFName = EmojiHandler.encodeJava(editProfileFName.getText().toString());
+        String stringProfileLName = EmojiHandler.encodeJava(editProfileLName.getText().toString());
 
         String stringCheckNotification = checkNotification.isChecked() ? "true" : "false";
         String stringProfileDOB = editProfileDOB.getText().toString();
@@ -242,8 +235,8 @@ public class FragmentProfile extends Fragment implements ImagePicker.Picker, Vie
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID,returnObject.optInt("userid"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_NAME,returnObject.optString("username"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_EMAIL,returnObject.optString("userEmail"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME,returnObject.optString("userFirstname"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME,returnObject.optString("userLastname"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME,EmojiHandler.decodeJava(returnObject.optString("userFirstname")));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME,EmojiHandler.decodeJava(returnObject.optString("userLastname")));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COMPANY_ID,returnObject.optInt("companyid"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_NOTIFICATION,returnObject.optBoolean("ReceiveEmailNotifications"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COUNTRY,returnObject.optString("country"));
@@ -282,13 +275,8 @@ public class FragmentProfile extends Fragment implements ImagePicker.Picker, Vie
 
     private void setFields() {
         textProfileViews.setText("Profile Views: "+AppConstants.PROFILE_VIEWS);
-        String loda = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
-        try {
-            loda = URLDecoder.decode(loda, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        textUserFullName.setText(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME) +" " + loda);
+        String lastName = SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME);
+        textUserFullName.setText(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME) +" " + lastName);
         setEditField((String) SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_EMAIL),editProfileEmail);
         setEditField((String) SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME),editProfileFName);
         setEditField((String) SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME),editProfileLName);

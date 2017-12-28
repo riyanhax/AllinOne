@@ -6,15 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.notification.MyNotificationOpenedHandler;
@@ -33,6 +32,7 @@ public class MyApplication extends Application {
 		instance = this;
 		appContext = this;
 		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 
 	@Override
@@ -42,26 +42,9 @@ public class MyApplication extends Application {
 //		if(getSharedPreferences("swopinfo", Context.MODE_PRIVATE).getString(AppConstants.PREF_PLAYER_ID, "").equals("")){
 			initOneSignal(this);
 //		}
-		initImageLoader(getApplicationContext());
 
 	}
 
-	public static void initImageLoader(Context context) {
-		// This configuration tuning is custom. You can tune every option, you may tune some of them,
-		// or you can create default configuration by
-		//  ImageLoaderConfiguration.createDefault(this);
-		// method.
-		ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
-		config.threadPriority(Thread.NORM_PRIORITY - 2);
-		config.denyCacheImageMultipleSizesInMemory();
-		config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-		config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
-		config.tasksProcessingOrder(QueueProcessingType.LIFO);
-		config.writeDebugLogs(); // Remove for release app
-
-		// Initialize ImageLoader with configuration.
-		ImageLoader.getInstance().init(config.build());
-	}
 
 	public static void initOneSignal(Context context) {
 		Log.e("One Signal", "initOneSignal: " );
@@ -132,4 +115,20 @@ public class MyApplication extends Application {
 		}
 	}
 
+
+	public static InputFilter EMOJI_FILTER = new InputFilter() {
+
+		@Override
+		public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+			for (int index = start; index < end; index++) {
+
+				int type = Character.getType(source.charAt(index));
+
+				if (type == Character.SURROGATE) {
+					return "";
+				}
+			}
+			return null;
+		}
+	};
 }

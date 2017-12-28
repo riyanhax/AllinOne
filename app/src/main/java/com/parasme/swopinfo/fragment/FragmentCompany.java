@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.MainActivity;
@@ -542,6 +544,13 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                 if(companyId == SharedPreferenceUtility.getInstance().get(AppConstants.PREF_OWN_COMPANY_ID,0))
                     MainActivity.replaceFragment(new FragmentCompanyEdit(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                 break;
+            case R.id.btnChat:
+                Intent intent = new Intent(getActivity(), ConversationActivity.class);
+                intent.putExtra(ConversationUIService.USER_ID, jsonObject.optInt("ownerid")+"");
+                intent.putExtra(ConversationUIService.DISPLAY_NAME, textCompanyName.getText().toString()); //put it for displaying the title.
+                intent.putExtra(ConversationUIService.TAKE_ORDER,true); //Skip chat list for showing on back press
+                startActivity(intent);
+                break;
         }
     }
 
@@ -559,6 +568,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                                 btnFollow.setText("Follow");
                             else {
                                 btnFollow.setText("Unfollow");
+                                btnChat.setVisibility(View.VISIBLE);
                                 JSONObject jsonObject = new JSONObject(response);
                                 followLinkId = jsonObject.optInt("FollowLinkID") + "";
                             }
@@ -606,7 +616,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                     public void run() {
                         if(response.contains("{")){
                             btnFollow.setText("Unfollow");
-
+                            btnChat.setVisibility(View.VISIBLE);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 followLinkId = jsonObject.optInt("FollowLinkID") + "";
@@ -640,6 +650,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                     public void run() {
                         if(response.contains("SUCCESS")){
                             btnFollow.setText("Follow");
+                            btnChat.setVisibility(View.GONE);
                             MyApplication.alertDialog(mActivity,"You have successfully unfollowed this company","Unfollow Success");
                         }
                         else

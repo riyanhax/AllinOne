@@ -38,14 +38,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
 import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
@@ -373,13 +372,17 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                         feed.setFileId(feedJsonObject.optInt("FileID"));
                         Log.e("FILEID",""+feedJsonObject.optInt("FileID"));
                         feed.setFileUserId(feedJsonObject.optInt("FileUserID"));
-                        feed.setComment(feedJsonObject.optString("Comment"));
-                        feed.setUserFullName(feedJsonObject.optString("UserFullName"));
+
+                        // Decoding emojis
+                        feed.setComment(EmojiHandler.decodeJava(feedJsonObject.optString("Comment")));
+                        feed.setUserFullName(EmojiHandler.decodeJava(feedJsonObject.optString("UserFullName")));
+                        feed.setCompanyName(EmojiHandler.decodeJava(feedJsonObject.optString("CompanyName")));
+
                         feed.setFileName(feedJsonObject.optString("Filename"));
                         feed.setThumbFileName(feedJsonObject.optString("Thumbnailfilename"));
                         feed.setThumbURL(createThumbURL(feedJsonObject.optInt("FileUserID") + "", feedJsonObject.optString("FolderName"), feedJsonObject.optString("Thumbnailfilename"), feedJsonObject.optString("FileType"), feedJsonObject.optInt("companyid")));
                         feed.setMenuExpanded(false);
-                        feed.setFileTitle(feedJsonObject.optString("FileTitle"));
+                        feed.setFileTitle(EmojiHandler.decodeJava(feedJsonObject.optString("FileTitle")));
                         feed.setFolderName(feedJsonObject.optString("FolderName"));
                         feed.setFileType(feedJsonObject.optString("FileType"));
                         feed.setVideoUrl(feedJsonObject.optString("videourl"));
@@ -392,7 +395,6 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                         feed.setVoteStatus(feedJsonObject.optInt("CurrentUserVote"));
                         feed.setErrorSet(false);
                         feed.setCommentEditText(null);
-                        feed.setCompanyName(feedJsonObject.optString("CompanyName"));
                         feed.setPreviewLoaded(false);
                         feed.setUserPicLoaded(false);
 
@@ -409,17 +411,18 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                             comment.setCommentId(commentObject.optInt("commentid"));
                             comment.setFileId(commentObject.optInt("fileid"));
                             comment.setUserId(commentObject.optInt("userid"));
-                            comment.setCommentText(commentObject.optString("commenttext"));
+
+                            // Decoding EMojis
+                            comment.setCommentText(EmojiHandler.decodeJava(commentObject.optString("commenttext")));
                             comment.setTimeDate(commentObject.optString("timedate"));
                             comment.setDate(commentObject.optString("DisplayDate"));
 
                             JSONObject userObject = commentObject.optJSONObject("User");
                             comment.setUserId(userObject.optInt("userid"));
                             comment.setUserName(userObject.optString("username"));
-                            comment.setUserFullName(userObject.optString("UserFullName"));
+                            comment.setUserFullName(EmojiHandler.decodeJava(userObject.optString("UserFullName")));
                             comment.setCompanyId(userObject.optInt("companyid"));
                             String imageURL=AppConstants.URL_DOMAIN+"upload/user"+ userObject.optInt("userid")+"/profilepic.jpg";
-                            comment.setUserImageURL(imageURL);
                             comment.setUserImageURL(imageURL);
                             commentArrayList.add(comment);
 
@@ -456,10 +459,13 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
                                 upload.setVideoURL(jsonObject.optString("videourl"));
                                 if(j==0) {
                                     upload.setFileId(jsonObject.getInt("fileid"));
+
                                     //feed.setCompanyId(jsonObject.getInt("companyid")); // When multiple image shared from company then main array returns company id zero so replace it here
-                                    upload.setCommentText(feedJsonObject.optString("Comment"));
-                                    upload.setDescription(jsonObject.getString("description"));
-                                    upload.setUserFullName(feedJsonObject.optString("UserFullName"));
+
+                                    // Decoding eMojis
+                                    upload.setCommentText(EmojiHandler.decodeJava(feedJsonObject.optString("Comment")));
+                                    upload.setDescription(EmojiHandler.decodeJava(jsonObject.getString("description")));
+                                    upload.setUserFullName(EmojiHandler.decodeJava(feedJsonObject.optString("UserFullName")));
                                     upload.setUserThumbURL(feedJsonObject.optString("UserThumbnail"));
                                 }
                                 uploadArrayList.add(upload);

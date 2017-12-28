@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SwopInfo</string>
+    <string name="fb_id">558408897832159</string>
+
 
     <string name="action_settings">Settings</string>
 

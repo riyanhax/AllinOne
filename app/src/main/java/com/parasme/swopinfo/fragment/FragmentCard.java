@@ -23,6 +23,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.Shimmer;
 import com.parasme.swopinfo.helper.ShimmerTextView;
@@ -209,7 +210,8 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
         String fax = jsonObject.optString("businesscustomfax");
         String companyName = jsonObject.optString("businessCompanyName");
 
-        textUserName.setText(jsonObject.optString("userFirstname") + " " + jsonObject.optString("userLastname"));
+        textUserName.setText(EmojiHandler.decodeJava(jsonObject.optString("userFirstname")) + " " +
+                EmojiHandler.decodeJava(jsonObject.optString("userLastname")));
         textEmail.setText((!email.equals("null") && !email.equals("")) ? email : "Not Available");
         textCell.setText((!cell.equals("null") && !cell.equals("")) ? cell : "Not Available");
         textTel1.setText((!tel.equals("null") && !tel.equals("")) ? tel : "Not Available");

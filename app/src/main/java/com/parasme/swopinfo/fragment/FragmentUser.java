@@ -37,6 +37,7 @@ import com.parasme.swopinfo.adapter.GroupAdapter;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Follow;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
@@ -90,6 +91,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
 
         userId = this.getArguments().getString(AppConstants.KEY_USER_ID);
         followUserName = this.getArguments().getString(AppConstants.KEY_USER_NAME);
+        followUserName = EmojiHandler.decodeJava(followUserName);
         Log.e("USERNAME",followUserName);
 
         setUserData();

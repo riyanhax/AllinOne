@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.adapter.FollowingAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.model.Follow;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
@@ -61,7 +62,7 @@ public class FragmentFollowing extends BaseFragment {
                         follow.setTimeDate(jsonObject.optString("TimeDate"));
                         follow.setUserName(jsonObject.optString("username"));
                         follow.setUserEmail(jsonObject.optString("userEmail"));
-                        follow.setFullName(jsonObject.optString("Name"));
+                        follow.setFullName(EmojiHandler.decodeJava(jsonObject.optString("Name")));
                         follow.setReceiveNotification(jsonObject.optBoolean("ReceiveEmailNotifications"));
                         follow.setReceiveNotificationUser(jsonObject.optBoolean("ReceiveEmailNotificationsUser"));
 

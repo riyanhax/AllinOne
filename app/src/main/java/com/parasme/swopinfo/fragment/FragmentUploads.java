@@ -20,6 +20,7 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.model.Upload;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
@@ -83,7 +84,7 @@ public class FragmentUploads extends FragmentUploadsWrapper {
                                 }
 
                                 upload.setUploadType(uploadType);
-                                upload.setUserFullName(fileObject.optString("userfullname"));
+                                upload.setUserFullName(EmojiHandler.decodeJava(fileObject.optString("userfullname")));
                                 upload.setUserId(fileObject.optInt("userid"));
                                 upload.setFileId(fileObject.optInt("fileid"));
                                 upload.setViewsCount(fileObject.optInt("viewscount"));
@@ -97,9 +98,9 @@ public class FragmentUploads extends FragmentUploadsWrapper {
                                 upload.setFileSize(fileObject.optString("filesize"));
                                 upload.setTimeDate(fileObject.optString("timedate"));
                                 upload.setCategory(fileObject.optString("category"));
-                                upload.setTitle(fileObject.optString("title"));
+                                upload.setTitle(EmojiHandler.decodeJava(fileObject.optString("title")));
                                 upload.setTags(fileObject.optString("tags"));
-                                upload.setDescription(fileObject.optString("description"));
+                                upload.setDescription(EmojiHandler.decodeJava(fileObject.optString("description")));
                                 upload.setVeryPdf(fileObject.optString("verypdf"));
 
                                 String folderName = fileObject.optString("foldername");

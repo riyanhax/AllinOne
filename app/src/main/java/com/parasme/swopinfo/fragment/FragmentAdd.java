@@ -3,7 +3,6 @@ package com.parasme.swopinfo.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -26,6 +25,7 @@ import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.webservice.Progress;
@@ -161,8 +161,8 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
 
         String swopText=editSwopText.getText().toString();
         String folderName=editFolderName.getText().toString();
-        String title=editTitle.getText().toString();
-        String description=editDescription.getText().toString();
+        String title= EmojiHandler.encodeJava(editTitle.getText().toString());
+        String description=EmojiHandler.encodeJava(editDescription.getText().toString());
         String videoURL=editYoutubeLink.getText().toString();
         String tags=editTag.getText().toString();
         String broadcastType=spinnerBroadcast.getSelectedItem().toString();

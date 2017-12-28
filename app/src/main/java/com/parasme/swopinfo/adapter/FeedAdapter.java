@@ -4,11 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,19 +34,16 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
+import com.parasme.swopinfo.activity.SplashActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentCompany;
 import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.NonScrollRecyclerView;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -51,6 +55,8 @@ import com.parasme.swopinfo.urlpreview.SourceContent;
 import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +66,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -78,25 +85,6 @@ import static com.parasme.swopinfo.activity.MainActivity.replaceFragment;
 
 public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListener {
 
-    DisplayImageOptions optionsUserImage = new DisplayImageOptions.Builder()
-//            .showImageOnLoading(R.drawable.avtar)
-            .showImageForEmptyUri(R.drawable.avtar)
-            .showImageOnFail(R.drawable.avtar)
-            .cacheInMemory(false)
-            .cacheOnDisk(false)
-            .considerExifParams(true)
-            .bitmapConfig(Bitmap.Config.RGB_565)
-            .build();
-
-    DisplayImageOptions optionsFile = new DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.drawable.document_gray)
-            .showImageOnFail(R.drawable.document_gray)
-            .cacheInMemory(false)
-            .cacheOnDisk(false)
-            .considerExifParams(true)
-            .bitmapConfig(Bitmap.Config.RGB_565)
-            .imageScaleType(ImageScaleType.EXACTLY)
-            .build();
 
 //    private String randomNumber = randomNumber();
     private Map<String, Bitmap> mBitmapCache = new HashMap<String, Bitmap>();
@@ -291,6 +279,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     private synchronized void loadUserOrCompanyThumb(String userThumbUrl, final ImageView imageView, final int position) {
         userThumbUrl=userThumbUrl.substring(1);
         userThumbUrl=AppConstants.URL_DOMAIN+userThumbUrl;
+        final String url = userThumbUrl;
         Bitmap imageBitmap = mBitmapCache.get(userThumbUrl);
 
         if(imageBitmap!=null) {
@@ -304,30 +293,26 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         else {
             imageView.setImageBitmap(null);
 
-            ImageLoader.getInstance()
-                    .displayImage(userThumbUrl, imageView, optionsUserImage, new ImageLoadingListener() {
+            Picasso.with(context)
+                    .load(userThumbUrl)
+                    .into(new Target() {
                         @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-
-                        }
-
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                        }
-
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            // TO escape long horizontal stretch image issue of company logo
-                            if (loadedImage.getWidth()>loadedImage.getHeight()*2)
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            if (bitmap.getWidth()>bitmap.getHeight()*2)
                                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-                            mBitmapCache.put(imageUri, loadedImage);
+                            mBitmapCache.put(url, bitmap);
+                            imageView.setImageBitmap(bitmap);
                             //notifyDataSetChanged();
                         }
 
                         @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
+                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
 
                         }
                     });
@@ -519,7 +504,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         bundle.putInt(AppConstants.KEY_COMPANY_ID,feedArrayList.get(position).getCompanyId());
         fragment.setArguments(bundle);
         replaceFragment(fragment,((Activity) context).getFragmentManager(),(Activity) context,R.id.content_frame);
-
     }
 
     private void setAddCommentListener(final int position) {
@@ -527,7 +511,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         btnAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String comment= editComment.getText().toString();
+                String comment= EmojiHandler.encodeJava(editComment.getText().toString());
                 Log.e("CCheck", "onClick: "+comment );
                 if(comment.equals("")){
                     editComment.setError("Please write a comment first");
@@ -590,7 +574,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     if(imageBitmap!=null)
                         viewHolder.imageShareThumb.setImageBitmap(imageBitmap);
                     else
-                        ImageLoader.getInstance().displayImage(url, viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
+                        Picasso.with(context).load(url).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageShareThumb, url));
 
                 } else {
                     String fileType = feedArrayList.get(position).getFileType();
@@ -604,8 +588,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                         if (imageBitmap != null)
                             viewHolder.imageShareThumb.setImageBitmap(imageBitmap);
                         else
-                            ImageLoader.getInstance()
-                                    .displayImage(uploadArrayList.get(0).getThumbURL(), viewHolder.imageShareThumb, optionsFile, imageFileLoadingListener);
+                            Picasso.with(context).load(uploadArrayList.get(0).getThumbURL()).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageShareThumb, uploadArrayList.get(0).getThumbURL()));
                     }
                     else
                         viewHolder.imageShareThumb.setImageResource(R.drawable.audio_thumb);
@@ -665,7 +648,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         if (url.contains("youtu.be"))
             url = url.replace("http:","https:");
 
-        if(!url.contains("24.com") && !url.contains("24.co")){
+        if(!url.contains("24.com") && !url.contains("24.co") && !url.contains("swopinfo.com")){
             viewHolder.progressBar.setVisibility(View.GONE);
             if (!feedArrayList.get(position).isPreviewLoaded()) {
                 Log.e("AAAAA",url);
@@ -725,9 +708,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                                 if (imageBitmap != null)
                                     viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
                                 else
-                                    ImageLoader.getInstance()
-                                            .displayImage(sourceContent.getImages().get(0), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
-
+                                    Picasso.with(context).load(sourceContent.getImages().get(0)).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imagePreviewThumb, sourceContent.getImages().get(0)));
                         }
                     }
                 };
@@ -852,7 +833,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
     }
 
-    private void attachFileLayout(ViewHolder viewHolder, int position, String type) {
+    private void attachFileLayout(final ViewHolder viewHolder, int position, String type) {
         viewHolder.layoutUser.setVisibility(View.GONE);
         viewHolder.layoutShare.setVisibility(View.GONE);
         viewHolder.layoutFileComment.setVisibility(View.VISIBLE);
@@ -872,8 +853,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 if(imageBitmap!=null)
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
                 else
-                    ImageLoader.getInstance()
-                            .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                    Picasso.with(context).load(feedArrayList.get(position).getThumbFileName()).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageFileThumb, feedArrayList.get(position).getThumbFileName()));
             }
 
             else {
@@ -891,8 +871,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     if (imageBitmap != null)
                         viewHolder.imageFileThumb.setImageBitmap(imageBitmap);
                     else
-                        ImageLoader.getInstance()
-                                .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                        Picasso.with(context).load(fileThumbUrl).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageFileThumb, fileThumbUrl));
                 }
                 else
                     viewHolder.imageFileThumb.setImageResource(R.drawable.audio_thumb);
@@ -913,7 +892,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
         else if(type.equals("comment")){
             viewHolder.textTimeFile.setText(feedArrayList.get(position).getFileTime());
-            ArrayList<Comment> arrayList = feedArrayList.get(position).getCommentArrayList();
+            final ArrayList<Comment> arrayList = feedArrayList.get(position).getCommentArrayList();
 
             ArrayList<Comment> minimizedList = calculateCommentingUsers(arrayList);
 
@@ -941,26 +920,25 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
             else {
 
-                ImageLoader.getInstance()
-                        .displayImage(arrayList.get(0).getUserImageURL(), viewHolder.imageUser, optionsUserImage, new ImageLoadingListener() {
+                Picasso.with(context)
+                        .load(arrayList.get(0).getUserImageURL())
+                        .placeholder(R.drawable.avtar)
+                        .error(R.drawable.avtar)
+                        .into(new Target() {
                             @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                mBitmapCache.put(imageUri, loadedImage);
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                mBitmapCache.put(arrayList.get(0).getUserImageURL(), bitmap);
+                                viewHolder.imageUser.setImageBitmap(bitmap);
                                 //notifyDataSetChanged();
                             }
 
                             @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
+                            public void onBitmapFailed(Drawable errorDrawable) {
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
 
                             }
                         });
@@ -977,10 +955,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 if(imageBitmap1!=null)
                     viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
                 else
-                    ImageLoader.getInstance()
-                            .displayImage(feedArrayList.get(position).getThumbFileName(), viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
-
-                //Picasso.with(getContext()).load(feedArrayList.get(position).getThumbFileName()).placeholder(R.drawable.document_gray).error(android.R.drawable.stat_notify_error).into(viewHolder.imageFileThumb);
+                    Picasso.with(context).load(feedArrayList.get(position).getThumbFileName()).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageFileThumb, feedArrayList.get(position).getThumbFileName()));
             }
             else {
                 String fileType = feedArrayList.get(position).getFileType();
@@ -997,8 +972,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                     if (imageBitmap1 != null)
                         viewHolder.imageFileThumb.setImageBitmap(imageBitmap1);
                     else
-                        ImageLoader.getInstance()
-                                .displayImage(fileThumbUrl, viewHolder.imageFileThumb, optionsFile, imageFileLoadingListener);
+                        Picasso.with(context).load(fileThumbUrl).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imageFileThumb, fileThumbUrl));
                 }
                 else
                     viewHolder.imageFileThumb.setImageResource(R.drawable.audio_thumb);
@@ -1202,34 +1176,84 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         }
     }
 
+    public Target imageFileLoadingListener1(final ImageView imageView, final String url){
+        Target imageFileLoadingListener1 = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                imageView.setImageBitmap(bitmap);
+                mBitmapCache.put(url,bitmap);
+                //notifyDataSetChanged();
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        return imageFileLoadingListener1;
+    }
 
 
-    public ImageLoadingListener imageFileLoadingListener = new ImageLoadingListener() {
-        @Override
-        public void onLoadingStarted(String imageUri, View view) {
-            ((ImageView) view).setImageResource(R.drawable.app_logo);
-        }
-
-        @Override
-        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-        }
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            mBitmapCache.put(imageUri,loadedImage);
-            //notifyDataSetChanged();
-        }
-
-        @Override
-        public void onLoadingCancelled(String imageUri, View view) {
-
-        }
-    };
 
     @Override
     public int getItemViewType(int position) {
         return position;
     }
 
+
+    public void customAppChoserIntent(String message) {
+
+        int SEND_MSG_REQUEST = 10;
+
+        //Create primary intent to be used for chooser intent
+        Intent smsIntent = new Intent();
+        smsIntent.setAction(Intent.ACTION_SEND);
+        smsIntent.setType("text/plain");
+        //need to limit the scope of this intent to SMS app only. If we don't set the
+        //package here, it will target apps like bluetooth, clipboard etc also.
+        smsIntent.setPackage("com.android.mms");
+        smsIntent.putExtra("sms_body", message);
+
+        //intent for adding other apps
+        Intent queryIntent = new Intent(Intent.ACTION_SEND);
+        queryIntent.setType("text/plain");
+
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(queryIntent, 0);
+
+        List<LabeledIntent> otherAppIntentList = new ArrayList<LabeledIntent>();
+        //filter out all the other intents which we want to keep
+        for (int i = 0; i < resolveInfos.size(); i++) {
+            ResolveInfo ri = resolveInfos.get(i);
+            String packageName = ri.activityInfo.packageName;
+            Intent intentToAdd = new Intent();
+            if (packageName.contains("com.whatsapp") || packageName.contains("android.gm")) {
+                //this is the intent we are interested in
+                intentToAdd.setComponent(new ComponentName(packageName, ri.activityInfo.name));
+                intentToAdd.setAction(Intent.ACTION_SEND);
+                intentToAdd.setType("text/plain");
+                intentToAdd.setPackage(packageName);
+                intentToAdd.putExtra(Intent.EXTRA_TEXT, message);
+                //add this intent to the list
+                otherAppIntentList.add(new LabeledIntent(intentToAdd, packageName,
+                        ri.loadLabel(pm), ri.icon));
+            }
+        }
+
+        // convert intentList to array
+        LabeledIntent[] extraIntents = otherAppIntentList.toArray(
+                new LabeledIntent[ otherAppIntentList.size() ]);
+
+        //create and add all the intents to chooser
+        Intent chooserIntent = Intent.createChooser(smsIntent, "Share Post");
+
+        //add all the extra intents that we have created
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+        ((Activity)context).startActivityForResult(chooserIntent, SEND_MSG_REQUEST);
+    }
 }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -245,8 +246,12 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
             editTextArrayList2.get(2).setError(null);
         }
 
+        // Encoding emojis if exists
+        String firstName = EmojiHandler.encodeJava(editFirstName.getText().toString());
+        String lastName = EmojiHandler.encodeJava(editLastName.getText().toString());
+
         String paramsArray[]={"userid","username","userEmail","userFirstname","userLastname","companyid","ReceiveEmailNotifications","country","bday","password"};
-        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),editFirstName.getText().toString(),editLastName.getText().toString(),"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString()};
+        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),firstName,lastName,"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString()};
 //        String paramsArray[]={"userid","username","userEmail","userFirstname","userLastname","companyid","ReceiveEmailNotifications","country","bday","password","profilepic"};
 //        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),editFirstName.getText().toString(),editLastName.getText().toString(),"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString(),imagePath};
 

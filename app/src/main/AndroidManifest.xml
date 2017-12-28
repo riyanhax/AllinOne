@@ -115,6 +115,14 @@
             android:theme="@style/AppTheme"
             />
 
+        <activity android:name=".activity.FbLoginActivty"/>
+
+        <!-- facebook app id -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/fb_id" />
+
+
         <!-- this is for map, put map key here -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

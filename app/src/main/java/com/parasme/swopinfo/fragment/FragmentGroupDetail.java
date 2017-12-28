@@ -42,6 +42,7 @@ import com.parasme.swopinfo.adapter.FollowerAdapter;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Follow;
@@ -230,6 +231,9 @@ public class FragmentGroupDetail extends FragmentGroupWrapper implements FileSel
                             groupName = jsonObject.optString("groupname");
                             if (jsonObject.isNull("groupname"))
                                 groupName = FragmentGroupDetail.this.getArguments().getString(AppConstants.KEY_GROUP_NAME);
+
+                            // Decoding emojis if exists
+                            groupName = EmojiHandler.decodeJava(groupName);
 
                             requireAccessCode = jsonObject.optBoolean("requiresaccesscode");
                             readOnlyGroup = jsonObject.optBoolean("readonlygroup");

@@ -70,8 +70,8 @@ public class SubscriptionPayPalActivity extends AppCompatActivity implements Vie
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
 
     // note that these credentials will differ between live & sandbox environments.
-    private static final String CONFIG_CLIENT_ID = "AepaOoPFDHrA2kWtQYjX4yynFAgN74eublUJUwwKBVQrlRuBBefn0jKieV9usbBX3bf3f23L3Z67wbGE";
-
+//    private static final String CONFIG_CLIENT_ID = "AepaOoPFDHrA2kWtQYjX4yynFAgN74eublUJUwwKBVQrlRuBBefn0jKieV9usbBX3bf3f23L3Z67wbGE";
+    private static final String CONFIG_CLIENT_ID = "AXsNaFQ9JE5oameiGe3hopPlzArQ9LJFDkVVVN0Rm_ChgzxctCcifyUwUiejGzIlr0Rb1V6u1tgdbHRj";
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
@@ -185,6 +185,7 @@ public class SubscriptionPayPalActivity extends AppCompatActivity implements Vie
                 break;
             case R.id.btnSubmit:
                 validate();
+                //chargePayPal("399");
                 break;
         }
     }

@@ -45,8 +45,6 @@ import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActiv
 import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
 import com.applozic.mobicommons.json.GsonUtils;
 import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -113,21 +111,12 @@ public class SplashActivity extends AppCompatActivity {
     private TextView textPreviewDescription;
     private TextView textPreviewURL;
     private ImageView imagePreviewThumb;
-    DisplayImageOptions optionsFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        optionsFile = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.document_gray)
-                .showImageOnFail(R.drawable.document_gray)
-                .cacheInMemory(false)
-                .cacheOnDisk(false)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
 
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);
@@ -619,9 +608,11 @@ public class SplashActivity extends AppCompatActivity {
             textPreviewTitle.setText(sourceContent.getTitle());
             textPreviewDescription.setText(sourceContent.getDescription());
             textPreviewURL.setText(sourceContent.getUrl());
-            ImageLoader.getInstance()
-                    .displayImage(sourceContent.getImages().get(0), imagePreviewThumb, optionsFile, null);
 
+            Picasso.with(SplashActivity.this).load(sourceContent.getImages().get(0))
+                    .error(R.drawable.document_gray)
+                    .placeholder(R.drawable.document_gray)
+                    .into(imagePreviewThumb);
         }
     };
 

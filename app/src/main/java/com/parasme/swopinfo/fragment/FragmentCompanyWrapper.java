@@ -30,7 +30,7 @@ public abstract class FragmentCompanyWrapper extends Fragment implements View.On
     protected LinearLayout baseLayout;
     protected TextView textCompanyName;
     protected ImageView imageCompany,imageActionCompanyAbout,imageActionCompanyUploads,imageActionCompanyMembers,imageActionCompanyFollowers;
-    protected Button btnFollow;
+    protected Button btnFollow, btnChat;
     protected boolean isCompanyFilesLoaded,isCompanyFoldersLoaded;
 
     @Override
@@ -45,8 +45,10 @@ public abstract class FragmentCompanyWrapper extends Fragment implements View.On
         imageActionCompanyFollowers = (ImageView) baseView.findViewById(R.id.imageActionCompanyFollowers);
         imageCompany = (ImageView) baseView.findViewById(R.id.imageCompany);
         btnFollow = (Button) baseView.findViewById(R.id.btnFollow);
+        btnChat = (Button) baseView.findViewById(R.id.btnChat);
 
         btnFollow.setOnClickListener(this);
+        btnChat.setOnClickListener(this);
         imageActionCompanyAbout.setOnClickListener(this);
         imageActionCompanyUploads.setOnClickListener(this);
         imageActionCompanyMembers.setOnClickListener(this);

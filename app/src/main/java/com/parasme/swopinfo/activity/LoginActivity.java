@@ -12,8 +12,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.onesignal.OneSignal;
@@ -32,6 +35,7 @@ import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentSubscription;
 import com.parasme.swopinfo.fragment.FragmentSubscriptionPayment;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
@@ -62,7 +66,7 @@ import static com.parasme.swopinfo.application.MyApplication.initOneSignal;
  * Mobile +917737556190
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements FbLoginActivty.FbSignInDetail {
 
     private boolean isWriteAllowed = false;
     private boolean isCameraAllowed = false;
@@ -76,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView textForgot, textCreateAccount;
     Button btnLogin;
     private final int MY_PERMISSIONS_REQUEST_CAMERA_WRITE_LOCATION=111;
+    private RelativeLayout layoutFbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +90,14 @@ public class LoginActivity extends AppCompatActivity {
 
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
+
+        editUserName.setFilters(new InputFilter[]{MyApplication.EMOJI_FILTER});
+        editPassword.setFilters(new InputFilter[]{MyApplication.EMOJI_FILTER});
+
         textForgot = (TextView) findViewById(R.id.textForgot);
         textCreateAccount = (TextView) findViewById(R.id.textCreateAccount);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        layoutFbLogin = (RelativeLayout) findViewById(R.id.layout_fb_login);
 
         copyAssets();
 
@@ -130,6 +140,18 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+/*
+                String emoji = editUserName.getText().toString();
+                String string1 = "";
+                string1 = EmojiHandler.encodeJava(emoji);
+                Log.i("tag1", ""+string1);
+
+                string1 = EmojiHandler.decodeJava(string1);
+                Log.i("tag2", ""+string1);
+
+                btnLogin.setText(string1);
+*/
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if ((ActivityCompat.checkSelfPermission(LoginActivity.this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -157,6 +179,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                     validateAndLogin();
+
+            }
+        });
+
+        layoutFbLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -220,8 +249,13 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID, returnObject.optInt("userid"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_NAME, returnObject.optString("username"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_EMAIL, returnObject.optString("userEmail"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME, returnObject.optString("userFirstname"));
-                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME, returnObject.optString("userLastname"));
+
+                                // Decoding encoded emojis if exists
+                                String firstName = EmojiHandler.decodeJava(returnObject.optString("userFirstname"));
+                                String lastName = EmojiHandler.decodeJava(returnObject.optString("userLastname"));
+
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME, firstName);
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME, lastName);
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COMPANY_ID, returnObject.optInt("companyid"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_NOTIFICATION, returnObject.optBoolean("ReceiveEmailNotifications"));
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COUNTRY, returnObject.optString("country"));
@@ -401,6 +435,16 @@ public class LoginActivity extends AppCompatActivity {
                 validateAndLogin();
             }
         }
+    }
+
+
+    @Override
+    public void onGetFBAccountDetail(final JSONObject object) {
+        String id = String.valueOf(object.optLong("id"));
+        String email = object.optString("email");
+        String first_name = object.optString("first_name");
+        String last_name = object.optString("last_name");
+
     }
 
 }

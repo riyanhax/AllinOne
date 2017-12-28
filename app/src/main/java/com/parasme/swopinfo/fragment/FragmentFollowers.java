@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.adapter.FollowerAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.model.Follow;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
@@ -93,11 +94,11 @@ public class FragmentFollowers extends BaseFragment {
                         follow.setTimeDate(jsonObject.optString("TimeDate"));
                         follow.setUserName(jsonObject.optString("username"));
                         follow.setUserEmail(jsonObject.optString("userEmail"));
-                        follow.setFullName(jsonObject.optString("Name"));
+                        follow.setFullName(EmojiHandler.decodeJava(jsonObject.optString("Name")));
 
                         // When loading company members
                         if(jsonObject.has("membername"))
-                            follow.setFullName(jsonObject.optString("membername"));
+                            follow.setFullName(EmojiHandler.decodeJava(jsonObject.optString("membername")));
 
 
                         follow.setReceiveNotification(jsonObject.optBoolean("ReceiveEmailNotifications"));

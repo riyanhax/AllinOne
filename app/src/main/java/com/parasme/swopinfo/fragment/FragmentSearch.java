@@ -20,6 +20,7 @@ import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.SearchAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ExpandAnimation;
 import com.parasme.swopinfo.helper.NestedListView;
 import com.parasme.swopinfo.model.Follow;
@@ -163,7 +164,7 @@ public class FragmentSearch extends Fragment{
                         JSONObject jsonObject1 = userResults.optJSONObject(i);
                         Follow follow = new Follow();
                         follow.setUserId(jsonObject1.optInt("userid"));
-                        follow.setFullName(jsonObject1.optString("UserFullName"));
+                        follow.setFullName(EmojiHandler.decodeJava(jsonObject1.optString("UserFullName")));
 
                         userArrayList.add(follow);
                     }
@@ -241,7 +242,7 @@ public class FragmentSearch extends Fragment{
                         JSONObject jsonObject1 = companyGroupArray.optJSONObject(i);
                         Group group = new Group();
                         group.setGroupId(jsonObject1.optInt("id"));
-                        group.setGroupName(jsonObject1.optString("name"));
+                        group.setGroupName(EmojiHandler.decodeJava(jsonObject1.optString("name")));
                         group.setExtraInfo1(jsonObject1.optString("ExtraInfo1"));
                         group.setExtraInfo2(jsonObject1.optString("ExtraInfo2"));
                         group.setBusinessCity(jsonObject1.optString("BussinessCity"));

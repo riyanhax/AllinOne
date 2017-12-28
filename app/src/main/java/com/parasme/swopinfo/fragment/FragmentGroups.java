@@ -30,6 +30,7 @@ import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.adapter.GroupAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.model.Group;
@@ -154,7 +155,8 @@ public class FragmentGroups extends BaseFragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String currentDateandTime = sdf.format(new Date());
 
-                String groupName=editGroupName.getText().toString();
+                String groupName= EmojiHandler.encodeJava(editGroupName.getText().toString());
+
                 String groupAccessCode=editGroupAccessCode.getText().toString();
                 boolean isAccessCodeNeeded=radioAccessCode.isChecked();
                 boolean isReadOnly=radioReadOnly.isChecked();
@@ -244,10 +246,10 @@ public class FragmentGroups extends BaseFragment {
                                 group.setOwnerUserId(jsonObject.optInt("OwnerUserID"));
                                 group.setTotalFiles(jsonObject.optInt("TotalFiles"));
                                 group.setTotalMembers(jsonObject.optInt("TotalMembers"));
-                                group.setGroupName(jsonObject.optString("groupname"));
+                                group.setGroupName(EmojiHandler.decodeJava(jsonObject.optString("groupname")));
                                 group.setTimeDate(jsonObject.optString("timedate"));
-                                group.setOwnerUserName(jsonObject.optString("OwnerUserName"));
-                                group.setOwnerFullName(jsonObject.optString("OwnerName"));
+                                group.setOwnerUserName(EmojiHandler.decodeJava(jsonObject.optString("OwnerUserName")));
+                                group.setOwnerFullName(EmojiHandler.decodeJava(jsonObject.optString("OwnerName")));
                                 group.setOwnerEmail(jsonObject.optString("memberemail"));
                                 group.setGroupAccessCode(jsonObject.optString("groupaccesscode"));
                                 group.setGroupLogo(jsonObject.optBoolean("grouplogo"));
