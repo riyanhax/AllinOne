@@ -4,20 +4,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.LabeledIntent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,8 +26,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.applozic.mobicomkit.api.conversation.Message;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.activity.SplashActivity;
@@ -61,12 +54,12 @@ import com.squareup.picasso.Target;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -83,7 +76,7 @@ import static com.parasme.swopinfo.activity.MainActivity.replaceFragment;
  * Created by SoNu on 6/6/2016.
  */
 
-public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListener {
+public class FeedAdapter extends ArrayAdapter<Feed>{
 
 
 //    private String randomNumber = randomNumber();
@@ -127,11 +120,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     {
         TextView textUserName,textFolderName,textView,textComment,textShare,textUserNameFile,textViewFile,textTime,textTimeFile,
                 textMultipleFiles,textPreviewTitle, textPreviewDescription,textPreviewURL;
-        ImageView imageUser,imageFileThumb,imageLike,imageDislkike,imageUserFile,imageShareThumb,imagePreviewThumb;
+        ImageView imageUser,imageFileThumb,imageLike,imageDislkike,imageUserFile,imageShareThumb,imagePreviewThumb
+                , imgComment, imgShareToApps, imgShareToChat;
         LinearLayout layoutFileComment,layoutUser,layoutShare,layoutAction,layoutAdditionalInfo,layoutMultipleFiles;
-        FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
-        FloatingActionsMenu menuShare;
-        Button btnComment,btnShareMe;
         NonScrollRecyclerView recyclerView;
 
         ProgressBar progressBar;
@@ -171,18 +162,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.layoutShare = (LinearLayout) view.findViewById(R.id.layoutShare);
             viewHolder.layoutUser = (LinearLayout) view.findViewById(R.id.layoutUser);
             viewHolder.layoutAction = (LinearLayout) view.findViewById(R.id.layoutActions);
-            viewHolder.btnLinkedIn = (FloatingActionButton) view.findViewById(R.id.btnLinkedIn);
-            viewHolder.btnMail = (FloatingActionButton) view.findViewById(R.id.btnMail);
-            viewHolder.btnFacebook = (FloatingActionButton) view.findViewById(R.id.btnFacebook);
-            viewHolder.btnTwitter = (FloatingActionButton) view.findViewById(R.id.btnTwitter);
-            viewHolder.btnGPlus = (FloatingActionButton) view.findViewById(R.id.btnGPlus);
-            viewHolder.btnPinterest = (FloatingActionButton) view.findViewById(R.id.btnPinterest);
-            viewHolder.btnWhatsapp = (FloatingActionButton) view.findViewById(R.id.btnWhatsapp);
-            viewHolder.menuShare = (FloatingActionsMenu) view.findViewById(R.id.menuShare);
+            viewHolder.imgShareToApps = (ImageView) view.findViewById(R.id.imgShareToApp);
+            viewHolder.imgShareToChat = (ImageView) view.findViewById(R.id.imgShareToChat);
             viewHolder.imageLike = (ImageView) view.findViewById(R.id.imageLike);
             viewHolder.imageDislkike = (ImageView) view.findViewById(R.id.imageDisLike);
-            viewHolder.btnComment = (Button) view.findViewById(R.id.btnComment);
-            viewHolder.btnShareMe = (Button) view.findViewById(R.id.btnShareMe);
+            viewHolder.imgComment = (ImageView) view.findViewById(R.id.imgComment);
             viewHolder.progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
             viewHolder.infoWrap = (LinearLayout) view.findViewById(R.id.info_wrap);
             viewHolder.openGraphView = (OpenGraphView) view.findViewById(R.id.og_view);
@@ -199,14 +183,37 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         }
 
 
-        viewHolder.btnLinkedIn.setTag(position);
-        viewHolder.btnMail.setTag(position);
-        viewHolder.btnFacebook.setTag(position);
-        viewHolder.btnTwitter.setTag(position);
-        viewHolder.btnGPlus.setTag(position);
-        viewHolder.btnPinterest.setTag(position);
-        viewHolder.btnWhatsapp.setTag(position);
+        viewHolder.imgShareToApps.setTag(position);
+        viewHolder.imgShareToChat.setTag(position);
 
+        viewHolder.imgShareToApps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Feed feed = feedArrayList.get((Integer) view.getTag());
+                fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+feed.getFileId();
+                if (feed.getUploadArrayList().size()==0 &&
+                        feed.getType().equalsIgnoreCase("newsfeed"))
+                    fileURLtoShare = feed.getComment();
+
+                Utils.shareURLCustomIntent(fileURLtoShare, (Activity) context);
+            }
+        });
+
+        viewHolder.imgShareToChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Feed feed = feedArrayList.get((Integer) view.getTag());
+                fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+feed.getFileId();
+
+                if (feed.getUploadArrayList().size()==0 &&
+                        feed.getType().equalsIgnoreCase("newsfeed"))
+                    fileURLtoShare = feed.getComment();
+
+                MainActivity mainActivity = (MainActivity) context;
+                Message message = mainActivity.buildMessages(null, fileURLtoShare, (Activity) context);
+                mainActivity.startMessageForward(message, (Activity) context);
+            }
+        });
 
         // Setting timeSpan
         viewHolder.textTime.setText(feedArrayList.get(position).getItemTimeAgo());
@@ -237,7 +244,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 attachFileLayout(viewHolder,position,type);
                 break;
             case "newsfeed":
-                viewHolder.layoutAction.setVisibility(View.GONE);
+                viewHolder.layoutAction.setVisibility(View.VISIBLE);
                     attachShareLayout(viewHolder,position);
                 break;
             default:
@@ -250,27 +257,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         setClickListeners(position);
 
 
-        viewHolder.imageLike.setVisibility(feedArrayList.get(position).isMenuExpanded() ? View.GONE : View.VISIBLE);
-        viewHolder.imageDislkike.setVisibility(feedArrayList.get(position).isMenuExpanded() ? View.GONE : View.VISIBLE);
-        viewHolder.btnComment.setVisibility(feedArrayList.get(position).isMenuExpanded() ? View.GONE : View.VISIBLE);
         //viewHolder.btnShareMe.setVisibility(feedArrayList.get(position).isMenuExpanded() ? View.GONE : View.VISIBLE);
 
         setVote(feedArrayList.get(position).getVoteStatus());
-
-        viewHolder.menuShare.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                feedArrayList.get(position).setMenuExpanded(true);
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                feedArrayList.get(position).setMenuExpanded(false);
-                notifyDataSetChanged();
-            }
-        });
-
 
 
         return view;
@@ -464,7 +453,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         });
 
 
-        viewHolder.btnComment.setOnClickListener(new View.OnClickListener() {
+        viewHolder.imgComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -487,13 +476,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         });
 
 
-        viewHolder.btnFacebook.setOnClickListener(this);
-        viewHolder.btnGPlus.setOnClickListener(this);
-        viewHolder.btnLinkedIn.setOnClickListener(this);
-        viewHolder.btnMail.setOnClickListener(this);
-        viewHolder.btnPinterest.setOnClickListener(this);
-        viewHolder.btnTwitter.setOnClickListener(this);
-        viewHolder.btnWhatsapp.setOnClickListener(this);
     }
 
     private void replaceCompanyFragment(int position) {
@@ -1015,41 +997,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     }
 
 
-    @Override
-    public void onClick(View view) {
-        fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+feedArrayList.get((Integer) view.getTag()).getFileId();
-        switch (view.getId()){
-
-            case R.id.btnLinkedIn:
-                new Utils((Activity) context).sharePost("com.linkedin.android","Linkedin",fileURLtoShare);
-                break;
-
-            case R.id.btnMail:
-                new Utils((Activity) context).shareOnMails(fileURLtoShare);
-                break;
-
-            case R.id.btnGPlus:
-                new Utils((Activity) context).sharePost("com.google.android.apps.plus","Google Plus",fileURLtoShare);
-                break;
-
-            case R.id.btnFacebook:
-                new Utils((Activity) context).sharePost("com.facebook.katana","Facebook",fileURLtoShare);
-                break;
-
-            case R.id.btnTwitter:
-                new Utils((Activity) context).sharePost("com.twitter.android","Twitter",fileURLtoShare);
-                break;
-
-            case R.id.btnWhatsapp:
-                new Utils((Activity) context).sharePost("com.whatsapp","Whatsapp",fileURLtoShare);
-                break;
-
-            case R.id.btnPinterest:
-                new Utils((Activity) context).sharePost("com.pinterest","Pinterest",fileURLtoShare);
-                break;
-        }
-    }
-
     private void setRecyclerView(ArrayList<Upload> uploadArrayList) {
         StaggeredGridLayoutManager staggeredGridLayoutManager;
 
@@ -1206,54 +1153,4 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     }
 
 
-    public void customAppChoserIntent(String message) {
-
-        int SEND_MSG_REQUEST = 10;
-
-        //Create primary intent to be used for chooser intent
-        Intent smsIntent = new Intent();
-        smsIntent.setAction(Intent.ACTION_SEND);
-        smsIntent.setType("text/plain");
-        //need to limit the scope of this intent to SMS app only. If we don't set the
-        //package here, it will target apps like bluetooth, clipboard etc also.
-        smsIntent.setPackage("com.android.mms");
-        smsIntent.putExtra("sms_body", message);
-
-        //intent for adding other apps
-        Intent queryIntent = new Intent(Intent.ACTION_SEND);
-        queryIntent.setType("text/plain");
-
-        PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(queryIntent, 0);
-
-        List<LabeledIntent> otherAppIntentList = new ArrayList<LabeledIntent>();
-        //filter out all the other intents which we want to keep
-        for (int i = 0; i < resolveInfos.size(); i++) {
-            ResolveInfo ri = resolveInfos.get(i);
-            String packageName = ri.activityInfo.packageName;
-            Intent intentToAdd = new Intent();
-            if (packageName.contains("com.whatsapp") || packageName.contains("android.gm")) {
-                //this is the intent we are interested in
-                intentToAdd.setComponent(new ComponentName(packageName, ri.activityInfo.name));
-                intentToAdd.setAction(Intent.ACTION_SEND);
-                intentToAdd.setType("text/plain");
-                intentToAdd.setPackage(packageName);
-                intentToAdd.putExtra(Intent.EXTRA_TEXT, message);
-                //add this intent to the list
-                otherAppIntentList.add(new LabeledIntent(intentToAdd, packageName,
-                        ri.loadLabel(pm), ri.icon));
-            }
-        }
-
-        // convert intentList to array
-        LabeledIntent[] extraIntents = otherAppIntentList.toArray(
-                new LabeledIntent[ otherAppIntentList.size() ]);
-
-        //create and add all the intents to chooser
-        Intent chooserIntent = Intent.createChooser(smsIntent, "Share Post");
-
-        //add all the extra intents that we have created
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        ((Activity)context).startActivityForResult(chooserIntent, SEND_MSG_REQUEST);
-    }
 }

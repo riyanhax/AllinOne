@@ -46,9 +46,11 @@ import com.applozic.mobicomkit.api.account.user.UserClientService;
 import com.applozic.mobicomkit.api.account.user.UserDetail;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.api.account.user.UserLogoutTask;
+import com.applozic.mobicomkit.api.conversation.Message;
 import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
+import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
 import com.applozic.mobicommons.json.GsonUtils;
 import com.google.gson.Gson;
 import com.onesignal.OneSignal;
@@ -582,6 +584,32 @@ public class MainActivity extends AppCompatActivity {
         //list of photos of seleced
         if (requestCode == LocationActivity.REQUEST_CHECK_SETTINGS)
             super.onActivityResult(requestCode, resultCode, data);
+
+        else if (requestCode == ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION && resultCode == RESULT_OK) {
+            String userId = data.getStringExtra(ConversationUIService.USER_ID);
+            Integer groupId = data.getIntExtra(ConversationUIService.GROUP_ID, -1);
+
+            String oldMessage = data.getStringExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE);
+            Message message = (Message)GsonUtils.getObjectFromJson(oldMessage, Message.class);
+
+            Intent conversationIntent = new Intent(this, ConversationActivity.class);
+            if (!TextUtils.isEmpty(userId)) {
+                conversationIntent.putExtra(ConversationUIService.USER_ID, userId);
+                message.setTo(userId);
+                message.setContactIds(userId);
+            }
+
+            if (groupId != null  && groupId != -1) {
+                conversationIntent.putExtra(ConversationUIService.GROUP_ID, groupId);
+                message.setGroupId(groupId);
+            }
+
+            conversationIntent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
+            conversationIntent.putExtra(ConversationUIService.TAKE_ORDER, true);
+            startActivity(conversationIntent);
+            finish();
+        }
+
         else{
             if (data != null) {
                 Log.e("TAG", "onActivityResult: ");
@@ -833,5 +861,39 @@ public class MainActivity extends AppCompatActivity {
         isActive = true;
     }
 
+
+    public Message buildMessages(ArrayList<File> fileArrayList, String text, Activity activity)
+    {
+        Message message = new Message();
+        MobiComUserPreference userPreferences = MobiComUserPreference.getInstance(activity);
+        message.setRead(Boolean.TRUE);
+        message.setStoreOnDevice(Boolean.TRUE);
+        message.setCreatedAtTime(System.currentTimeMillis() + userPreferences.getDeviceTimeOffset());
+        message.setSendToDevice(Boolean.FALSE);
+        message.setType(Message.MessageType.MT_OUTBOX.getValue());
+        message.setSource(Message.Source.MT_MOBILE_APP.getValue());
+        message.setMessage(text);
+
+        if (fileArrayList!=null) {
+            List<String> fileList = new ArrayList<String>();
+            for (int i = 0; i < fileArrayList.size(); i++) {
+                fileList.add(fileArrayList.get(i).getPath());
+            }
+
+            message.setFilePaths(fileList);
+        }
+
+        return message;
+    }
+
+
+    public void startMessageForward(Message message, Activity activity)
+    {
+        Intent intent = new Intent(activity, MobiComKitPeopleActivity.class);
+        if (message != null) {
+            intent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
+        }
+        activity.startActivityForResult(intent, ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION);
+    }
 
 }

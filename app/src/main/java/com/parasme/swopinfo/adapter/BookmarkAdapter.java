@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -31,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
 
 /**
@@ -68,7 +68,7 @@ public class BookmarkAdapter extends ArrayAdapter<Upload> {
         TextView textBookmarkURL;
         ImageView imageBookmarkIcon;
         ImageView imageDelete;
-        FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
+        CircleImageView imgShare;
     }
 
     @Override
@@ -83,13 +83,7 @@ public class BookmarkAdapter extends ArrayAdapter<Upload> {
             viewHolder.textBookmarkURL = (TextView) view.findViewById(R.id.textBookmarkURL);
             viewHolder.imageBookmarkIcon = (ImageView) view.findViewById(R.id.imageFavIcon);
             viewHolder.imageDelete = (ImageView) view.findViewById(R.id.imageDelete);
-            viewHolder.btnLinkedIn = (FloatingActionButton) view.findViewById(R.id.btnLinkedIn);
-            viewHolder.btnMail = (FloatingActionButton) view.findViewById(R.id.btnMail);
-            viewHolder.btnFacebook = (FloatingActionButton) view.findViewById(R.id.btnFacebook);
-            viewHolder.btnTwitter = (FloatingActionButton) view.findViewById(R.id.btnTwitter);
-            viewHolder.btnGPlus = (FloatingActionButton) view.findViewById(R.id.btnGPlus);
-            viewHolder.btnPinterest = (FloatingActionButton) view.findViewById(R.id.btnPinterest);
-            viewHolder.btnWhatsapp = (FloatingActionButton) view.findViewById(R.id.btnWhatsapp);
+            viewHolder.imgShare = (CircleImageView) view.findViewById(R.id.imgShare);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -139,46 +133,10 @@ public class BookmarkAdapter extends ArrayAdapter<Upload> {
         });
 
        final String bookmarkUrlToShare = bookmarkArrayList.get(position).getRealFileName();
-        viewHolder.btnLinkedIn.setOnClickListener(new View.OnClickListener() {
+        viewHolder.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.linkedin.android","Linkedin",bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnMail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).shareOnMails(bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnGPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.google.android.apps.plus","Google Plus",bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.facebook.katana","Facebook",bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnTwitter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.twitter.android","Twitter",bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnWhatsapp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.whatsapp","Whatsapp",bookmarkUrlToShare);
-            }
-        });
-        viewHolder.btnPinterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Utils((Activity) context).sharePost("com.pinterest","Pinterest",bookmarkUrlToShare);
+                Utils.shareURLCustomIntent(bookmarkUrlToShare, (Activity) context);
             }
         });
 

@@ -14,8 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by :- Mukesh Kumawat on 11-Jan-17.
@@ -34,7 +35,7 @@ public abstract class FragmentGroupWrapper extends Fragment implements View.OnCl
     protected Button btnAction,btnDelete,btnChat;
     protected LinearLayout baseLayout;
     protected RelativeLayout layoutGroupShare;
-    protected FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
+    protected CircleImageView imgShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,25 +49,13 @@ public abstract class FragmentGroupWrapper extends Fragment implements View.OnCl
         btnChat = (Button) baseView.findViewById(R.id.btnChat);
         baseLayout = (LinearLayout) baseView.findViewById(R.id.layout);
         layoutGroupShare = (RelativeLayout) baseView.findViewById(R.id.layoutGroupShare);
-        btnLinkedIn = (FloatingActionButton) baseView.findViewById(R.id.btnLinkedIn);
-        btnMail = (FloatingActionButton) baseView.findViewById(R.id.btnMail);
-        btnFacebook = (FloatingActionButton) baseView.findViewById(R.id.btnFacebook);
-        btnTwitter = (FloatingActionButton) baseView.findViewById(R.id.btnTwitter);
-        btnGPlus = (FloatingActionButton) baseView.findViewById(R.id.btnGPlus);
-        btnPinterest = (FloatingActionButton) baseView.findViewById(R.id.btnPinterest);
-        btnWhatsapp = (FloatingActionButton) baseView.findViewById(R.id.btnWhatsapp);
+        imgShare = (CircleImageView) baseView.findViewById(R.id.imgShare);
 
         imageActionGroupUploads.setOnClickListener(this);
         imageActionGroupMembers.setOnClickListener(this);
         btnAction.setOnClickListener(this);
         btnChat.setOnClickListener(this);
-        btnGPlus.setOnClickListener(this);
-        btnLinkedIn.setOnClickListener(this);
-        btnMail.setOnClickListener(this);
-        btnFacebook.setOnClickListener(this);
-        btnTwitter.setOnClickListener(this);
-        btnPinterest.setOnClickListener(this);
-        btnWhatsapp.setOnClickListener(this);
+        imgShare.setOnClickListener(this);
         return baseView;
     }
 

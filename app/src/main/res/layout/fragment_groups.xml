@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,13 +29,16 @@
         android:textSize="@dimen/_20sdp"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingAddGroup"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgAddGroup"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
         android:src="@drawable/plus"
         android:layout_margin="@dimen/_10sdp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        app:civ_fill_color="@color/colorPrimaryDark"
+        app:civ_border_color="@color/colorPrimaryDark"
+        app:civ_border_width="@dimen/_3sdp"
         />
 </RelativeLayout>

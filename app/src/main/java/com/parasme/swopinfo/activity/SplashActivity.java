@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,34 +15,27 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
 import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
-import com.applozic.mobicomkit.api.account.user.User;
-import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.api.conversation.Message;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
 import com.applozic.mobicommons.json.GsonUtils;
-import com.google.gson.Gson;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -59,37 +50,22 @@ import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 
 import org.jsoup.helper.StringUtil;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.kaelaela.opengraphview.OnLoadListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.kaelaela.opengraphview.OpenGraphView;
 import okhttp3.Credentials;
-import okhttp3.FormBody;
-
-import static com.parasme.swopinfo.adapter.FeedAdapter.context;
-import static com.parasme.swopinfo.helper.Utils.fixExif;
 
 /**
  * Created by Mukesh Kumawat on 22-Sep-16.
@@ -224,7 +200,6 @@ public class SplashActivity extends AppCompatActivity {
                     message.setGroupId(groupId);
                 }
 
-                Log.e("CHECK",message.getFilePaths().get(0));
                 conversationIntent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
                 conversationIntent.putExtra(ConversationUIService.TAKE_ORDER, true);
                 startActivity(conversationIntent);
@@ -512,7 +487,7 @@ public class SplashActivity extends AppCompatActivity {
         TextView emptyTextView = (TextView) dialogGroupShare.findViewById(R.id.emptyGridText);
         gridView.setBackgroundColor(getResources().getColor(R.color.white));
         emptyTextView.setBackgroundColor(getResources().getColor(R.color.white));
-        FloatingActionButton floatingAddGroup = (FloatingActionButton) dialogGroupShare.findViewById(R.id.floatingAddGroup);
+        CircleImageView floatingAddGroup = (CircleImageView) dialogGroupShare.findViewById(R.id.imgAddGroup);
         gridView.setBackgroundColor(getResources().getColor(R.color.white));
         floatingAddGroup.setVisibility(View.GONE);
 
@@ -659,7 +634,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
-    public Message buildMessages(ArrayList<File> fileArrayList, String text )
+    public Message buildMessages(ArrayList<File> fileArrayList, String text)
     {
         Message message = new Message();
         MobiComUserPreference userPreferences = MobiComUserPreference.getInstance(SplashActivity.this);
@@ -671,12 +646,14 @@ public class SplashActivity extends AppCompatActivity {
         message.setSource(Message.Source.MT_MOBILE_APP.getValue());
         message.setMessage(text);
 
-        List<String> fileList = new ArrayList<String>();
-        for (int i = 0; i < fileArrayList.size(); i++) {
-            fileList.add(fileArrayList.get(i).getPath());
-        }
+        if (fileArrayList!=null) {
+            List<String> fileList = new ArrayList<String>();
+            for (int i = 0; i < fileArrayList.size(); i++) {
+                fileList.add(fileArrayList.get(i).getPath());
+            }
 
-        message.setFilePaths(fileList);
+            message.setFilePaths(fileList);
+        }
 
         return message;
     }
@@ -684,11 +661,11 @@ public class SplashActivity extends AppCompatActivity {
 
     public void startMessageForward(Message message)
     {
-        Intent intent = new Intent(this, MobiComKitPeopleActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MobiComKitPeopleActivity.class);
         if (message != null) {
             intent.putExtra(MobiComKitPeopleActivity.FORWARD_MESSAGE, GsonUtils.getJsonFromObject(message, message.getClass()));
         }
-        startActivityForResult(intent,ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION);
-
+        startActivityForResult(intent, ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION);
     }
+
 }

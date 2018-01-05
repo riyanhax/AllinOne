@@ -63,99 +63,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/share"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgShare"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_alignParentRight="true"
-            fab:fab_size="normal"
+            android:src="@drawable/share"
+            fab:civ_border_color="#537cbe"
+            fab:civ_fill_color="#537cbe"
+            fab:civ_border_width="@dimen/_3sdp"
             />
-
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/menuShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_expandDirection="left"
-            fab:fab_addButtonSize="normal"
-            fab:fab_addButtonColorNormal="@android:color/transparent"
-            fab:fab_addButtonColorPressed="@android:color/transparent"
-            fab:fab_addButtonPlusIconColor="@android:color/transparent"
-            android:layout_alignParentRight="true"
-            >
-
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnFacebook"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/fb"
-                fab:fab_colorNormal="#537cbe"
-                fab:fab_colorPressed="#537cbe"
-                fab:fab_size="normal"/>
-            />
-
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnTwitter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_colorNormal="#78cef1"
-                fab:fab_icon="@drawable/twi"
-                fab:fab_colorPressed="#78cef1"
-                fab:fab_size="normal"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnWhatsapp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_colorNormal="#FF029947"
-                fab:fab_icon="@drawable/whats"
-                fab:fab_colorPressed="#FF029947"
-                fab:fab_size="normal"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnLinkedIn"
-                android:layout_width="17dp"
-                android:layout_height="17dp"
-                fab:fab_icon="@drawable/linkedin"
-                fab:fab_colorNormal="#FF0278B5"
-                fab:fab_colorPressed="#FF0278B5"
-                fab:fab_size="normal"/>
-            />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnGPlus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/google"
-                fab:fab_colorNormal="#FFDC4B39"
-                fab:fab_colorPressed="#FFDC4B39"
-                fab:fab_size="normal"/>
-            />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnPinterest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_colorNormal="#FFBD0A1E"
-                fab:fab_icon="@drawable/pinterest"
-                fab:fab_colorPressed="#FFBD0A1E"
-                fab:fab_size="normal"/>
-
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnMail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/mail"
-                fab:fab_colorNormal="#8b8f91"
-                fab:fab_colorPressed="#8b8f91"
-                fab:fab_size="normal"/>
-            />
-
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
 
     </RelativeLayout>
 

@@ -294,6 +294,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:textColor="@color/colorEdit"
                 android:background="@drawable/btn_bg_active"
+                android:layout_marginBottom="@dimen/_10sdp"
                 />
 
 

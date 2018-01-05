@@ -193,28 +193,6 @@ public class FragmentUploadsWrapper extends BaseFragment implements FileSelectio
         GridView gridFolders = (GridView) view.findViewById(R.id.gridFolders);
         TextView emptyGridText = (TextView) view.findViewById(R.id.emptyGridText);
 
-/*
-        FloatingActionButton btnAddFolder = (FloatingActionButton) view.findViewById(R.id.floatingAddFolder);
-        btnAddFolder.setVisibility(View.VISIBLE);
-        btnAddFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Dialog folderDialog = Utils.loadFolderDialog(appCompatActivity);
-                EditText editFolderName = (EditText) folderDialog.findViewById(R.id.editFolderName);
-                Button btnCreateFolder = (Button) folderDialog.findViewById(R.id.btnCreateFolder);
-                Button btnCancel = (Button) folderDialog.findViewById(R.id.btnCancel);
-
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        folderDialog.dismiss();
-                    }
-                });
-
-                folderDialog.show();
-            }
-        });
-*/
 
         layoutUploadWrapper.removeAllViews();
         //uploadWrapperLayout.setGravity(Gravity.CENTER);

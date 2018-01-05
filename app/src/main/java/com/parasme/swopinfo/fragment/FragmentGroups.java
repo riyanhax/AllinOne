@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +15,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -27,18 +24,13 @@ import com.applozic.mobicomkit.channel.service.ChannelService;
 import com.applozic.mobicommons.people.channel.Channel;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.adapter.GroupAdapter;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
-import com.parasme.swopinfo.model.Feed;
 import com.parasme.swopinfo.model.Group;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,9 +42,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
-
-import static com.parasme.swopinfo.helper.Utils.createThumbURL;
 
 
 /**
@@ -67,7 +58,7 @@ public class FragmentGroups extends BaseFragment {
 
     private View childView;
     private GridView gridGroups;
-    private FloatingActionButton floatingAddGroup;
+    private CircleImageView floatingAddGroup;
     private TextView emptyGridText;
     public Dialog dialogGroupAdd;
     //    public static String groupId="";
@@ -85,7 +76,7 @@ public class FragmentGroups extends BaseFragment {
 
         childView = mActivity.getLayoutInflater().inflate(R.layout.fragment_groups, null);
         gridGroups = (GridView) childView.findViewById(R.id.gridGroups);
-        floatingAddGroup = (FloatingActionButton) childView.findViewById(R.id.floatingAddGroup);
+        floatingAddGroup = (CircleImageView) childView.findViewById(R.id.imgAddGroup);
         emptyGridText = (TextView) childView.findViewById(R.id.emptyGridText);
 
         LinearLayout layout = (LinearLayout) baseView.findViewById(R.id.layout);

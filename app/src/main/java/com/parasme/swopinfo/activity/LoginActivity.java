@@ -186,7 +186,8 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
         layoutFbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FbLoginActivty.setOnFbClickListener(LoginActivity.this);
+                startActivity(new Intent(LoginActivity.this, FbLoginActivty.class));
             }
         });
 
@@ -444,6 +445,78 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
         String email = object.optString("email");
         String first_name = object.optString("first_name");
         String last_name = object.optString("last_name");
+
+        FormBody.Builder builder = WebServiceHandler.createBuilder(new String[]{"username", "password", "player_id"}, new String[]{"mukeshkmwt", "parasme", playerId});
+        WebServiceHandler webServiceHandler = new WebServiceHandler(LoginActivity.this);
+        webServiceHandler.serviceListener = new WebServiceListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("LOGIN", response);
+                try {
+                    final JSONObject jsonObject = new JSONObject(response);
+                    final String status = jsonObject.optString("status");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (status.equals("1")) {
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_LOGIN, true);
+                                JSONObject returnObject = jsonObject.optJSONObject("returnvalue");
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID, returnObject.optInt("userid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_NAME, returnObject.optString("username"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_EMAIL, returnObject.optString("userEmail"));
+
+                                // Decoding encoded emojis if exists
+                                String firstName = EmojiHandler.decodeJava(returnObject.optString("userFirstname"));
+                                String lastName = EmojiHandler.decodeJava(returnObject.optString("userLastname"));
+
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_FIRST_NAME, firstName);
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_SUR_NAME, lastName);
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COMPANY_ID, returnObject.optInt("companyid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_NOTIFICATION, returnObject.optBoolean("ReceiveEmailNotifications"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_COUNTRY, returnObject.optString("country"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BDAY, returnObject.optString("bday"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TITLE, returnObject.optString("businessTitle"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMAIL, returnObject.optString("businessEmail"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CELL, returnObject.optString("businessCell"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_TEL, returnObject.optString("businessDirecttel"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_FAX, returnObject.optString("businesscustomfax"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF1, returnObject.optString("businesscustomfield1"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_CUSTOMF2, returnObject.optString("businesscustomfield2"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_STATUS, returnObject.optString("businessstatus"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_EMP_DATE, returnObject.optString("businessempdate"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_PROFESSION, returnObject.optString("businessprofession"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_BUSINESS_COMPANY, returnObject.optString("businessCompanyName"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_AUTH_TOKEN, returnObject.optString("authenticationtoken"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_OWN_COMPANY_ID, returnObject.optInt("companyid"));
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_IS_BUSINESS, returnObject.optInt("companyid") == 0 ? false : true);
+
+                                AppConstants.AUTH_TOKEN = returnObject.optString("authenticationtoken");
+                                String userId = returnObject.optInt("userid") + "";
+                                AppConstants.USER_ID = userId;
+                                Intent intent;
+                                if (SharedPreferenceUtility.getInstance().get(AppConstants.PREF_INTRO, false))
+                                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                                else
+                                    intent = new Intent(LoginActivity.this, FlowActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else
+                                MyApplication.alertDialog(LoginActivity.this, "Login Failed. Wrong Username or Password", "Alert");
+                        }
+                    });
+
+                } catch (JSONException e) {
+
+                }
+
+            }
+        };
+        try {
+            webServiceHandler.post(AppConstants.URL_LOGIN, builder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

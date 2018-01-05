@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.fragment.FragmentFile;
@@ -75,17 +74,6 @@ public class AllFilesRecyclerViewAdapter extends RecyclerView.Adapter<AllFilesVi
 
         loadFileThumb(position, holder);
 
-        holder.menuShare.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                toggleVisibility(true,holder);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                toggleVisibility(false, holder);
-            }
-        });
 
         setUserVote(itemList.get(position).getUserVote(), holder);
 
@@ -106,7 +94,7 @@ public class AllFilesRecyclerViewAdapter extends RecyclerView.Adapter<AllFilesVi
             }
         });
 
-        holder.btnComment.setOnClickListener(new View.OnClickListener() {
+        holder.imageComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 /*
@@ -148,15 +136,11 @@ public class AllFilesRecyclerViewAdapter extends RecyclerView.Adapter<AllFilesVi
         }
     }
 
-    private void toggleVisibility(boolean shouldHide, AllFilesViewHolders holder) {
-        holder.btnComment.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
-        holder.imageLike.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
-        holder.imageDisLike.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
-    }
 
     private void loadFileThumb(final int position, final AllFilesViewHolders holder) {
 
-        String url = itemList.get(position).getFileType().contains("image") ? itemList.get(position).getFileURL() : itemList.get(position).getThumbURL();
+        String url = itemList.get(position).getThumbURL();
+//        String url = itemList.get(position).getFileType().contains("image") ? itemList.get(position).getFileURL() : itemList.get(position).getThumbURL();
         Picasso.with(context)
                 .load(url)
                 .placeholder(R.drawable.app_logo)

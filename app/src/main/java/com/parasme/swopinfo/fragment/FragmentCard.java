@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -36,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.parasme.swopinfo.helper.Utils.openDialerActivity;
 import static com.parasme.swopinfo.helper.Utils.openEmailClients;
@@ -58,9 +59,9 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
     private boolean isCardAvailable=false;
     private int cardId;
     private String cardURL,userId;
-    private FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
     private String cardURLtoShare;
     private JSONObject returnObject;
+    private CircleImageView imgShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,13 +83,7 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
         btnCardAction = (Button) view.findViewById(R.id.btnCardAction);
         imageCard = (ImageView) view.findViewById(R.id.imageCard);
         layoutDefaultCard = (LinearLayout) view.findViewById(R.id.layoutDefaultCard);
-        btnLinkedIn = (FloatingActionButton) view.findViewById(R.id.btnLinkedIn);
-        btnMail = (FloatingActionButton) view.findViewById(R.id.btnMail);
-        btnFacebook = (FloatingActionButton) view.findViewById(R.id.btnFacebook);
-        btnTwitter = (FloatingActionButton) view.findViewById(R.id.btnTwitter);
-        btnGPlus = (FloatingActionButton) view.findViewById(R.id.btnGPlus);
-        btnPinterest = (FloatingActionButton) view.findViewById(R.id.btnPinterest);
-        btnWhatsapp = (FloatingActionButton) view.findViewById(R.id.btnWhatsapp);
+        imgShare = (CircleImageView) view.findViewById(R.id.imgShare);
 
         Shimmer shimmer1 = new Shimmer();
         Shimmer shimmer2 = new Shimmer();
@@ -120,13 +115,7 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
         textTel1.setOnClickListener(this);
         textTel2.setOnClickListener(this);
         textFax.setOnClickListener(this);
-        btnGPlus.setOnClickListener(this);
-        btnLinkedIn.setOnClickListener(this);
-        btnMail.setOnClickListener(this);
-        btnFacebook.setOnClickListener(this);
-        btnTwitter.setOnClickListener(this);
-        btnPinterest.setOnClickListener(this);
-        btnWhatsapp.setOnClickListener(this);
+        imgShare.setOnClickListener(this);
 
         return view;
     }
@@ -347,28 +336,9 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
             case R.id.textFax:
                 openDialerActivity(mActivity,textFax.getText().toString());
                 break;
-            case R.id.btnLinkedIn:
-                new Utils(mActivity).sharePost("com.linkedin.android","Linkedin", cardURLtoShare);
+            case R.id.imgShare:
+                Utils.shareURLCustomIntent(cardURLtoShare, mActivity);
                 break;
-            case R.id.btnMail:
-                new Utils(mActivity).shareOnMails(cardURLtoShare);
-                break;
-            case R.id.btnGPlus:
-                new Utils(mActivity).sharePost("com.google.android.apps.plus","Google Plus", cardURLtoShare);
-                break;
-            case R.id.btnFacebook:
-                new Utils(mActivity).sharePost("com.facebook.katana","Facebook", cardURLtoShare);
-                break;
-            case R.id.btnTwitter:
-                new Utils(mActivity).sharePost("com.twitter.android","Twitter", cardURLtoShare);
-                break;
-            case R.id.btnWhatsapp:
-                new Utils(mActivity).sharePost("com.whatsapp","Whatsapp", cardURLtoShare);
-                break;
-            case R.id.btnPinterest:
-                new Utils(mActivity).sharePost("com.pinterest","Pinterest", cardURLtoShare);
-                break;
-
         }
     }
 }

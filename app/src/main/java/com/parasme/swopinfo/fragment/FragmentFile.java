@@ -28,7 +28,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.CommentAdapter;
@@ -90,12 +89,11 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     private  Button btnAddComment;
     private  ListView listComments;
     private  ImageView imageLike;
-    private  ImageView imageDisLike, imageMediaPlayPause;
+    private  ImageView imageDisLike, imageMediaPlayPause, imageShare;
     private CustomWebView webView;
     private  ScrollView scrollView;
     private String finalWebViewURL ="",downloadURL;
     private AppCompatActivity mActivity;
-    private FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
     private RelativeLayout layoutMP3View;
     MediaPlayer mediaplayer;
 
@@ -136,27 +134,15 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         imageDisLike = (ImageView) view.findViewById(R.id.imageDisLike);
         webView = (CustomWebView) view.findViewById(R.id.webView);
         scrollView = (ScrollView) view.findViewById(R.id.scrollView);
-        btnLinkedIn = (FloatingActionButton) view.findViewById(R.id.btnLinkedIn);
-        btnMail = (FloatingActionButton) view.findViewById(R.id.btnMail);
-        btnFacebook = (FloatingActionButton) view.findViewById(R.id.btnFacebook);
-        btnTwitter = (FloatingActionButton) view.findViewById(R.id.btnTwitter);
-        btnGPlus = (FloatingActionButton) view.findViewById(R.id.btnGPlus);
-        btnPinterest = (FloatingActionButton) view.findViewById(R.id.btnPinterest);
-        btnWhatsapp = (FloatingActionButton) view.findViewById(R.id.btnWhatsapp);
         layoutMP3View = (RelativeLayout) view.findViewById(R.id.mp3View);
         imageMediaPlayPause = (ImageView) view.findViewById(R.id.img_media_play);
+        imageShare = (ImageView) view.findViewById(R.id.imgShare);
 
-        btnGPlus.setOnClickListener(this);
-        btnLinkedIn.setOnClickListener(this);
-        btnMail.setOnClickListener(this);
-        btnFacebook.setOnClickListener(this);
-        btnTwitter.setOnClickListener(this);
-        btnPinterest.setOnClickListener(this);
-        btnWhatsapp.setOnClickListener(this);
         imageLike.setOnClickListener(this);
         imageDisLike.setOnClickListener(this);
         btnAddComment.setOnClickListener(this);
         textDownload.setOnClickListener(this);
+        imageShare.setOnClickListener(this);
     }
 
     private void loadWebView() {
@@ -634,26 +620,8 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btnLinkedIn:
-                new Utils(mActivity).sharePost("com.linkedin.android","Linkedin",fileURLtoShare);
-                break;
-            case R.id.btnMail:
-                new Utils(mActivity).shareOnMails(fileURLtoShare);
-                break;
-            case R.id.btnGPlus:
-                new Utils(mActivity).sharePost("com.google.android.apps.plus","Google Plus",fileURLtoShare);
-                break;
-            case R.id.btnFacebook:
-                new Utils(mActivity).sharePost("com.facebook.katana","Facebook",fileURLtoShare);
-                break;
-            case R.id.btnTwitter:
-                new Utils(mActivity).sharePost("com.twitter.android","Twitter",fileURLtoShare);
-                break;
-            case R.id.btnWhatsapp:
-                new Utils(mActivity).sharePost("com.whatsapp","Whatsapp",fileURLtoShare);
-                break;
-            case R.id.btnPinterest:
-                new Utils(mActivity).sharePost("com.pinterest","Pinterest",fileURLtoShare);
+            case R.id.imgShare:
+                Utils.shareURLCustomIntent(fileURLtoShare, mActivity);
                 break;
             case R.id.imageLike:
                 imageLike.setImageResource(R.drawable.ic_like);

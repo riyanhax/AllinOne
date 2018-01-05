@@ -60,7 +60,8 @@ public class FbLoginActivty extends Activity {
 
         }
 
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends","email","user_location","user_posts","user_birthday","user_relationships"));
+//        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends","email","user_location","user_posts","user_birthday","user_relationships"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email","user_birthday"));
 
         accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -89,6 +90,8 @@ public class FbLoginActivty extends Activity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
 
+
+/*
                         GraphRequest request = GraphRequest.newGraphPathRequest(
                                 loginResult.getAccessToken(),
                                 "/me?fields=id,name,cover,birthday,posts,email,devices,location,relationship_status",
@@ -97,32 +100,32 @@ public class FbLoginActivty extends Activity {
                                     public void onCompleted(GraphResponse response) {
                                         // Insert your code here
                                         Log.e("BHAI",response.getJSONObject().toString());
-                                        Log.e("DATA",new Gson().toJson(response));
+                                        fbSignInDetail.onGetFBAccountDetail(response.getJSONObject());
+                                        LoginManager.getInstance().logOut();
+                                        finish();
+
                                     }
                                 });
 
                         request.executeAsync();
-
-/*
-                        // login successful
-                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.i("LoginActivity", response.toString());
-                                // Get facebook data from login
-
-                                    //fbSignInDetail.onGetFBAccountDetail(object);
-                                    //LoginManager.getInstance().logOut();
-                                    //finish();
-
-                            }
-                        });
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id, first_name, last_name, email, gender, cover"); // Parámetros que pedimos a facebook
-                        request.setParameters(parameters);
-                        request.executeAsync();
 */
+
+                        GraphRequest request = GraphRequest.newGraphPathRequest(
+                                loginResult.getAccessToken(),
+                                "/me?fields=id,name,birthday,email,picture.type(large)",
+                                new GraphRequest.Callback() {
+                                    @Override
+                                    public void onCompleted(GraphResponse response) {
+                                        // Insert your code here
+                                        Log.e("BHAI",response.getJSONObject().toString());
+                                        fbSignInDetail.onGetFBAccountDetail(response.getJSONObject());
+                                        LoginManager.getInstance().logOut();
+                                        finish();
+
+                                    }
+                                });
+
+                        request.executeAsync();
 
 
                     }

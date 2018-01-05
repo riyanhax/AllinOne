@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;

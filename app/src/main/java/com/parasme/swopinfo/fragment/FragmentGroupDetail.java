@@ -495,26 +495,8 @@ public class FragmentGroupDetail extends FragmentGroupWrapper implements FileSel
             case R.id.btnAction:
                 actionClick();
                 break;
-            case R.id.btnLinkedIn:
-                new Utils(mActivity).sharePost("com.linkedin.android","Linkedin",groupURLToShare);
-                break;
-            case R.id.btnMail:
-                new Utils(mActivity).shareOnMails(groupURLToShare);
-                break;
-            case R.id.btnGPlus:
-                new Utils(mActivity).sharePost("com.google.android.apps.plus","Google Plus",groupURLToShare);
-                break;
-            case R.id.btnFacebook:
-                new Utils(mActivity).sharePost("com.facebook.katana","Facebook",groupURLToShare);
-                break;
-            case R.id.btnTwitter:
-                new Utils(mActivity).sharePost("com.twitter.android","Twitter",groupURLToShare);
-                break;
-            case R.id.btnWhatsapp:
-                new Utils(mActivity).sharePost("com.whatsapp","Whatsapp",groupURLToShare);
-                break;
-            case R.id.btnPinterest:
-                new Utils(mActivity).sharePost("com.pinterest","Pinterest",groupURLToShare);
+            case R.id.imgShare:
+                Utils.shareURLCustomIntent(groupURLToShare, mActivity);
                 break;
             case R.id.btnChat:
                 Intent intent = new Intent(mActivity, ConversationActivity.class);

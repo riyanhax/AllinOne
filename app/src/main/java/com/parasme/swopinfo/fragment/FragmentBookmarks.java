@@ -1,7 +1,6 @@
 package com.parasme.swopinfo.fragment;
 
 import android.app.Dialog;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;

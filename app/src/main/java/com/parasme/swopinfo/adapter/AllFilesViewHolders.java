@@ -5,20 +5,15 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.applozic.mobicomkit.api.conversation.Message;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.application.AppConstants;
-import com.parasme.swopinfo.fragment.FragmentAllFiles;
 import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.model.Upload;
@@ -31,10 +26,7 @@ public class AllFilesViewHolders extends RecyclerView.ViewHolder implements View
     public ImageView countryPhoto;
     public TextView textViews, textDownloads, textScore, textDownload;
     public ArrayList<Upload> allFilesList=new ArrayList<>();
-    public FloatingActionButton btnLinkedIn,btnMail,btnFacebook,btnTwitter,btnGPlus,btnPinterest,btnWhatsapp;
-    public FloatingActionsMenu menuShare;
-    public ImageView imageDisLike, imageLike;
-    public Button btnComment;
+    public ImageView imageDisLike, imageLike, imageShare, imageComment, imageShareToChat;
     public Context context;
 
     public AllFilesViewHolders(View itemView, final List<Upload> allFilesList, final Context context) {
@@ -47,16 +39,9 @@ public class AllFilesViewHolders extends RecyclerView.ViewHolder implements View
         textScore = (TextView) itemView.findViewById(R.id.textScore);
         imageDisLike = (ImageView) itemView.findViewById(R.id.imageDisLike);
         imageLike = (ImageView) itemView.findViewById(R.id.imageLike);
-        btnComment = (Button) itemView.findViewById(R.id.btnComment);
-
-        btnLinkedIn = (FloatingActionButton) itemView.findViewById(R.id.btnLinkedIn);
-        btnMail = (FloatingActionButton) itemView.findViewById(R.id.btnMail);
-        btnFacebook = (FloatingActionButton) itemView.findViewById(R.id.btnFacebook);
-        btnTwitter = (FloatingActionButton) itemView.findViewById(R.id.btnTwitter);
-        btnGPlus = (FloatingActionButton) itemView.findViewById(R.id.btnGPlus);
-        btnPinterest = (FloatingActionButton) itemView.findViewById(R.id.btnPinterest);
-        btnWhatsapp = (FloatingActionButton) itemView.findViewById(R.id.btnWhatsapp);
-        menuShare = (FloatingActionsMenu) itemView.findViewById(R.id.menuShare);
+        imageComment = (ImageView) itemView.findViewById(R.id.imgComment);
+        imageShare = (ImageView) itemView.findViewById(R.id.imgShareToApp);
+        imageShareToChat = (ImageView) itemView.findViewById(R.id.imgShareToChat);
 
         this.allFilesList.addAll(allFilesList);
 
@@ -77,52 +62,22 @@ public class AllFilesViewHolders extends RecyclerView.ViewHolder implements View
 
     private void setShareListeners() {
 
-        btnLinkedIn.setOnClickListener(new View.OnClickListener() {
+        imageShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.linkedin.android","Linkedin",fileURLtoShare);
+                Utils.shareURLCustomIntent(fileURLtoShare, (Activity) context);
             }
         });
-        btnMail.setOnClickListener(new View.OnClickListener() {
+
+        imageShareToChat.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).shareOnMails(fileURLtoShare);
-            }
-        });
-        btnGPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.google.android.apps.plus","Google Plus",fileURLtoShare);
-            }
-        });
-        btnFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.facebook.katana","Facebook",fileURLtoShare);
-            }
-        });
-        btnTwitter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.twitter.android","Twitter",fileURLtoShare);
-            }
-        });
-        btnWhatsapp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.whatsapp","Whatsapp",fileURLtoShare);            }
-        });
-        btnPinterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String fileURLtoShare = AppConstants.URL_DOMAIN+"docview.aspx?fileid="+allFilesList.get(getPosition()).getFileId();
-                new Utils((Activity) context).sharePost("com.pinterest","Pinterest",fileURLtoShare);
+                MainActivity mainActivity = (MainActivity) context;
+                Message message = mainActivity.buildMessages(null, fileURLtoShare, (Activity) context);
+                mainActivity.startMessageForward(message, (Activity) context);
+
             }
         });
     }

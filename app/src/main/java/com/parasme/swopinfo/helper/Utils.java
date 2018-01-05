@@ -6,16 +6,21 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -47,8 +52,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
+import com.applozic.mobicomkit.api.conversation.Message;
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
+import com.applozic.mobicommons.json.GsonUtils;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.FileSelectionActivity;
+import com.parasme.swopinfo.activity.SplashActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.adapter.UploadAdapter;
 import com.parasme.swopinfo.application.AppConstants;
@@ -81,6 +92,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -814,6 +826,9 @@ public class Utils {
                         BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
                         sink.writeAll(Progress.finalResponse.body().source());
                         sink.close();
+                        MediaScannerConnection.scanFile(activity,
+                                new String[] { downloadedFile.getPath() }, null,
+                                null);
                     } catch (Exception e) {
 
                         e.printStackTrace();
@@ -885,4 +900,67 @@ public class Utils {
         matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
+
+
+
+
+
+    public static void shareURLCustomIntent(String message, Activity context) {
+
+        int SEND_MSG_REQUEST = 10;
+
+        //Create primary intent to be used for chooser intent
+        Intent smsIntent = new Intent();
+        smsIntent.setAction(Intent.ACTION_SEND);
+        smsIntent.setType("text/plain");
+        //need to limit the scope of this intent to SMS app only. If we don't set the
+        //package here, it will target apps like bluetooth, clipboard etc also.
+        smsIntent.setPackage("com.android.mms");
+        smsIntent.putExtra("sms_body", message);
+
+        //intent for adding other apps
+        Intent queryIntent = new Intent(Intent.ACTION_SEND);
+        queryIntent.setType("text/plain");
+
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(queryIntent, 0);
+
+        List<LabeledIntent> otherAppIntentList = new ArrayList<LabeledIntent>();
+        //filter out all the other intents which we want to keep
+        for (int i = 0; i < resolveInfos.size(); i++) {
+            ResolveInfo ri = resolveInfos.get(i);
+            String packageName = ri.activityInfo.packageName;
+            Intent intentToAdd = new Intent();
+            if (packageName.contains("com.whatsapp")
+                    || packageName.contains("android.gm")
+                    || packageName.contains("com.twitter")
+                    || packageName.contains("com.facebook")
+                    || packageName.contains("com.linkedin")
+                    || packageName.contains("com.google.android.apps.plus")
+                    || packageName.contains("com.pinterest")
+                    ) {
+                //this is the intent we are interested in
+                intentToAdd.setComponent(new ComponentName(packageName, ri.activityInfo.name));
+                intentToAdd.setAction(Intent.ACTION_SEND);
+                intentToAdd.setType("text/plain");
+                intentToAdd.setPackage(packageName);
+                intentToAdd.putExtra(Intent.EXTRA_TEXT, message);
+                //add this intent to the list
+                otherAppIntentList.add(new LabeledIntent(intentToAdd, packageName,
+                        ri.loadLabel(pm), ri.icon));
+            }
+        }
+
+        // convert intentList to array
+        LabeledIntent[] extraIntents = otherAppIntentList.toArray(
+                new LabeledIntent[ otherAppIntentList.size() ]);
+
+        //create and add all the intents to chooser
+        Intent chooserIntent = Intent.createChooser(smsIntent, "Share Post");
+
+        //add all the extra intents that we have created
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+        ((Activity)context).startActivityForResult(chooserIntent, SEND_MSG_REQUEST);
+    }
+
 }

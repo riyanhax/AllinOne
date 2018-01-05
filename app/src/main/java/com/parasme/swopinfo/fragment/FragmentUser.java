@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.method.Touch;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -212,7 +208,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
 
         GridView gridGroups = (GridView) childView.findViewById(R.id.gridGroups);
         TextView emptyGridText = (TextView) childView.findViewById(R.id.emptyGridText);
-        FloatingActionButton floatingAddGroup = (FloatingActionButton) childView.findViewById(R.id.floatingAddGroup);
+        CircleImageView floatingAddGroup = (CircleImageView) childView.findViewById(R.id.imgAddGroup);
         floatingAddGroup.setVisibility(View.GONE);
 
         ((TextView) mActivity.findViewById(R.id.text_title)).setText("Groups");
