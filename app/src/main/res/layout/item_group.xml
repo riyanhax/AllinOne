@@ -44,7 +44,6 @@
             <ImageView
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
-                android:src="@drawable/ic_member"
                 />
             <TextView
                 android:id="@+id/textMemberCount"
@@ -60,7 +59,6 @@
             <ImageView
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
-                android:src="@drawable/ic_file"
                 android:layout_marginLeft="@dimen/_20sdp"
                 />
             <TextView

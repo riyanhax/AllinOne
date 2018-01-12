@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "/media/mukesh/HOme/mukesh/My Workspace/SwopInfo/urlview/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/home/mukesh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.0.1.aar/b6d82a9ef7d8b747257fe19f71e15948/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}

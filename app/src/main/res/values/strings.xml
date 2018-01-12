@@ -73,40 +73,6 @@
     </integer-array>
 
 
-    <integer-array name="game">
-        <item>@drawable/game1</item>
-        <item>@drawable/game2</item>
-        <item>@drawable/game3</item>
-    </integer-array>
-
-    <integer-array name="hifi">
-        <item>@drawable/hifi1</item>
-        <item>@drawable/hifi2</item>
-        <item>@drawable/hifi3</item>
-        <item>@drawable/hifi4</item>
-    </integer-array>
-
-    <integer-array name="pick">
-        <item>@drawable/pick1</item>
-        <item>@drawable/pick2</item>
-        <item>@drawable/pick3</item>
-        <item>@drawable/pick4</item>
-        <item>@drawable/pick5</item>
-        <item>@drawable/pick6</item>
-        <item>@drawable/pick7</item>
-    </integer-array>
-
-    <integer-array name="spar">
-        <item>@drawable/spar1</item>
-        <item>@drawable/spar2</item>
-        <item>@drawable/spar3</item>
-    </integer-array>
-
-    <integer-array name="wool">
-        <item>@drawable/wool1</item>
-        <item>@drawable/wool2</item>
-        <item>@drawable/wool3</item>
-    </integer-array>
 
     <string-array name="categories">
         <item>Audio, Electronic, PC, Cellphone &amp; Photo</item>

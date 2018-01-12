@@ -655,31 +655,6 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
     }
 
 
-    private File ReadFromAssets()
-    {
-        AssetManager assetManager = mActivity.getAssets();
-
-        InputStream in = null;
-        OutputStream out = null;
-        File file = new File(mActivity.getFilesDir(), "sample.pdf");
-        try
-        {
-            in = assetManager.open("sample.pdf");
-            out = mActivity.openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
-
-            copyFile(in, out);
-            in.close();
-            in = null;
-            out.flush();
-            out.close();
-            out = null;
-        } catch (Exception e)
-        {
-            Log.e("tag", e.getMessage());
-        }
-
-        return file;
-    }
 
     private void copyFile(InputStream in, OutputStream out) throws IOException
     {

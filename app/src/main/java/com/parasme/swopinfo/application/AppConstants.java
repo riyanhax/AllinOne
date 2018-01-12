@@ -94,4 +94,5 @@ public class AppConstants {
     public static final String URL_COMAPNY_REGISTER = URL_DOMAIN + "api/company/register";
     public static final String URL_COMAPNY_ACTIVATE = URL_DOMAIN + "api/company/registercomplete";
     public static final String URL_CHECKIN_COUNT = URL_DOMAIN + "checkincounts.aspx?";
+    public static final String URL_FB_LOGIN = URL_DOMAIN + "api/facebook";
 }

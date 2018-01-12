@@ -217,9 +217,10 @@
         <ImageView
             android:id="@+id/imageShareThumb"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_160sdp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             />
 
 
@@ -285,7 +286,7 @@
         android:id="@+id/layoutPreview"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:gravity="center"
         android:orientation="vertical" >
 

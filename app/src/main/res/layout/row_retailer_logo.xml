@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_170sdp"
         android:scaleType="fitCenter"
-        android:src="@drawable/logo_spar"
         />
 
 

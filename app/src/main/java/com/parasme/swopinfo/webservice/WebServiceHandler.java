@@ -75,7 +75,7 @@ public class WebServiceHandler {
             progressDialog.show();
         Log.e("POSTURL",url);
 
-        if(url.equalsIgnoreCase(AppConstants.URL_DOMAIN + "api/Authentication")){
+        if(url.equalsIgnoreCase(AppConstants.URL_DOMAIN + "api/Authentication") || url.contains("facebook")){
             request = new Request.Builder()
                     .url(url)
                     .post(builder.build())

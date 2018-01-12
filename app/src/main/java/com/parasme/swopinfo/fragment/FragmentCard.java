@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,7 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -49,8 +54,8 @@ import static com.parasme.swopinfo.helper.Utils.openEmailClients;
  * Mobile :- +917737556190
  */
 
-public class FragmentCard extends Fragment implements ImagePicker.Picker, View.OnClickListener {
-    private TextView textUserName,textCompanyName;
+public class FragmentCard extends Fragment implements ImagePicker.Picker, View.OnClickListener, ColorPickerDialogListener {
+    private TextView textUserName,textCompanyName, textFooter;
     private ShimmerTextView textCell,textEmail,textTel1,textTel2,textFax;
     private AppCompatActivity mActivity;
     private Button btnCardAction;
@@ -62,6 +67,9 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
     private String cardURLtoShare;
     private JSONObject returnObject;
     private CircleImageView imgShare;
+    private RelativeLayout layoutCardHeader, layoutShape;
+    private static final int DIALOG_ID = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +83,7 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
 
         textUserName = (TextView) view.findViewById(R.id.textUserName);
         textCompanyName = (TextView) view.findViewById(R.id.textCompanyName);
+        textFooter = (TextView) view.findViewById(R.id.textFooter);
         textEmail = (ShimmerTextView) view.findViewById(R.id.textEmail);
         textCell = (ShimmerTextView) view.findViewById(R.id.textCell);
         textTel1 = (ShimmerTextView) view.findViewById(R.id.textTel1);
@@ -84,6 +93,8 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
         imageCard = (ImageView) view.findViewById(R.id.imageCard);
         layoutDefaultCard = (LinearLayout) view.findViewById(R.id.layoutDefaultCard);
         imgShare = (CircleImageView) view.findViewById(R.id.imgShare);
+        layoutCardHeader = (RelativeLayout) view.findViewById(R.id.layoutCardHeader);
+        layoutShape = (RelativeLayout) view.findViewById(R.id.layoutShape);
 
         Shimmer shimmer1 = new Shimmer();
         Shimmer shimmer2 = new Shimmer();
@@ -116,6 +127,7 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
         textTel2.setOnClickListener(this);
         textFax.setOnClickListener(this);
         imgShare.setOnClickListener(this);
+        layoutCardHeader.setOnClickListener(this);
 
         return view;
     }
@@ -164,15 +176,15 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
                             returnObject = new JSONObject(response).optJSONObject("returnvalue");
                             JSONObject cardObject = returnObject.optJSONObject("businesscard");
 
-                        if (cardObject==null){
-                            isCardAvailable = false;
-                            imageCard.setVisibility(View.GONE);
-                            layoutDefaultCard.setVisibility(View.VISIBLE);
-                            btnCardAction.setText("Upload your own");
-                            loadDefaultCard(returnObject);
-                        }
+                            if (cardObject==null){
+                                isCardAvailable = false;
+                                imageCard.setVisibility(View.GONE);
+                                layoutDefaultCard.setVisibility(View.VISIBLE);
+                                btnCardAction.setText("Upload your own");
+                                loadDefaultCard(returnObject);
+                            }
 
-                        else {
+                            else {
                                 cardId = cardObject.optInt("cardid");
                                 cardURL = AppConstants.URL_DOMAIN+cardObject.optString("coordsurl");
                                 imageCard.setVisibility(View.VISIBLE);
@@ -264,7 +276,6 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
     public void onVideoPicked(String videoPath) {
 
     }
-
     private void uploadCard(final Bitmap bitmap, String imagePath) {
         WebServiceHandler webServiceHandler=new WebServiceHandler(mActivity);
         webServiceHandler.serviceListener=new WebServiceListener() {
@@ -339,6 +350,36 @@ public class FragmentCard extends Fragment implements ImagePicker.Picker, View.O
             case R.id.imgShare:
                 Utils.shareURLCustomIntent(cardURLtoShare, mActivity);
                 break;
+            case R.id.layoutCardHeader:
+                ColorPickerDialog colorPickerDialog =
+                ColorPickerDialog.newBuilder()
+                        .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
+                        .setAllowPresets(false)
+                        .setDialogId(DIALOG_ID)
+                        .setColor(Color.BLACK)
+                        .setShowAlphaSlider(true)
+                        .create();
+
+                colorPickerDialog.setColorPickerDialogListener(FragmentCard.this);
+                colorPickerDialog.show(getFragmentManager(),"color-picker-dialog");
+                break;
         }
+    }
+
+    @Override
+    public void onColorSelected(int dialogId, int color) {
+        if (dialogId == DIALOG_ID){
+            // We got result from the dialog that is shown when clicking on the icon in the action bar.
+            String strColor = String.format("#%06X", 0xFFFFFF & color);
+            Toast.makeText(getActivity(), "Selected Color: #" + strColor, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "Selected Color: #" + Integer.toHexString(color), Toast.LENGTH_SHORT).show();
+            layoutShape.setBackgroundColor(Color.parseColor(strColor));
+            textFooter.setBackgroundColor(Color.parseColor(strColor));
+        }
+    }
+
+    @Override
+    public void onDialogDismissed(int dialogId) {
+
     }
 }

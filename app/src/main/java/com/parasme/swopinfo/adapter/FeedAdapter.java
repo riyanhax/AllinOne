@@ -7,8 +7,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,13 +29,13 @@ import android.widget.TextView;
 import com.applozic.mobicomkit.api.conversation.Message;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.activity.MainActivity;
-import com.parasme.swopinfo.activity.SplashActivity;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentCompany;
 import com.parasme.swopinfo.fragment.FragmentFile;
 import com.parasme.swopinfo.fragment.FragmentHome;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.DatabaseHelper;
 import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.NonScrollRecyclerView;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
@@ -54,7 +54,6 @@ import com.squareup.picasso.Target;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,6 +95,8 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
     public static ArrayList<String> arrayList = new ArrayList<>();
     public ListView listFeeds;
 
+    private DatabaseHelper databaseHelper;
+
     public FeedAdapter(Context context, int resourceId, ArrayList<Feed> feedArrayList, ListView listFeeds) {
         // TODO Auto-generated constructor stub
         super(context,resourceId);
@@ -106,6 +107,7 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         arrayList.clear();
         this.listFeeds = listFeeds;
+        databaseHelper = new DatabaseHelper(context);
     }
 
     @Override
@@ -539,6 +541,20 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
             viewHolder.layoutShare.setVisibility(View.VISIBLE);
             //viewHolder.textCategoryName.setVisibility(View.GONE);
             viewHolder.layoutMultipleFiles.setVisibility(View.GONE);
+/*
+            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.app_logo);
+            Log.e("BHARAT",icon.getHeight()+"_"+icon.getWidth());
+            if (icon.getHeight() >= (icon.getWidth()*3)) {
+                viewHolder.imageShareThumb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                viewHolder.imageShareThumb.setMaxWidth(400);
+                viewHolder.imageShareThumb.setMaxHeight(600);
+            }
+            else{
+                viewHolder.imageShareThumb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            }
+*/
+
             viewHolder.textShare.setText(feedArrayList.get(position).getComment());
             viewHolder.textView.setText("shared some info");
 
@@ -610,7 +626,7 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
         viewHolder.layoutShare.setVisibility(View.GONE);
         viewHolder.layoutPreview.setVisibility(View.VISIBLE);
         viewHolder.layoutMultipleFiles.setVisibility(View.GONE);
-        viewHolder.textShare.setVisibility(View.GONE);
+        //viewHolder.textShare.setVisibility(View.GONE);
         viewHolder.textView.setText("shared some info");
 
 
@@ -630,9 +646,10 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
         if (url.contains("youtu.be"))
             url = url.replace("http:","https:");
 
+        Feed feed = databaseHelper.getURLPreviewData(feedArrayList.get(position).getFileId());
         if(!url.contains("24.com") && !url.contains("24.co") && !url.contains("swopinfo.com")){
             viewHolder.progressBar.setVisibility(View.GONE);
-            if (!feedArrayList.get(position).isPreviewLoaded()) {
+            if (feed==null) {
                 Log.e("AAAAA",url);
                 //feedArrayList.get(position).setPreviewLoaded(true);
                 OnLoadListener onLoadListener = new OnLoadListener() {
@@ -643,7 +660,8 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
                         feedArrayList.get(position).setPreviewPageURL(ogData.getUrl());
                         feedArrayList.get(position).setPreviewThumbURL(ogData.getImage());
                         feedArrayList.get(position).setPreviewLoaded(true);
-                        notifyDataSetChanged();
+                        databaseHelper.addURLPreview(feedArrayList.get(position).getFileId(), ogData.getTitle(), ogData.getDescription(), ogData.getUrl(), ogData.getImage());
+                        //notifyDataSetChanged();
                     }
                 };
 
@@ -652,14 +670,24 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
             }
 
             else{
-                viewHolder.openGraphView.loadFrom(url);
+                //viewHolder.openGraphView.loadFrom(url);
+                viewHolder.textPreviewTitle.setText(feed.getPreviewTitle());
+                viewHolder.textPreviewDescription.setText(feed.getPreviewDescription());
+                viewHolder.textPreviewURL.setText(feed.getPreviewPageURL());
+
+                Bitmap imageBitmap = mBitmapCache.get(feed.getPreviewThumbURL());
+                if (imageBitmap != null)
+                    viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
+                else
+                    Picasso.with(context).load(feed.getPreviewThumbURL()).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imagePreviewThumb, feed.getPreviewThumbURL()));
+
             }
 
         }
 
         else {
 
-            if (!feedArrayList.get(position).isPreviewLoaded()) {
+            if (feed == null) {
                 LinkPreviewCallback callback = new LinkPreviewCallback() {
                     @Override
                     public void onPre() {
@@ -676,8 +704,10 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
                             feedArrayList.get(position).setPreviewTitle(sourceContent.getTitle());
                             feedArrayList.get(position).setPreviewDescription(sourceContent.getDescription());
                             feedArrayList.get(position).setPreviewPageURL(sourceContent.getUrl());
+                            databaseHelper.addURLPreview(feedArrayList.get(position).getFileId(), sourceContent.getTitle(), sourceContent.getDescription(), sourceContent.getUrl(),
+                                    sourceContent.getImages().size()>0 ? sourceContent.getImages().get(0) : "");
 
-                            notifyDataSetChanged();
+                            //notifyDataSetChanged();
 
                             if (sourceContent.getImages().size()>0)
                                 feedArrayList.get(position).setPreviewThumbURL(sourceContent.getImages().get(0));
@@ -700,19 +730,16 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
             }
             else{
                 //viewHolder.progressBar.setVisibility(View.GONE);
-                viewHolder.textPreviewTitle.setText(feedArrayList.get(position).getPreviewTitle());
-                viewHolder.textPreviewDescription.setText(feedArrayList.get(position).getPreviewDescription());
-                viewHolder.textPreviewURL.setText(feedArrayList.get(position).getPreviewPageURL());
+                viewHolder.textPreviewTitle.setText(feed.getPreviewTitle());
+                viewHolder.textPreviewDescription.setText(feed.getPreviewDescription());
+                viewHolder.textPreviewURL.setText(feed.getPreviewPageURL());
 
                 //Picasso.with(getContext()).load(feedArrayList.get(position).getPreviewThumbURL()).error(android.R.drawable.stat_notify_error).into(viewHolder.imagePreviewThumb);
-                Bitmap imageBitmap = mBitmapCache.get(feedArrayList.get(position).getPreviewThumbURL());
+                Bitmap imageBitmap = mBitmapCache.get(feed.getPreviewThumbURL());
                 if(imageBitmap!=null)
                     viewHolder.imagePreviewThumb.setImageBitmap(imageBitmap);
-/*
                 else
-                    ImageLoader.getInstance()
-                            .displayImage(feedArrayList.get(position).getPreviewThumbURL(), viewHolder.imagePreviewThumb, optionsFile, imageFileLoadingListener);
-*/
+                    Picasso.with(context).load(feed.getPreviewThumbURL()).error(R.drawable.document_gray).placeholder(R.drawable.document_gray).into(imageFileLoadingListener1(viewHolder.imagePreviewThumb, feed.getPreviewThumbURL()));
 
             }
 
@@ -1145,6 +1172,21 @@ public class FeedAdapter extends ArrayAdapter<Feed>{
         return imageFileLoadingListener1;
     }
 
+/*
+    private void setFileThumbWidthHeight(Bitmap bitmap, ImageView imageView) {
+        if (bitmap.getHeight() >= (bitmap.getWidth()*3)) {
+            try{
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                imageView.setMaxWidth(400);
+                imageView.setMaxHeight(600);
+            }catch (ClassCastException e){Log.e("CLASS","error");}
+        }
+        else{
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
+
+    }
+*/
 
 
     @Override

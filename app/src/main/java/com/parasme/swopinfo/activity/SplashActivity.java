@@ -42,6 +42,7 @@ import com.parasme.swopinfo.application.MyApplication;
 import com.parasme.swopinfo.fragment.FragmentAdd;
 import com.parasme.swopinfo.fragment.FragmentGroups;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
 import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
@@ -93,6 +94,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        Log.e("Bhai", EmojiHandler.decodeJava("\u0921\u0947\u092e\u094b"));
 
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);

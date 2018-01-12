@@ -44,6 +44,7 @@ import com.parasme.swopinfo.activity.LocationActivity;
 import com.parasme.swopinfo.activity.MainActivity;
 import com.parasme.swopinfo.adapter.FeedAdapter;
 import com.parasme.swopinfo.application.AppConstants;
+import com.parasme.swopinfo.helper.DatabaseHelper;
 import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.ImagePicker;
 import com.parasme.swopinfo.helper.RippleBackground;
@@ -117,7 +118,6 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     private LinearLayout layoutPick;
 
     public static RippleBackground rippleBackground;
-    String[] language ={"C","C++","Java",".NET","iPhone","Android","ASP.NET","PHP"};
     public String fullAddress="";
     public boolean isLoading = false;
 
@@ -126,6 +126,7 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
     MediaRecorder mediaRecorder;
     String recordedPath;
     private final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO=1;
+
 
     @Override
     public void onResume() {
@@ -828,9 +829,6 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         links.add(linkUsername);
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,
-                android.R.layout.simple_dropdown_item_1line, language);
-
 
         editSwop.setTokenizer(new SpaceTokenizer());
         //editSwop.setAdapter(adapter);
@@ -1045,7 +1043,8 @@ public class FragmentHome extends BaseFragment implements FileSelectionActivity.
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("ERROR",e.toString());
+            //Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

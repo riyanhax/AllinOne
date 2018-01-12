@@ -72,7 +72,6 @@ public class FragmentPromotionPager extends Fragment {
         countCheckin();
 
         promotionArrayList = new ArrayList<>();
-        setArrayList();
 
         Log.e("PromotionSize",FragmentHome.retailerList.get(FragmentRetailerLogos.retailerPosition).getPromotions().size()+"");
         //pagerPromotions.setAdapter(new PromotionPagerAdapter(appCompatActivity, promotionArrayList));
@@ -121,41 +120,6 @@ public class FragmentPromotionPager extends Fragment {
         }
     }
 
-    private void setArrayList() {
-        TypedArray gamePromos = getResources().obtainTypedArray(R.array.game);
-        TypedArray hifiPromos = getResources().obtainTypedArray(R.array.hifi);
-        TypedArray pickPromos = getResources().obtainTypedArray(R.array.pick);
-        TypedArray sparPromos = getResources().obtainTypedArray(R.array.spar);
-        TypedArray woolPromos = getResources().obtainTypedArray(R.array.wool);
-
-        switch (FragmentRetailerLogos.retailerPosition){
-            case 0:
-                for (int i = 0; i <gamePromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(gamePromos.getResourceId(i,0)));
-                }
-                break;
-            case 1:
-                for (int i = 0; i <hifiPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(hifiPromos.getResourceId(i,0)));
-                }
-                break;
-            case 2:
-                for (int i = 0; i <pickPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(pickPromos.getResourceId(i,0)));
-                }
-                break;
-            case 3:
-                for (int i = 0; i <sparPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(sparPromos.getResourceId(i,0)));
-                }
-                break;
-            case 4:
-                for (int i = 0; i <woolPromos.length() ; i++) {
-                    promotionArrayList.add(new Store.Promotion(woolPromos.getResourceId(i,0)));
-                }
-                break;
-        }
-    }
 
 
     private void findViews(View view) {

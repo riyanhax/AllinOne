@@ -16,7 +16,6 @@
             android:id="@+id/image_upload_thumb"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_100sdp"
-            android:src="@drawable/ic_file"
             />
 
         <TextView

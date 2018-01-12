@@ -22,7 +22,6 @@
             android:id="@+id/imageShareThumb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_member"
             android:maxHeight="@dimen/_350sdp"
             android:adjustViewBounds="true"
             android:layout_marginTop="@dimen/_10sdp"
