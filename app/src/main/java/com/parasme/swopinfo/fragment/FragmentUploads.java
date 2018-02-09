@@ -196,7 +196,7 @@ public class FragmentUploads extends FragmentUploadsWrapper {
                 bundle.putSerializable("fileData",uploadArrayList.get(i));
                 Fragment fragment = new FragmentFile();
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+                MainActivity.replaceFragment(fragment,mActivity.getFragmentManager(),mActivity,R.id.content_frame);
             }
         });
 //        }

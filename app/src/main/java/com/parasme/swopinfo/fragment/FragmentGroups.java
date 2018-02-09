@@ -110,7 +110,7 @@ public class FragmentGroups extends BaseFragment {
                 bundle.putString(AppConstants.KEY_USER_ID,groupArrayList.get(i).getOwnerUserId()+"");
                 Fragment fragment = new FragmentGroupDetail();
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
     }

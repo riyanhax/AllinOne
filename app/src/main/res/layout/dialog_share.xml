@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:og="http://schemas.android.com/apk/res-auto"
     android:minWidth="@dimen/_280sdp"
     android:layout_marginLeft="@dimen/_10sdp"
     android:layout_marginRight="@dimen/_10sdp"
@@ -37,6 +36,7 @@
         android:visibility="gone"
         android:indeterminate="true" />
 
+<!--
     <me.kaelaela.opengraphview.OpenGraphView
         android:id="@+id/og_view"
         android:layout_width="match_parent"
@@ -51,6 +51,11 @@
         og:strokeColor="@color/light_gray"
         og:titleColor="@color/base_gray"
         og:urlTextColor="@color/base_gray"
+        />
+-->
+
+    <include layout="@layout/url_preview"
+        android:visibility="gone"
         />
 
     <TextView

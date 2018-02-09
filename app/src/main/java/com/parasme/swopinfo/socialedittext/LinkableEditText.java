@@ -2,6 +2,7 @@ package com.parasme.swopinfo.socialedittext;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
@@ -42,6 +43,8 @@ public class LinkableEditText extends MultiAutoCompleteTextView implements TextW
     }
 
     private void init() {
+//        setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
         addTextChangedListener(this);
         setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -91,6 +94,13 @@ public class LinkableEditText extends MultiAutoCompleteTextView implements TextW
 
     @Override
     public void afterTextChanged(Editable s) {
+        String string = s.toString();
+        if (string.length()==1 && !string.equals(string.toUpperCase())){
+            string = string.toUpperCase();
+            setText(string);
+            setSelection(1);
+        }
+
         mLinkModifier.setSpannable(s);
 
         mLinkModifier.build();

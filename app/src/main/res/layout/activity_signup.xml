@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="visible"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >
@@ -34,7 +35,7 @@
             android:drawableLeft="@drawable/ic_mail"
             android:backgroundTint="@color/colorEdit"
             android:textColorHint="@color/colorEditHint"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_7sdp"
             />
 
         <EditText
@@ -45,6 +46,7 @@
             android:textColor="@color/colorEdit"
             android:textSize="@dimen/_14sdp"
             android:singleLine="true"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
             android:inputType="textCapSentences"
             android:drawablePadding="@dimen/_6sdp"
             android:drawableLeft="@drawable/ic_user"
@@ -61,6 +63,7 @@
             android:textColor="@color/colorEdit"
             android:textSize="@dimen/_14sdp"
             android:singleLine="true"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
             android:inputType="textCapSentences"
             android:drawablePadding="@dimen/_6sdp"
             android:drawableLeft="@drawable/ic_user"
@@ -84,6 +87,24 @@
             android:layout_marginTop="@dimen/_10sdp"
             />
 
+        <EditText
+            android:id="@+id/editDOB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth"
+            android:clickable="false"
+            android:focusable="false"
+            android:singleLine="true"
+            android:textColor="@color/colorEdit"
+            android:textSize="@dimen/_14sdp"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_cake"
+            android:drawableRight="@drawable/ic_arrow"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
         <Button
             android:id="@+id/btnNext"
             android:layout_width="match_parent"
@@ -92,7 +113,7 @@
             android:background="@drawable/border_button"
             android:text="Next"
             android:textAllCaps="false"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:textColor="@color/colorPrimaryDark"
             />
     </LinearLayout>
@@ -120,41 +141,7 @@
             android:layout_gravity="center_horizontal"
             />
 
-        <EditText
-            android:id="@+id/editDOB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Date of Birth"
-            android:clickable="false"
-            android:focusable="false"
-            android:singleLine="true"
-            android:textColor="@color/colorEdit"
-            android:textSize="@dimen/_14sdp"
-            android:drawablePadding="@dimen/_6sdp"
-            android:drawableLeft="@drawable/ic_cake"
-            android:drawableRight="@drawable/ic_arrow"
-            android:backgroundTint="@color/colorEdit"
-            android:textColorHint="@color/colorEditHint"
-            android:layout_marginTop="@dimen/_10sdp"
-            />
 
-        <EditText
-            android:id="@+id/editCountry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Country"
-            android:textColor="@color/colorEdit"
-            android:clickable="false"
-            android:focusable="false"
-            android:singleLine="true"
-            android:textSize="@dimen/_14sdp"
-            android:drawablePadding="@dimen/_6sdp"
-            android:drawableLeft="@drawable/ic_country"
-            android:drawableRight="@drawable/ic_arrow"
-            android:backgroundTint="@color/colorEdit"
-            android:textColorHint="@color/colorEditHint"
-            android:layout_marginTop="@dimen/_10sdp"
-            />
 
         <EditText
             android:id="@+id/editPassword"
@@ -188,6 +175,59 @@
             android:layout_marginTop="@dimen/_10sdp"
             />
 
+        <EditText
+            android:id="@+id/editCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:textColor="@color/colorEdit"
+            android:clickable="false"
+            android:focusable="false"
+            android:singleLine="true"
+            android:textSize="@dimen/_14sdp"
+            android:drawablePadding="@dimen/_6sdp"
+            android:drawableLeft="@drawable/ic_country"
+            android:drawableRight="@drawable/ic_arrow"
+            android:backgroundTint="@color/colorEdit"
+            android:textColorHint="@color/colorEditHint"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_10sdp"
+            >
+            <EditText
+                android:id="@+id/editCountryCode"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorEdit"
+                android:textSize="@dimen/_14sdp"
+                android:singleLine="true"
+                android:inputType="number"
+                android:clickable="false"
+                android:focusable="false"
+                android:drawableLeft="@drawable/ic_mobile"
+                android:backgroundTint="@color/colorEdit"
+                android:textColorHint="@color/colorEditHint"
+                />
+            <EditText
+                android:id="@+id/editMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile Number"
+                android:textColor="@color/colorEdit"
+                android:textSize="@dimen/_14sdp"
+                android:singleLine="true"
+                android:layout_marginTop="6.5px"
+                android:inputType="number"
+                android:backgroundTint="@color/colorEdit"
+                android:textColorHint="@color/colorEditHint"
+                />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
@@ -204,7 +244,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_13sdp"
-            android:text="\u00A9 2017 - SwopInfo.com. All rights reserved.\n      Privacy Policy Terms and Conditions"
+            android:text="\u00A9 2018 - SwopInfo.com. All rights reserved.\n      Privacy Policy Terms and Conditions"
             android:layout_gravity="center"
             android:textColor="@color/colorEdit"
             />

@@ -167,7 +167,7 @@ public class FragmentUploadsWrapper extends BaseFragment implements FileSelectio
                 bundle.putInt("fildeId",uploadArrayList.get(i).getFileId());
                 Fragment fragment = new FragmentFile();
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+                MainActivity.replaceFragment(fragment,mActivity.getFragmentManager(),mActivity,R.id.content_frame);
             }
         });
 

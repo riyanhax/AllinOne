@@ -130,6 +130,16 @@ public class Utils {
         return countryNameList;
     }
 
+    public ArrayList<String> getCountryCodes() {
+        ArrayList<String> countryCodeList=new ArrayList<>();
+        String[] countries =  activity.getResources().getStringArray(R.array.countries);
+        for (int i = 0; i < countries.length; i++) {
+            String[] country = countries[i].split(",");
+            countryCodeList.add(country[0]);
+        }
+        return countryCodeList;
+    }
+
     public Object[] loadCountryDialog(ArrayList<String> countryNameList) {
         Dialog dialogCountry= new Dialog(activity);
 
@@ -963,4 +973,32 @@ public class Utils {
         ((Activity)context).startActivityForResult(chooserIntent, SEND_MSG_REQUEST);
     }
 
+
+
+/*
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, areaList) {
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                String area = areaList.get(position).split(":")[0];
+                String areaId = areaList.get(position).split(":")[1];
+                ((TextView) view).setText(area);
+                ((TextView) view).setTag(areaId);
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                String area = areaList.get(position).split(":")[0];
+                ((TextView) v).setText(area);
+                return v;
+            }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerArea.setAdapter(adapter);
+
+*/
 }

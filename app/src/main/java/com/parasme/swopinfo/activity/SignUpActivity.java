@@ -1,11 +1,15 @@
 package com.parasme.swopinfo.activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +37,7 @@ import com.parasme.swopinfo.webservice.WebServiceListener;
 import net.alhazmy13.catcho.library.Catcho;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,18 +56,21 @@ import okhttp3.MultipartBody;
 public class SignUpActivity extends AppCompatActivity implements ImagePicker.Picker{
 
     private ArrayList<String> countryNameList = new ArrayList<>();
+    private ArrayList<String> countryCodeList = new ArrayList<>();
     private Dialog dialogCountry;
     private ListView listViewCountry;
     private boolean isFirstPhase=true;
     private View rootView;
     private ArrayList<EditText> editTextArrayList1 =new ArrayList<>();
     private ArrayList<EditText> editTextArrayList2 =new ArrayList<>();
-    private String imagePath="";
+    public static String imagePath="";
 
-    EditText editCountry,editEmail,editFirstName,editLastName,editUserName,editPassword,editConfirmPassword,editDOB;
+    EditText editCountry,editEmail,editFirstName,editLastName,editUserName,editPassword,
+            editConfirmPassword,editDOB,editMobile,editCountryCode;
     LinearLayout layoutPhase1,layoutPhase2;
     ImageView imageUser,imageUser2;
     Button btnNext, btnSubmit;
+    private String userTempId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
 
         editCountry = (EditText) findViewById(R.id.editCountry);
+        editCountryCode = (EditText) findViewById(R.id.editCountryCode);
         editEmail = (EditText) findViewById(R.id.editEmail);
         editFirstName = (EditText) findViewById(R.id.editFirstName);
         editLastName = (EditText) findViewById(R.id.editLastName);
@@ -78,6 +87,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         editPassword = (EditText) findViewById(R.id.editPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
         editDOB = (EditText) findViewById(R.id.editDOB);
+        editMobile = (EditText) findViewById(R.id.editMobile);
 
         layoutPhase1 = (LinearLayout) findViewById(R.id.layoutPhase1);
         layoutPhase2 = (LinearLayout) findViewById(R.id.layoutPhase2);
@@ -160,15 +170,60 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         editTextArrayList1.add(editFirstName);
         editTextArrayList1.add(editLastName);
         editTextArrayList1.add(editUserName);
+        editTextArrayList1.add(editDOB);
 
-        editTextArrayList2.add(editDOB);
         editTextArrayList2.add(editCountry);
         editTextArrayList2.add(editPassword);
         editTextArrayList2.add(editConfirmPassword);
+        editTextArrayList2.add(editMobile);
 
         countryNameList= new Utils(SignUpActivity.this).getCountryNames();
+        countryCodeList= new Utils(SignUpActivity.this).getCountryCodes();
         loadCountryDialog();
         rootView=this.getWindow().getDecorView().findViewById(android.R.id.content);
+
+        editMobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String string = s.toString();
+                if (string.startsWith("0"))
+                    editMobile.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        setCountryAndCode();
+
+    }
+
+    private void setCountryAndCode() {
+        String countryCode="", countryName="";
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String countryId = tm.getSimCountryIso().toUpperCase();
+        if (!StringUtil.isBlank(countryId)) {
+            String[] countries = getResources().getStringArray(R.array.countries);
+            for (int i = 0; i < countries.length; i++) {
+                Log.e("pos", i + "__" + countries.length);
+                String id = countries[i].split(",")[1];
+                if (countryId.equalsIgnoreCase(id)) {
+                    countryCode = countries[i].split(",")[0];
+                    countryName = countries[i].split(",")[2];
+                    break;
+                }
+            }
+            editCountry.setText(countryName);
+            editCountryCode.setText("+"+countryCode);
+        }
+
     }
 
 
@@ -181,6 +236,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         listViewCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                editCountryCode.setText("+"+countryCodeList.get(position));
                 editCountry.setText(countryNameList.get(position));
                 dialogCountry.dismiss();
             }
@@ -236,24 +292,32 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
             }
         }
 
-        if(!editTextArrayList2.get(2).getText().toString().equals(editTextArrayList2.get(3).getText().toString())){
-            editTextArrayList2.get(2).setError("Please enter same passwords");
-            editTextArrayList2.get(2).requestFocus();
+        if(!editTextArrayList2.get(1).getText().toString().equals(editTextArrayList2.get(2).getText().toString())){
+            editTextArrayList2.get(1).setError("Please enter same passwords");
+            editTextArrayList2.get(1).requestFocus();
             return;
         }
         else{
-            editTextArrayList2.get(2).clearFocus();
-            editTextArrayList2.get(2).setError(null);
+            editTextArrayList2.get(1).clearFocus();
+            editTextArrayList2.get(1).setError(null);
         }
+        String mob = editCountryCode.getText().toString()+editMobile.getText().toString();
 
         // Encoding emojis if exists
         String firstName = EmojiHandler.encodeJava(editFirstName.getText().toString());
         String lastName = EmojiHandler.encodeJava(editLastName.getText().toString());
 
-        String paramsArray[]={"userid","username","userEmail","userFirstname","userLastname","companyid","ReceiveEmailNotifications","country","bday","password"};
-        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),firstName,lastName,"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString()};
+        String paramsArray[]={"userid","username","userEmail","userFirstname","userLastname","companyid","ReceiveEmailNotifications","country","bday","password","userMobile"};
+        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),firstName,lastName,"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString(),mob};
 //        String paramsArray[]={"userid","username","userEmail","userFirstname","userLastname","companyid","ReceiveEmailNotifications","country","bday","password","profilepic"};
 //        String valuesArray[]={"0",editUserName.getText().toString(),editEmail.getText().toString(),editFirstName.getText().toString(),editLastName.getText().toString(),"0","true",editCountry.getText().toString(),editDOB.getText().toString(),editPassword.getText().toString(),imagePath};
+
+        // Creating url according to country
+        final String country = editCountry.getText().toString();
+        String url = AppConstants.URL_REGISTER_WITHOUT_OTP;
+        if (country.equalsIgnoreCase("south africa"))
+            url = AppConstants.URL_REGISTER;
+
 
         FormBody.Builder builder= WebServiceHandler.createBuilder(paramsArray,valuesArray);
         WebServiceHandler webServiceHandler=new WebServiceHandler(SignUpActivity.this);
@@ -270,18 +334,28 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
                         public void run() {
                             if(status.equals("1")){
                                 //MyApplication.alertDialog(SignUpActivity.this,"Verify mail is sent to your email id!","Alert");
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_AUTH_TOKEN,"abcd1234");
                                 try {
-                                    SharedPreferenceUtility.getInstance().save(AppConstants.PREF_AUTH_TOKEN,"abcd1234");
-                                    updatePic(null,imagePath,jsonObject.getJSONObject("returnvalue").getInt("userid"));
+                                    if (country.equalsIgnoreCase("south africa")){
+                                        userTempId = jsonObject.getString("returnvalue");
+                                        Intent intent = new Intent(SignUpActivity.this, OTPActivity.class);
+                                        intent.putExtra("id",jsonObject.getString("returnvalue"));
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else
+                                        updatePic(null,imagePath,jsonObject.getJSONObject("returnvalue").getInt("userid"), editCountry.getText().toString());
+
                                 } catch (JSONException e) {e.printStackTrace();}
                             }
                             else if(status.equals("991"))
                                 MyApplication.alertDialog(SignUpActivity.this,"Email Already Exists","Alert");
                             else if(status.equals("992"))
                                 MyApplication.alertDialog(SignUpActivity.this,"Username Already Exists","Alert");
+                            else
+                                MyApplication.alertDialog(SignUpActivity.this, jsonObject.optString("message"),"Alert");
                         }
                     });
-
                 }
                 catch (JSONException e){
 
@@ -290,7 +364,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
         };
 
         try {
-            webServiceHandler.post(AppConstants.URL_REGISTER,builder);
+            webServiceHandler.post(url,builder);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -310,7 +384,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
 
     }
 
-    private void updatePic(final Bitmap bitmap, String imagePath, int userId) {
+    private void updatePic(final Bitmap bitmap, String imagePath, int userId, final String country) {
         WebServiceHandler webServiceHandler=new WebServiceHandler(SignUpActivity.this);
         webServiceHandler.serviceListener=new WebServiceListener() {
             @Override
@@ -321,8 +395,7 @@ public class SignUpActivity extends AppCompatActivity implements ImagePicker.Pic
                     public void run() {
                         try{
                             if(new JSONObject(response).optString("Code").equals("200")){
-                                MyApplication.alertDialog(SignUpActivity.this,"Verify mail is sent to your email id","Alert");
-
+                                    MyApplication.alertDialog(SignUpActivity.this,"Verify mail is sent to your email id","Alert");
                             }
                             else
                                 MyApplication.alertDialog(SignUpActivity.this,"Could not register","Alert");

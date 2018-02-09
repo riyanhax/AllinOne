@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/mobicomkit/mobicomkit.iml" filepath="$PROJECT_DIR$/mobicomkit/mobicomkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobicomkitui/mobicomkitui.iml" filepath="$PROJECT_DIR$/mobicomkitui/mobicomkitui.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobicommons/mobicommons.iml" filepath="$PROJECT_DIR$/mobicommons/mobicommons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/urlview/urlview.iml" filepath="$PROJECT_DIR$/urlview/urlview.iml" />
     </modules>
   </component>
 </project>

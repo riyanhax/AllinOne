@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.onesignal.OneSignal;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
@@ -52,6 +54,8 @@ import net.alhazmy13.catcho.library.Catcho;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
@@ -60,6 +64,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import okhttp3.FormBody;
@@ -130,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
                         Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                        finish();
                     }
                 });
 
@@ -213,14 +220,7 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
 
             }
         });
-
-        //new VersionChecker().execute();
     }
-
-
-
-
-
 
     private void validateAndLogin() {
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
@@ -268,6 +268,9 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
                         @Override
                         public void run() {
                             if (status.equals("1")) {
+
+                                SharedPreferenceUtility.getInstance().save(AppConstants.PREF_TIME, Calendar.getInstance().getTimeInMillis());
+
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_LOGIN, true);
                                 JSONObject returnObject = jsonObject.optJSONObject("returnvalue");
                                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_USER_ID, returnObject.optInt("userid"));
@@ -399,6 +402,7 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
                 Intent i = new Intent(LoginActivity.this, SubscriptionActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                finish();
             }
         });
 
@@ -409,6 +413,7 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
                 Intent i = new Intent(LoginActivity.this, SubscriptionPayPalActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                finish();
             }
         });
 
@@ -416,34 +421,6 @@ public class LoginActivity extends AppCompatActivity implements FbLoginActivty.F
         return dialogPayment;
     }
 
-    public class VersionChecker extends AsyncTask<String, String, String> {
-
-        String newVersion;
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + "com.parasme.swopinfo" + "&hl=en")
-                        .timeout(30000)
-                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                        .referrer("http://www.google.com")
-                        .get()
-                        .select("div[itemprop=softwareVersion]")
-                        .first()
-                        .ownText();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return newVersion;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.e("CCCCCVER",s);
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

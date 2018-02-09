@@ -93,7 +93,7 @@ public class FragmentPromotionPager extends Fragment {
                     bundle.putBoolean("isOwnCompany", false);
                     bundle.putInt(AppConstants.KEY_COMPANY_ID, Integer.parseInt(companyId));
                     fragment.setArguments(bundle);
-                    replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                    replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                 }
             }
         });

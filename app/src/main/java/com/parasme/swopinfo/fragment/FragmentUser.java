@@ -226,7 +226,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 bundle.putString(AppConstants.KEY_USER_ID, FragmentGroups.groupArrayList.get(i).getOwnerUserId() + "");
                 Fragment fragment = new FragmentGroupDetail();
                 fragment.setArguments(bundle);
-                replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
 
@@ -293,7 +293,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 bundle.putInt("fildeId",uploadArrayList.get(i).getFileId());
                 Fragment fragment = new FragmentFile();
                 fragment.setArguments(bundle);
-                replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
 
@@ -382,14 +382,14 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 FragmentCompany.companyId = userDetails.getCompanyId();
 
                 fragment.setArguments(bundle);
-                replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+                replaceFragment(fragment,mActivity.getFragmentManager(),mActivity,R.id.content_frame);
                 break;
             case R.id.btnViewCard:
                 Fragment fragment1=new FragmentCard();
                 Bundle bundle1 = new Bundle();
                 bundle1.putString(AppConstants.KEY_USER_ID, userId);
                 fragment1.setArguments(bundle1);
-                replaceFragment(fragment1,getFragmentManager(),mActivity,R.id.content_frame);
+                replaceFragment(fragment1,mActivity.getFragmentManager(),mActivity,R.id.content_frame);
                 break;
             case R.id.textTitle:
                 FragmentCompany.companyId = userDetails.getCompanyId();
@@ -398,7 +398,7 @@ public class FragmentUser extends FragmentUserWrapper implements SwipeRefreshLay
                 bundle2.putBoolean("isOwnCompany", false);
                 bundle2.putInt(AppConstants.KEY_COMPANY_ID,userDetails.getCompanyId());
                 fragment2.setArguments(bundle2);
-                replaceFragment(fragment2,getFragmentManager(),mActivity,R.id.content_frame);
+                replaceFragment(fragment2,mActivity.getFragmentManager(),mActivity,R.id.content_frame);
                 break;
             case R.id.btnChat:
                 Intent intent = new Intent(getActivity(), ConversationActivity.class);

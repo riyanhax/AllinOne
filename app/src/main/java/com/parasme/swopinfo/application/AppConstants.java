@@ -43,6 +43,7 @@ public class AppConstants {
     public static final String PREF_CHECK_IN_INTRO = "check_in_intro";
     public static final String PREF_FAV_IDS = "fav_ids";
     public static final String PREF_RETAILER_MSGS = "retailer_msgs";
+    public static final String PREF_TIME = "pref_time";
 
     public static final String KEY_IS_GROUP_UPLOADS ="keyIsGroupUploads";
     public static final String KEY_USER_ID ="keyUserId";
@@ -82,6 +83,8 @@ public class AppConstants {
     public static final String URL_FORGOT = URL_DOMAIN + "api/password/recover";
     public static final String URL_USER = URL_DOMAIN + "api/User/";
     public static final String URL_REGISTER = URL_DOMAIN + "api/user/register";
+    public static final String URL_REGISTER_WITHOUT_OTP = URL_DOMAIN + "api/user/registerwithoutOTP";
+    public static final String URL_MATCH_OTP = URL_DOMAIN + "api/user/confirmreg";
     public static final String URL_UPDATE = URL_DOMAIN + "api/user/update";
     public static final String URL_FOLLOWERS = URL_DOMAIN + "api/Followers/";
     public static final String URL_FEED = URL_DOMAIN + "api/NewsFeed";

@@ -15,6 +15,7 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
+                android:id="@+id/layout_share_thoughts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -45,6 +46,7 @@
                     />
             </RelativeLayout>
 
+            <!--Layout Pick-->
             <LinearLayout
                 android:id="@+id/layout_pick"
                 android:layout_width="match_parent"
@@ -188,8 +190,52 @@
                         />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/map"
+                        />
+                    <fragment
+                        android:id="@+id/place_autocomplete_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                        />
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Add Location"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        />
+                </LinearLayout>
+
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_map"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_165sdp"
+                android:visibility="gone"
+                >
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="@dimen/_160sdp"
+                    app:liteMode="true"
+                    app:mapType="normal"
+                    />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layoutRecord"
@@ -244,16 +290,16 @@
                     android:layout_below="@+id/img_back"
                     />
 
-<!--
-                <ImageView
-                    android:id="@+id/img_back"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:src="@android:drawable/ic_media_rew"
-                    android:layout_toRightOf="@id/circle"
-                    android:layout_below="@+id/img_record"
-                    />
--->
+                <!--
+                                <ImageView
+                                    android:id="@+id/img_back"
+                                    android:layout_width="@dimen/_30sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:src="@android:drawable/ic_media_rew"
+                                    android:layout_toRightOf="@id/circle"
+                                    android:layout_below="@+id/img_record"
+                                    />
+                -->
 
             </RelativeLayout>
 
@@ -271,6 +317,7 @@
                     android:layout_width="wrap_content"
                     android:paddingLeft="@dimen/_10sdp"
                     android:paddingRight="@dimen/_20sdp"
+                    android:maxLines="2"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_centerVertical="true"

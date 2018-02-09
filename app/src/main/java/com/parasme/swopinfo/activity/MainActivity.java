@@ -9,6 +9,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -75,6 +77,7 @@ import com.parasme.swopinfo.fragment.FragmentSubscriptionPayment;
 import com.parasme.swopinfo.fragment.FragmentUploads;
 import com.parasme.swopinfo.fragment.FragmentUploadsWrapper;
 import com.parasme.swopinfo.fragment.FragmentUser;
+import com.parasme.swopinfo.helper.DatabaseHelper;
 import com.parasme.swopinfo.helper.RippleBackground;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
@@ -86,15 +89,22 @@ import net.alhazmy13.catcho.library.Catcho;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 import static com.parasme.swopinfo.application.AppConstants.PREF_BUSINESS_CELL;
@@ -141,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         //Thread.setDefaultUncaughtExceptionHandler(new Catcho.Builder(this).recipients("parasme.mukesh@gmail.com").build());
         activityContext = MainActivity.this;
 
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         listLeftDrawer = (ListView) findViewById(R.id.listLeftDrawer);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -160,9 +171,26 @@ public class MainActivity extends AppCompatActivity {
         if(!SharedPreferenceUtility.getInstance().get(AppConstants.PREF_APPLOZIC_LOGIN,false))
             appLozicLogin(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_ID)+"", SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_FIRST_NAME)+" "+SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_SUR_NAME), SharedPreferenceUtility.getInstance().get(AppConstants.PREF_USER_EMAIL)+"");
 
-        replaceFragmentAccordingly();
+        new VersionChecker().execute();
     }
 
+    private void delete7DaysOlderCache() {
+        long currentTimeInMillis = Calendar.getInstance().getTimeInMillis();
+        DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+        Map<Integer, String> thumbMap = databaseHelper.getAllThumbs();
+
+        for(Iterator<Map.Entry<Integer, String>> it = thumbMap.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Integer, String> entry = it.next();
+            long thumbTimeInMillis = Long.parseLong(entry.getValue());
+            long daysInterval = TimeUnit.MILLISECONDS.toDays(currentTimeInMillis-thumbTimeInMillis);
+            if(daysInterval >= 7) {
+                File file = databaseHelper.getThumbFileFromId(entry.getKey());
+                boolean deleted = file.delete();
+                if (deleted)
+                    databaseHelper.deleteThumbRecord(entry.getKey());
+            }
+        }
+    }
 
 
     protected void init(){
@@ -285,19 +313,23 @@ public class MainActivity extends AppCompatActivity {
         }
 */
 
-        String backStateName = fragment.getClass().getName();
-        String fragmentTag = backStateName;
+        try {
+            String backStateName = fragment.getClass().getName();
+            String fragmentTag = backStateName;
 
-        boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
+            boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
 
-        if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) {
-            //fragment not in back stack, create it.
-            FragmentTransaction ft = manager.beginTransaction();
-            ft.replace(id, fragment, fragmentTag);
-            ft.addToBackStack(backStateName);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) {
+                //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(id, fragment, fragmentTag);
+                ft.addToBackStack(backStateName);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
-            ft.commit();
+                ft.commit();
+            }
+        }catch (IllegalStateException e){
+            Log.e("FragemtnREpl","Failed");
         }
     }
 
@@ -823,6 +855,9 @@ public class MainActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
 
             }
+            else
+                replaceFragment(new FragmentHome(),getFragmentManager(),MainActivity.this,R.id.content_frame);
+
         }
 
         else if(getIntent().hasExtra("fromOneSignal")){
@@ -845,7 +880,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else {
-                replaceFragment(new FragmentHome(), getFragmentManager(), MainActivity.this, R.id.content_frame);
+            replaceFragment(new FragmentHome(), getFragmentManager(), MainActivity.this, R.id.content_frame);
         }
     }
 
@@ -895,5 +930,75 @@ public class MainActivity extends AppCompatActivity {
         }
         activity.startActivityForResult(intent, ConversationUIService.REQUEST_CODE_CONTACT_GROUP_SELECTION);
     }
+
+
+    public class VersionChecker extends AsyncTask<String, String, String> {
+
+        String newVersion;
+        ArrayList<String> arrayList = new ArrayList<>();
+        String versionName;
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + "com.parasme.swopinfo" + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get()
+                        .select("div[itemprop=softwareVersion]")
+                        .first()
+                        .ownText();
+
+                Elements elements =  Jsoup.connect("https://play.google.com/store/apps/details?id=" + "com.parasme.swopinfo" + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get()
+                        .select("div[class=recent-change]");
+
+                for (Element element : elements){
+                    String a = element.text();
+                    arrayList.add(a);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return newVersion;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                PackageInfo pInfo = MainActivity.this.getPackageManager().getPackageInfo(getPackageName(), 0);
+                String codeVersion = pInfo.versionName;
+                Log.e("codeversion", codeVersion);
+
+                if (newVersion != null && codeVersion != null) {
+                    if (Float.parseFloat(newVersion) > Float.parseFloat(codeVersion)) {
+                        Intent intent = new Intent(MainActivity.this, NewVersionActivity.class);
+                        intent.putExtra("newVersion", newVersion);
+                        intent.putExtra("whatsNew", arrayList);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        delete7DaysOlderCache();
+                        replaceFragmentAccordingly();
+                    }
+                }
+                else{
+                    delete7DaysOlderCache();
+                    replaceFragmentAccordingly();
+                }
+            }
+
+            catch (PackageManager.NameNotFoundException e){e.printStackTrace();}
+        }
+    }
+
 
 }

@@ -119,7 +119,7 @@ public class FragmentSearch extends Fragment{
                 Fragment fragment = new FragmentFile();
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
-                MainActivity.replaceFragment(fragment,getFragmentManager(),mActivity,R.id.content_frame);
+                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(),mActivity,R.id.content_frame);
             }
         });
 

@@ -206,7 +206,7 @@ public class FragmentSelectCategories extends Fragment {
                 fragment.setArguments(bundle);
             }
 
-            MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+            MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
         }
     }
 

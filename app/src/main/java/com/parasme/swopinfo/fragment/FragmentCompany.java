@@ -225,7 +225,7 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                 bundle.putString("company",textCompanyName.getText().toString());
                 bundle.putString("address",businessAddress);
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
 
@@ -698,11 +698,11 @@ public class FragmentCompany extends FragmentCompanyWrapper implements View.OnCl
                 bundle.putInt("fildeId",uploadArrayList.get(i).getFileId());
                 Fragment fragment = new FragmentFile();
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment, getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
-
     }
+
     public void getFolders(String url, final Activity activity, final GridView gridView, final TextView emptyText) {
         if(folderArrayList.size()==0){
 

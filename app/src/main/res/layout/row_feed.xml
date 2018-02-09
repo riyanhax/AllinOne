@@ -42,15 +42,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:singleLine="true"
-                android:text="Lorem Ipsum "
+                android:visibility="gone"
+                android:text="Lorem Ipsum"
                 />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="uploaded a new file"
-                android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_toRightOf="@id/textUserName"
                 />
 
@@ -155,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
                 android:gravity="left|center"
                 android:text="It is a long established fact."
                 />
@@ -166,7 +166,6 @@
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:src="@drawable/app_logo"
                 />
 
 
@@ -210,6 +209,8 @@
             android:layout_height="wrap_content"
             android:gravity="center|left"
             android:autoLink="web"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
             android:layout_toRightOf="@+id/imageShareThumb"
             android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.acted by the readable content of a page when looking at its layout.acted by the readable content of a "
             />
@@ -243,6 +244,8 @@
             android:layout_height="wrap_content"
             android:gravity="center|left"
             android:autoLink="web"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
             android:layout_toRightOf="@+id/imageShareThumb"
             android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.acted by the readable content of a page when looking at its layout.acted by the readable content of a "
             />
@@ -299,6 +302,7 @@
             android:visibility="gone"
             android:indeterminate="true" />
 
+<!--
         <me.kaelaela.opengraphview.OpenGraphView
             android:id="@+id/og_view"
             android:layout_width="match_parent"
@@ -313,6 +317,10 @@
             fab:titleColor="@color/base_gray"
             fab:urlTextColor="@color/base_gray"
             />
+-->
+
+        <include layout="@layout/url_preview"/>
+
     </LinearLayout>
 
 

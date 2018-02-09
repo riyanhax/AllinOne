@@ -72,7 +72,7 @@ public class FragmentRetailerLogos extends Fragment {
                             && retailerMessages.containsValue(retailerArrayList.get(position).getRetailerMessage()))
                     {
                         retailerPosition = position;
-                        MainActivity.replaceFragment(new FragmentPromotionPager(), getFragmentManager(), mActivity, R.id.content_frame);
+                        MainActivity.replaceFragment(new FragmentPromotionPager(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                     }
                     else {
                         retailerPosition = position;
@@ -140,7 +140,7 @@ public class FragmentRetailerLogos extends Fragment {
         itemFavorite.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                MainActivity.replaceFragment(new FragmentFavourites(), getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentFavourites(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                 return false;
             }
         });
@@ -164,7 +164,7 @@ public class FragmentRetailerLogos extends Fragment {
                 retailerMessages.put(retailerId, message);
                 SharedPreferenceUtility.getInstance().save(AppConstants.PREF_RETAILER_MSGS, new Gson().toJson(retailerMessages));
                 dialog.dismiss();
-                MainActivity.replaceFragment(new FragmentPromotionPager(), getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentPromotionPager(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
 

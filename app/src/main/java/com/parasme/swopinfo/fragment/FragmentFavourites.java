@@ -184,7 +184,7 @@ public class FragmentFavourites extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
 
                 if(FragmentHome.retailerList.size()!=0)
-                    MainActivity.replaceFragment(new FragmentRetailerLogos(), getFragmentManager(), mActivity, R.id.content_frame);
+                    MainActivity.replaceFragment(new FragmentRetailerLogos(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                 else
                     checkIn(LocationActivity.mCurrentLocation.getLatitude()+"",LocationActivity.mCurrentLocation.getLongitude()+"", AppConstants.USER_ID);
 //                    checkIn("-32.9573774","27.9355181", AppConstants.USER_ID);
@@ -198,7 +198,7 @@ public class FragmentFavourites extends Fragment {
         itemEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                MainActivity.replaceFragment(new FragmentSelectCategories(), getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentSelectCategories(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
                 return false;
             }
         });
@@ -266,7 +266,7 @@ public class FragmentFavourites extends Fragment {
 //                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
 
 
-                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),getFragmentManager(),mActivity,R.id.content_frame);
+                                ((MainActivity)mActivity).replaceFragment(new FragmentRetailerLogos(),mActivity.getFragmentManager(),mActivity,R.id.content_frame);
 
                             }
                             else

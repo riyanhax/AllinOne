@@ -33,8 +33,12 @@ public class BaseFragment extends Fragment implements View.OnClickListener{
     public static boolean isFollowingLoaded;
     public static boolean isGroupsLoaded;
 
+    protected Bundle bundle;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        bundle = savedInstanceState;
+
         baseView = inflater.inflate(R.layout.fragment_base, container, false);
 
         imageActionFollower =  (ImageView) baseView.findViewById(R.id.imageActionFollower);

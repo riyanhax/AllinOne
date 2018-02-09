@@ -56,7 +56,7 @@ public class FragmentSettings extends Fragment {
         layoutAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.replaceFragment(new FragmentProfile(), getFragmentManager(), mActivity, R.id.content_frame);
+                MainActivity.replaceFragment(new FragmentProfile(), mActivity.getFragmentManager(), mActivity, R.id.content_frame);
             }
         });
 

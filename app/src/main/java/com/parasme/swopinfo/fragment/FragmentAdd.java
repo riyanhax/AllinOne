@@ -156,7 +156,6 @@ public class FragmentAdd extends FragmentUploadsWrapper implements FileSelection
                 if (type.contains("image"))
                     fileArrayList.set(i, new File(Utils.fixExif(fileArrayList.get(i).getPath())));
             }
-
         }
 
         String swopText=editSwopText.getText().toString();

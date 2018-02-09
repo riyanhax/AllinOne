@@ -7,11 +7,10 @@ repositories {
     }
 }
 
-
 repositories {
-    jcenter()
-    maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+    maven { url 'https://jitpack.io' }
 }
+
 
 android {
     compileSdkVersion 27
@@ -25,8 +24,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 19
-        versionName "1.18"
+        versionCode 25
+        versionName "1.24"
     }
 
     buildTypes {
@@ -89,18 +88,18 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'net.alhazmy13.Catcho:library:0.1.0-beta'
     compile 'com.library.tangxiaolv:telegramgallery:1.0.3'
-
     compile 'com.onesignal:OneSignal:3.+@aar'
-    compile 'com.google.android.gms:play-services-gcm:10.2.0'
+    compile 'com.google.android.gms:play-services-gcm:10.2.1'
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.3'
     compile project(':mobicomkitui')
-    compile project(':urlview')
-
     compile 'org.jsoup:jsoup:1.10.2'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
-//    compile 'com.google.android.gms:play-services-location:10.2.0'
+    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    //    compile 'com.google.android.gms:play-services-location:10.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.17.0'
-    compile 'com.android.support:multidex:1.0.1'
+        compile 'com.android.support:multidex:1.0.1'
     compile 'com.jaredrummler:colorpicker:1.0.1'
+    compile 'com.github.omegaes:Android-Link-Preview:1.0.2'
+    compile 'com.google.android.gms:play-services-places:10.2.1'
+    compile 'com.google.maps.android:android-maps-utils:0.4.4'
 }
 apply plugin: 'com.google.gms.google-services'

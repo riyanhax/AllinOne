@@ -1,5 +1,6 @@
 package com.parasme.swopinfo.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -15,11 +16,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +61,8 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.FormBody;
 import okio.BufferedSink;
@@ -154,8 +161,22 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
+        //webView.setWebChromeClient(new WebChromeClient());
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int w1 = displayMetrics.widthPixels;
+        int h1 = displayMetrics.heightPixels;
 
-        webView.loadUrl(finalWebViewURL);
+        if (finalWebViewURL.contains("embed") && finalWebViewURL.contains("youtube")) {
+
+            finalWebViewURL = "<html><body><iframe " +
+                    "width=\"100%\" height=\""+h1+"\" src=\""+finalWebViewURL+"\" " +
+                    " frameborder=\"0\" allowfullscreen></iframe></body></html>";
+
+            webView.loadDataWithBaseURL("http://www.youtube.com",finalWebViewURL, "text/html", "utf-8",null);
+        }
+        else
+            webView.loadUrl(finalWebViewURL);
+
         textDownloadCount.setText(downloadCount);
         textViewCount.setText(viewCount);
     }
@@ -237,6 +258,7 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
         setFileData();
     }
 
+    @SuppressLint("JavascriptInterface")
     private void setFileData() {
         userId = AppConstants.USER_ID;
         //bitmap = ((BitmapDrawable)imageFile.getDrawable()).getBitmap();
@@ -299,7 +321,7 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
                     mp.setDataSource(finalWebViewURL);
                     mp.prepare();
                 }catch (Exception e){e.printStackTrace();}
-                }
+            }
         });
 
         try{
@@ -649,7 +671,7 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
                 bundle.putString(AppConstants.KEY_USER_ID,fileOwnerId);
                 bundle.putString(AppConstants.KEY_USER_NAME,uploadData.getUserFullName());
                 fragment.setArguments(bundle);
-                MainActivity.replaceFragment(fragment, getFragmentManager(),mActivity,R.id.content_frame);
+                MainActivity.replaceFragment(fragment, mActivity.getFragmentManager(),mActivity,R.id.content_frame);
                 break;
         }
     }
@@ -665,4 +687,20 @@ public class FragmentFile extends Fragment implements View.OnClickListener{
             out.write(buffer, 0, read);
         }
     }
+
+    private String extractVideoIdFromYoutube(String videoURL) {
+        String videoId = "1111";
+        if(!videoURL.contains("youtube"))
+            return videoId;
+        String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(videoURL);
+
+        if(matcher.find())
+            return matcher.group();
+        else
+            return videoId;
+    }
+
 }

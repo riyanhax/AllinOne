@@ -31,6 +31,7 @@
         android:name=".application.MyApplication"
         android:theme="@style/AppTheme"
         tools:replace="android:icon"
+        android:hardwareAccelerated="true"
         >
 
 
@@ -85,9 +86,17 @@
         <activity android:name=".activity.ForgotPasswordActivity"
             android:theme="@style/AppTheme.FullScreen"
             />
+        <activity android:name=".activity.OTPActivity"
+            android:theme="@style/AppTheme.FullScreen"
+            />
 
         <activity android:name=".activity.SignUpActivity"
             android:theme="@style/AppTheme.FullScreen"/>
+
+        <activity android:name=".activity.NewVersionActivity"
+            android:theme="@style/MyMaterialTheme"
+            android:screenOrientation="portrait"
+            />
 
         <activity android:name=".activity.MainActivity"
             android:theme="@style/MyMaterialTheme"
@@ -116,6 +125,7 @@
             />
 
         <activity android:name=".activity.FbLoginActivty"/>
+
 
         <!-- facebook app id -->
         <meta-data

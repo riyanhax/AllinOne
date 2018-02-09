@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +18,10 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -27,6 +30,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +40,9 @@ import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity;
 import com.applozic.mobicommons.json.GsonUtils;
+import com.mega4tech.linkpreview.GetLinkPreviewListener;
+import com.mega4tech.linkpreview.LinkPreview;
+import com.mega4tech.linkpreview.LinkUtil;
 import com.parasme.swopinfo.R;
 import com.parasme.swopinfo.application.AppConstants;
 import com.parasme.swopinfo.application.MyApplication;
@@ -45,9 +52,6 @@ import com.parasme.swopinfo.fragment.FragmentUser;
 import com.parasme.swopinfo.helper.EmojiHandler;
 import com.parasme.swopinfo.helper.SharedPreferenceUtility;
 import com.parasme.swopinfo.helper.Utils;
-import com.parasme.swopinfo.urlpreview.LinkPreviewCallback;
-import com.parasme.swopinfo.urlpreview.SourceContent;
-import com.parasme.swopinfo.urlpreview.TextCrawler;
 import com.parasme.swopinfo.webservice.WebServiceHandler;
 import com.parasme.swopinfo.webservice.WebServiceListener;
 import com.squareup.picasso.Picasso;
@@ -61,11 +65,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.kaelaela.opengraphview.OpenGraphView;
 import okhttp3.Credentials;
 
 /**
@@ -82,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
     private String swopText = "";
     String arr[];
     private boolean isFilesFetched;
-    private OpenGraphView openGraphView;
+    private RelativeLayout layoutURLView;
     private ProgressBar progressBar;
     private TextView textPreviewTitle;
     private TextView textPreviewDescription;
@@ -94,7 +98,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Log.e("Bhai", EmojiHandler.decodeJava("\u0921\u0947\u092e\u094b"));
 
         String credential = Credentials.basic("gavin@swopinfo.com", "gavinsimoen01");
         Log.e("cRED",credential);
@@ -276,8 +279,12 @@ public class SplashActivity extends AppCompatActivity {
         Button btnChat = (Button) dialog.findViewById(R.id.btnChat);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
         TextView textShare = (TextView) dialog.findViewById(R.id.textShare);
-        openGraphView = (OpenGraphView) dialog.findViewById(R.id.og_view);
+        layoutURLView = (RelativeLayout) dialog.findViewById(R.id.parent_url_view);
         progressBar = (ProgressBar) dialog.findViewById(R.id.progress_bar);
+        textPreviewTitle = (TextView) dialog.findViewById(R.id.og_title);
+        textPreviewDescription = (TextView) dialog.findViewById(R.id.og_description);
+        textPreviewURL = (TextView) dialog.findViewById(R.id.og_url);
+        imagePreviewThumb = (ImageView) dialog.findViewById(R.id.og_image);
 
         if(SharedPreferenceUtility.getInstance().get(AppConstants.PREF_IS_BUSINESS))
             btnCompany.setVisibility(View.VISIBLE);
@@ -345,9 +352,11 @@ public class SplashActivity extends AppCompatActivity {
 
                         } else {
                             String uri = arr[i];
-                            String extension = uri.substring(uri.lastIndexOf(".") + 1, uri.length());
+//                            String extension = uri.substring(uri.lastIndexOf(".") + 1, uri.length());
+                            String extension = MimeTypeMap.getFileExtensionFromUrl(uri);
                             Log.e("EXTENSION", extension+"__"+fileMimeType.split("/")[1]);
-                            if (extension.equals(fileMimeType.split("/")[1]) || extension.contains("mp3") || extension.contains("audio")) {
+                            if (!StringUtil.isBlank(extension) || extension.contains("mp3") || extension.contains("audio")) {
+//                            if (extension.equals(fileMimeType.split("/")[1]) || extension.contains("mp3") || extension.contains("audio")) {
                                 Log.e("CHECK", "Ending with extension");
                                 path = Utils.getRealPathFromURI(SplashActivity.this, Uri.parse(arr[i]));
                             } else {
@@ -548,50 +557,42 @@ public class SplashActivity extends AppCompatActivity {
 
         return containedUrls;
     }
-    public void initPreview(String url) {
-        if(!url.contains("24.com")) {
-            openGraphView.setVisibility(View.VISIBLE);
-            openGraphView.clear();
-            if (url.startsWith("http://"))
-                url = url.replace("http://", "https://");
-            openGraphView.loadFrom(url);
-            isFilesFetched = true;
-        }
-        else{
-            TextCrawler textCrawler = new TextCrawler();
-            textPreviewTitle = (TextView) openGraphView.findViewById(R.id.og_title);
-            textPreviewDescription = (TextView) openGraphView.findViewById(R.id.og_description);
-            textPreviewURL = (TextView) openGraphView.findViewById(R.id.og_url);
-            imagePreviewThumb = (ImageView) openGraphView.findViewById(R.id.og_image);
+    public void initPreview(final String url) {
+        isFilesFetched = true;
+        layoutURLView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
-            textCrawler.makePreview(callback, url);
-            isFilesFetched = true;
-        }
+        LinkUtil.getInstance().getLinkPreview(SplashActivity.this, url, new GetLinkPreviewListener() {
+            @Override
+            public void onSuccess(final LinkPreview linkPreview) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layoutURLView.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+
+                        textPreviewTitle.setText(linkPreview.getTitle());
+                        textPreviewDescription.setText(linkPreview.getDescription());
+                        textPreviewURL.setText(url);
+
+                        Picasso.with(SplashActivity.this).load(linkPreview.getImageFile())
+                                .error(R.drawable.document_gray)
+                                .placeholder(R.drawable.document_gray)
+                                .into(imagePreviewThumb);
+                    }
+                });
+            }
+
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+
     }
 
 
-    private LinkPreviewCallback callback = new LinkPreviewCallback() {
-        @Override
-        public void onPre() {
-            openGraphView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onPos(SourceContent sourceContent, boolean isNull) {
-            openGraphView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-
-            textPreviewTitle.setText(sourceContent.getTitle());
-            textPreviewDescription.setText(sourceContent.getDescription());
-            textPreviewURL.setText(sourceContent.getUrl());
-
-            Picasso.with(SplashActivity.this).load(sourceContent.getImages().get(0))
-                    .error(R.drawable.document_gray)
-                    .placeholder(R.drawable.document_gray)
-                    .into(imagePreviewThumb);
-        }
-    };
 
     public String getCurrentDate() {
         String formattedDate="";

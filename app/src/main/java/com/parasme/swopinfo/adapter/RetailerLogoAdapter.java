@@ -14,6 +14,7 @@ import com.parasme.swopinfo.model.Retailer;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by SoNu on 6/6/2016.
@@ -64,8 +65,13 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-//       Picasso.with(context).load(retailerArrayList.get(position).getRetailerLogo()).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+        String url = retailerArrayList.get(position).getRetailerLogo();
+        url = url.replaceAll(" ","%20");
+        url = url + "?"+randomNumber();
 
+       Picasso.with(context).load(url).placeholder(R.drawable.app_icon).error(R.drawable.document_gray).into(viewHolder.imageRetailerLogo);
+
+/*
         Picasso.Builder builder = new Picasso.Builder(context);
         builder.listener(new Picasso.Listener()
         {
@@ -79,6 +85,7 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
         String url = retailerArrayList.get(position).getRetailerLogo();
         url = url.replaceAll(" ","%20");
         builder.build().load(url).placeholder(R.drawable.app_icon).error(R.drawable.app_icon).into(viewHolder.imageRetailerLogo);
+*/
 
 /*
         switch (position){
@@ -103,5 +110,12 @@ public class RetailerLogoAdapter extends ArrayAdapter<Retailer> {
         return view;
     }
 
+    private String randomNumber() {
+        Random r = new Random();
+        int Low = 10;
+        int High = 10000;
+        int Result = r.nextInt(High-Low) + Low;
+        return Result+"";
+    }
 
 }
